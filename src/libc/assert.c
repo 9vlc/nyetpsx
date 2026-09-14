@@ -4,17 +4,12 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#include <sio.h>
+#include <stdio.h>
 
 void
 _assertAbort(const char *file, int line, const char *expr) {
 #ifndef NDEBUG
-	puts(file);
-	putc(':');
-	putu32(line);
-	puts(" assert(");
-	puts(expr);
-	putc(')');
+	uprintf("%s:%d: assert(%s)\n", file, line, expr);
 #endif
 
 	while (1) {
@@ -26,7 +21,7 @@ void
 abort(void)
 {
 #ifndef NDEBUG
-	puts("abort()");
+	uprintf("abort\n");
 #endif
 
 	while (1) {
@@ -38,7 +33,7 @@ void
 __cxa_pure_virtual(void)
 {
 #ifndef NDEBUG
-	puts("__cxa_pure_virtual()");
+	uprintf("__cxa_pure_virtual()\n");
 #endif
 
 	while (1) {

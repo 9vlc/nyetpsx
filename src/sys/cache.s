@@ -31,35 +31,35 @@
 
 .set COP0_STATUS_IsC, 1 << 16
 
-.set ptr,         $a0
-.set temp,        $a1
-.set savedStatus, $a2
-.set savedBCC,    $a3
+.set ptr,		$a0
+.set temp,		$a1
+.set saved_status,	$a2
+.set saved_bcc,		$a3
 
-.section .text.flushCache, "ax", @progbits
-.global flushCache
-.type flushCache, @function
+.section .text.cpu_flush_cache, "ax", @progbits
+.global cpu_flush_cache
+.type cpu_flush_cache, @function
 
-flushCache:
+cpu_flush_cache:
 	# Call _flushCacheInner() through the uncached KSEG1 mirror of main RAM,
 	# ensuring the CPU will not attempt to use the cache while it is being
 	# cleared. This jump must be performed using a la/jr combo as immediate
 	# jumps (j) only update the program counter's bottommost 28 bits.
-	la    ptr, _flushCacheInner
+	la    ptr, _cpu_flush_cache_inner
 	lui   temp, %hi(KSEG1_BASE)
 	or    ptr, temp
 
 	jr    ptr
 	lui   ptr, %hi(CPU_BCC)
 
-.section .text._flushCacheInner, "ax", @progbits
-.type _flushCacheInner, @function
+.section .text._flush_cache_inner, "ax", @progbits
+.type _flush_cache_nner, @function
 
-_flushCacheInner:
+_cpu_flush_cache_inner:
 	# Save the current state of the BCC and COP0 status registers so that they
 	# can be restored later.
-	mfc0  savedStatus, COP0_STATUS
-	lw    savedBCC, %lo(CPU_BCC)(ptr)
+	mfc0  saved_status, COP0_STATUS
+	lw    saved_bcc, %lo(CPU_BCC)(ptr)
 
 	# Disable interrupts and the scratchpad, put the instruction cache into "tag
 	# test" mode and proceed to map it directly to the CPU's address space by
@@ -68,7 +68,7 @@ _flushCacheInner:
 
 	# CPU_BCC = (CPU_BCC & ~CPU_BCC_DS) | CPU_BCC_TAG | CPU_BCC_IS1;
 	li    temp, ~CPU_BCC_DS
-	and   temp, savedBCC
+	and   temp, saved_bcc
 	ori   temp, CPU_BCC_TAG | CPU_BCC_IS1
 	sw    temp, %lo(CPU_BCC)(ptr)
 
@@ -81,7 +81,7 @@ _flushCacheInner:
 	# respective 16-byte cache line.
 	li    temp, 0x1000 - 256
 
-.LclearLoop: # for (int i = 0x1000 - 256; i >= 0; i -= 256) {
+.L: # for (int i = 0x1000 - 256; i >= 0; i -= 256) {
 	sw    $0, 0x00(temp)
 	sw    $0, 0x10(temp)
 	sw    $0, 0x20(temp)
@@ -100,15 +100,15 @@ _flushCacheInner:
 	sw    $0, 0xf0(temp)
 
 	# }
-	bgtz  temp, .LclearLoop
+	bgtz  temp, .L
 	addiu temp, -256
 
 	# Clear the "isolate cache" bit, restore the previously saved state and
 	# return.
 	mtc0  $0, COP0_STATUS
 	nop
-	sw    savedBCC, %lo(CPU_BCC)(ptr)
-	mtc0  savedStatus, COP0_STATUS
+	sw    saved_bcc, %lo(CPU_BCC)(ptr)
+	mtc0  saved_status, COP0_STATUS
 
 	jr    $ra
 	nop

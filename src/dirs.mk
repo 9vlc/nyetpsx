@@ -1,2 +1,2 @@
-SUBDIRS:= libc etc out
+SUBDIRS:= sys libc etc out
 .include "${MBDIR}/indirs.mk"

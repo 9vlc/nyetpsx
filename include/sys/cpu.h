@@ -31,4 +31,6 @@
 
 #define CPU_BCC			MMIO32(CPU_BASE | 0x130)
 
+void cpu_flush_cache(void);
+
 #endif /* _SYS__CPU_H */

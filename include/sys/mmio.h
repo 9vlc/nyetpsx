@@ -7,6 +7,8 @@
 #ifndef _SYS__MMIO_H
 #define _SYS__MMIO_H
 
+#include <stdint.h>
+
 #define ADDR8(A)	((volatile uint8_t *)(A))
 #define ADDR16(A)	((volatile uint16_t *)(A))
 #define ADDR32(A)	((volatile uint32_t *)(A))

@@ -12,6 +12,10 @@
 #  define _SIZE_T_DEFINED
 typedef uint32_t		size_t;
 typedef int32_t			ssize_t;
+
+#  define SIZE_MAX		UINT32_MAX
+#  define SSIZE_MIN		INT32_MIN
+#  define SSIZE_MAX		INT32_MAX
 #endif
 
 #ifndef NULL
