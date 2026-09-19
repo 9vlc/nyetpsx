@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: MIT
- * Copyright (c) 2023 spicyjpeg
+ * Copyright (c) 2023-2026 spicyjpeg
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
@@ -13,9 +13,9 @@ typedef void (*vfunc)(void);
  */
 extern unsigned char _bss_start[], _bss_end[];
 
-extern const vfunc _preinit_arr_start[], _preinit_arr_end[];
-extern const vfunc _init_arr_start[], _init_arr_end[];
-extern const vfunc _finish_arr_start[], _finish_arr_end[];
+extern const vfunc _preinit_array_start[], _preinit_array_end[];
+extern const vfunc _init_array_start[], _init_array_end[];
+extern const vfunc _fini_array_start[], _fini_array_end[];
 
 /*
  * Program entry point
@@ -23,7 +23,10 @@ extern const vfunc _finish_arr_start[], _finish_arr_end[];
 int main(int argc, const char **argv);
 
 int
-_start(int argc, const char **argv)
+_start(
+	int argc,
+	const char **argv
+	)
 {
 	/*
 	 * Set $gp to point to the middle of the .sdata/.sbss sections, ensuring
@@ -44,17 +47,18 @@ _start(int argc, const char **argv)
 	 * Invoke all global constructors if any, then main() and finally
 	 *   all global destructors.
 	 */
-	for (const vfunc *f = _preinit_arr_start; f < _preinit_arr_end; f++) {
+	for (const vfunc *f = _preinit_array_start; f < _preinit_array_end; f++) {
+
 		(*f)();
 	}
 
-	for (const vfunc *f = _init_arr_start; f < _init_arr_end; f++) {
+	for (const vfunc *f = _init_array_start; f < _init_array_end; f++) {
 		(*f)();
 	}
 
 	int ret = main(argc, argv);
 
-	for (const vfunc *f = _finish_arr_start; f < _finish_arr_end; f++) {
+	for (const vfunc *f = _fini_array_start; f < _fini_array_end; f++) {
 		(*f)();
 	}
 

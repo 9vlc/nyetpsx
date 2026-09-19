@@ -48,7 +48,7 @@ typedef struct gte_matrix gte_matrix_t;
 /*
  * Command definitions
  */
-enum gte_command : uint32_t {
+enum gte_command {
 	GTE_CMD_BITMASK	= 63u << 0,
 	GTE_CMD_RTPS	=  1u << 0, /* Perspective transformation (1 vertex) */
 	GTE_CMD_NCLIP	=  6u << 0, /* Normal clipping */
@@ -72,7 +72,7 @@ enum gte_command : uint32_t {
 	GTE_CMD_GPF	= 61u << 0, /* Linear interpolation */
 	GTE_CMD_GPL	= 62u << 0, /* Linear interpolation with base */
 	GTE_CMD_NCCT	= 63u << 0, /* Normal color color (3 vertices) */
-	GTE_LM		= 1u << 10, /* Saturate IR to 0x0000-0x7fff */
+	GTE_LM		= 1u << 10, /* Saturate IR to 0x0000-0x7FFF */
 	GTE_CV_BITMASK	= 3u << 13,
 	GTE_CV_TR	= 0u << 13, /* Use TR as translation vector for MVMVA */
 	GTE_CV_BK	= 1u << 13, /* Use BK as translation vector for MVMVA */
@@ -115,7 +115,7 @@ gte_command(const uint32_t cmd)
 /*
  * Control register definitions
  */
-enum gte_control_reg : uint32_t {
+enum gte_control_reg {
 	GTE_RT11RT12	=  0, /* Rotation matrix */
 	GTE_RT13RT21	=  1, /* Rotation matrix */
 	GTE_RT22RT23	=  2, /* Rotation matrix */
@@ -154,7 +154,7 @@ typedef enum gte_control_reg gte_control_reg_t;
 /*
  * Status flag definitions
  */
-enum gte_flag : uint32_t {
+enum gte_flag {
 	GTE_FLAG_IR0_SATURATED		= 1u << 12,
 	GTE_FLAG_SY2_SATURATED		= 1u << 13,
 	GTE_FLAG_SX2_SATURATED		= 1u << 14,
@@ -184,7 +184,10 @@ typedef enum gte_flag gte_flag_t;
  * through immediates.
  */
 DEF(void)
-gte_set_control_reg(gte_control_reg_t reg, uint32_t value)
+gte_set_control_reg(
+	gte_control_reg_t reg,
+	uint32_t value
+	)
 {
 	__asm__ volatile("ctc2 %0, $%1\n" :: "r"(value), "i"(reg));
 }
@@ -204,7 +207,8 @@ gte_get_control_reg(gte_control_reg_t reg)
 		int16_t v11, int16_t v12, int16_t v13, \
 		int16_t v21, int16_t v22, int16_t v23, \
 		int16_t v31, int16_t v32, int16_t v33 \
-	) { \
+		) \
+	{ \
 		gte_set_control_reg(REG0, ((uint16_t)v11) | ((uint16_t)v12 << 16)); \
 		gte_set_control_reg(REG1, ((uint16_t)v13) | ((uint16_t)v21 << 16)); \
 		gte_set_control_reg(REG2, ((uint16_t)v22) | ((uint16_t)v23 << 16)); \
@@ -251,7 +255,7 @@ MATRIX_FUNCTIONS(GTE_LC11LC12, GTE_LC13LC21, GTE_LC22LC23, GTE_LC31LC32, GTE_LC3
 /*
  * Data register definitions
  */
-enum gte_data_reg : uint32_t {
+enum gte_data_reg {
 	GTE_VXY0	=  0, /* Input vector 0 */
 	GTE_VZ0		=  1, /* Input vector 0 */
 	GTE_VXY1	=  2, /* Input vector 1 */
@@ -287,7 +291,10 @@ enum gte_data_reg : uint32_t {
 typedef enum gte_data_reg gte_data_reg_t;
 
 DEF(void)
-gte_set_data_reg(gte_data_reg_t reg, uint32_t value)
+gte_set_data_reg(
+	gte_data_reg_t reg,
+	uint32_t value
+	)
 {
 	__asm__ volatile("mtc2 %0, $%1\n" :: "r"(value), "i"(reg));
 }
@@ -307,27 +314,45 @@ gte_get_data_reg(gte_data_reg_t reg)
  * and stored to memory directly using the lwc2 and swc2 instructions.
  */
 DEF(void)
-gte_load_data_reg(gte_data_reg_t reg, int16_t offset, const void *ptr)
+gte_load_data_reg(
+	gte_data_reg_t reg,
+	int16_t offset,
+	const void *ptr
+	)
 {
 	__asm__ volatile("lwc2 $%0, %1(%2)\n" :: "i"(reg), "i"(offset), "r"(ptr));
 }
 
 DEF(void)
-gte_store_data_reg(gte_data_reg_t reg, int16_t offset, void *ptr)
+gte_store_data_reg(
+	gte_data_reg_t reg,
+	int16_t offset,
+	void *ptr
+	)
 {
 	__asm__ volatile("swc2 $%0, %1(%2)\n" :: "i"(reg), "i"(offset), "r"(ptr) : "memory");
 }
 
 #define VECTOR_FUNCTIONS(reg0, reg1, name) \
-	DEF(void) gte_set_##name(int16_t x, int16_t y, int16_t z) { \
+	DEF(void) \
+	gte_set_##name( \
+		int16_t x, \
+		int16_t y, \
+		int16_t z \
+		) \
+	{ \
 		gte_set_data_reg(reg0, ((uint16_t) x) | ((uint16_t) y << 16)); \
 		gte_set_data_reg(reg1, z); \
 	} \
-	DEF(void) gte_load_##name(const gte_vector16_t *input) { \
+	\
+	DEF(void) \
+	gte_load_##name(const gte_vector16_t *input) { \
 		gte_load_data_reg(reg0, 0, input); \
 		gte_load_data_reg(reg1, 4, input); \
 	} \
-	DEF(void) gte_store_##name(gte_vector16_t *output) { \
+	\
+	DEF(void) \
+	gte_store_##name(gte_vector16_t *output) { \
 		gte_store_data_reg(reg0, 0, output); \
 		gte_store_data_reg(reg1, 4, output); \
 	}
@@ -338,12 +363,13 @@ VECTOR_FUNCTIONS(GTE_VXY2, GTE_VZ2, V2)
 
 #undef VECTOR_FUNCTIONS
 
-DEF(void) 
+DEF(void)
 gte_set_row_vectors(
 	int16_t v11, int16_t v12, int16_t v13,
 	int16_t v21, int16_t v22, int16_t v23,
 	int16_t v31, int16_t v32, int16_t v33
-) {
+	)
+{
 	gte_set_data_reg(GTE_VXY0, ((uint16_t)v11) | ((uint16_t)v12 << 16));
 	gte_set_data_reg(GTE_VZ0,  v13);
 	gte_set_data_reg(GTE_VXY1, ((uint16_t)v21) | ((uint16_t)v22 << 16));
@@ -357,7 +383,8 @@ gte_set_column_vectors(
 	int16_t v11, int16_t v12, int16_t v13,
 	int16_t v21, int16_t v22, int16_t v23,
 	int16_t v31, int16_t v32, int16_t v33
-) {
+	)
+{
 	gte_set_data_reg(GTE_VXY0, ((uint16_t)v11) | ((uint16_t)v21 << 16));
 	gte_set_data_reg(GTE_VZ0,  v31);
 	gte_set_data_reg(GTE_VXY1, ((uint16_t)v12) | ((uint16_t)v22 << 16));

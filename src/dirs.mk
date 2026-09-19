@@ -1,2 +1,5 @@
 SUBDIRS:= sys libc etc out
+.if ${NYETPSX_BUILD_EXAMPLE} == 1
+SUBDIRS+= example
+.endif
 .include "${MBDIR}/indirs.mk"

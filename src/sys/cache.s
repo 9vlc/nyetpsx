@@ -20,8 +20,8 @@
 # BIOS implementation unnecessarily zeroes out the contents of every cache line)
 # and is not subject to the waitstates imposed by the ROM's 8-bit bus.
 
-.set KSEG1_BASE, 0xa0000000
-.set CPU_BCC,    0xfffe0130
+.set KSEG1_BASE, 0xA0000000
+.set CPU_BCC,    0xFFFE0130
 
 .set CPU_BCC_TAG, 1 <<  2
 .set CPU_BCC_DS,  1 <<  7
@@ -92,12 +92,12 @@ _cpu_flush_cache_inner:
 	sw    $0, 0x70(temp)
 	sw    $0, 0x80(temp)
 	sw    $0, 0x90(temp)
-	sw    $0, 0xa0(temp)
-	sw    $0, 0xb0(temp)
-	sw    $0, 0xc0(temp)
-	sw    $0, 0xd0(temp)
-	sw    $0, 0xe0(temp)
-	sw    $0, 0xf0(temp)
+	sw    $0, 0xA0(temp)
+	sw    $0, 0xB0(temp)
+	sw    $0, 0xC0(temp)
+	sw    $0, 0xD0(temp)
+	sw    $0, 0xE0(temp)
+	sw    $0, 0xF0(temp)
 
 	# }
 	bgtz  temp, .L

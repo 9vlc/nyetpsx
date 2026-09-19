@@ -1,13 +1,18 @@
 /*
  * SPDX-License-Identifier: MIT
- * Copyright (c) 2023 spicyjpeg
+ * Copyright (c) 2023-2026 spicyjpeg
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
 #include <stdio.h>
 
 void
-_assertAbort(const char *file, int line, const char *expr) {
+_assertAbort(
+	const char *file,
+	int line,
+	const char *expr
+	)
+{
 #ifndef NDEBUG
 	uprintf("%s:%d: assert(%s)\n", file, line, expr);
 #endif

@@ -3,6 +3,9 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
+#ifndef _CRC32_H
+#define _CRC32_H
+
 #include <stddef.h>
 #include <stdint.h>
 
@@ -11,7 +14,10 @@
  * Requires current CRC32 state
  */
 static inline uint32_t
-crc32_step(uint32_t crc, const uint8_t byte)
+crc32_step(
+	uint32_t crc,
+	const uint8_t byte
+	)
 {
 	crc ^= byte;
 
@@ -27,3 +33,5 @@ crc32_step(uint32_t crc, const uint8_t byte)
 }
 
 uint32_t crc32(const char *data, const size_t len);
+
+#endif /* _CRC32_H */

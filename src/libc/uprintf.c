@@ -19,7 +19,10 @@ struct up_ctx {
 };
 
 static void
-up_putc(struct up_ctx *ctx, char c)
+up_putc(
+	struct up_ctx *ctx,
+	char c
+	)
 {
 	if (ctx->buf == NULL) {
 		putc(c);
@@ -31,7 +34,10 @@ up_putc(struct up_ctx *ctx, char c)
 }
 
 static void
-up_putu(struct up_ctx *ctx, uint32_t v)
+up_putu(
+	struct up_ctx *ctx,
+	uint32_t v
+	)
 {
 	char c[10];
 	int i = 0;
@@ -52,7 +58,10 @@ up_putu(struct up_ctx *ctx, uint32_t v)
 }
 
 void
-up_puti(struct up_ctx *ctx, int32_t v)
+up_puti(
+	struct up_ctx *ctx,
+	int32_t v
+	)
 {
 	uint32_t uv;
 
@@ -67,7 +76,10 @@ up_puti(struct up_ctx *ctx, int32_t v)
 }
 
 static void
-up_putx(struct up_ctx *ctx, uint32_t x)
+up_putx(
+	struct up_ctx *ctx,
+	uint32_t x
+	)
 {
 	int i;
 	uint32_t p;
@@ -89,7 +101,11 @@ up_putx(struct up_ctx *ctx, uint32_t x)
 }
 
 static void
-up_fmt(struct up_ctx *ctx, const char *fmt, va_list ap)
+up_fmt(
+	struct up_ctx *ctx,
+	const char *fmt,
+	va_list ap
+	)
 {
 	int c;
 	const char *s;
@@ -157,7 +173,10 @@ up_fmt(struct up_ctx *ctx, const char *fmt, va_list ap)
  */
 
 int
-uvprintf(const char *fmt, va_list ap)
+uvprintf(
+	const char *fmt,
+	va_list ap
+	)
 {
 	struct up_ctx ctx;
 
@@ -170,7 +189,10 @@ uvprintf(const char *fmt, va_list ap)
 }
 
 int
-uprintf(const char *fmt, ...)
+uprintf(
+	const char *fmt,
+	...
+	)
 {
 	va_list ap;
 	int n;
@@ -183,7 +205,11 @@ uprintf(const char *fmt, ...)
 }
 
 int
-uvsprintf(char *str, const char *fmt, va_list ap)
+uvsprintf(
+	char *str,
+	const char *fmt,
+	va_list ap
+	)
 {
 	struct up_ctx ctx;
 
@@ -198,7 +224,11 @@ uvsprintf(char *str, const char *fmt, va_list ap)
 }
 
 int
-usprintf(char *str, const char *fmt, ...)
+usprintf(
+	char *str,
+	const char *fmt,
+	...
+	)
 {
 	va_list ap;
 	int n;
@@ -211,7 +241,12 @@ usprintf(char *str, const char *fmt, ...)
 }
 
 int
-uvsnprintf(char *str, size_t size, const char *fmt, va_list ap)
+uvsnprintf(
+	char *str,
+	size_t size,
+	const char *fmt,
+	va_list ap
+	)
 {
 	struct up_ctx ctx;
 
@@ -228,7 +263,12 @@ uvsnprintf(char *str, size_t size, const char *fmt, va_list ap)
 }
 
 int
-usnprintf(char *str, size_t size, const char *fmt, ...)
+usnprintf(
+	char *str,
+	size_t size,
+	const char *fmt,
+	...
+	)
 {
 	va_list ap;
 	int n;

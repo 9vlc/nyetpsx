@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: MIT
- * Copyright (c) 2023 spicyjpeg
+ * Copyright (c) 2023-2026 spicyjpeg
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
@@ -9,7 +9,11 @@
 #include <string.h>
 
 void *
-memset(void *dest, int ch, size_t count)
+memset(
+	void *dest,
+	int ch,
+	size_t count
+	)
 {
 	uint8_t *_dest = (uint8_t *)dest;
 
@@ -21,7 +25,11 @@ memset(void *dest, int ch, size_t count)
 }
 
 void *
-memcpy(void * restrict dest, const void * restrict src, size_t count)
+memcpy(
+	void * restrict dest,
+	const void * restrict src,
+	size_t count
+	)
 {
 	uint8_t *_dest = (uint8_t *)dest;
 	const uint8_t *_src = (const uint8_t *)src;
@@ -34,7 +42,12 @@ memcpy(void * restrict dest, const void * restrict src, size_t count)
 }
 
 void *
-memccpy(void * restrict dest, const void * restrict src, int ch, size_t count)
+memccpy(
+	void * restrict dest,
+	const void * restrict src,
+	int ch,
+	size_t count
+	)
 {
 	uint8_t *_dest = (uint8_t *)dest;
 	const uint8_t *_src = (const uint8_t *)src;
@@ -52,7 +65,11 @@ memccpy(void * restrict dest, const void * restrict src, int ch, size_t count)
 }
 
 void *
-memmove(void *dest, const void *src, size_t count)
+memmove(
+	void *dest,
+	const void *src,
+	size_t count
+	)
 {
 	uint8_t *_dest = (uint8_t *)dest;
 	const uint8_t *_src = (const uint8_t *)src;
@@ -83,7 +100,11 @@ memmove(void *dest, const void *src, size_t count)
 }
 
 int
-memcmp(const void *lhs, const void *rhs, size_t count)
+memcmp(
+	const void *lhs,
+	const void *rhs,
+	size_t count
+	)
 {
 	const uint8_t *_lhs = (const uint8_t *)lhs;
 	const uint8_t *_rhs = (const uint8_t *)rhs;
@@ -101,7 +122,11 @@ memcmp(const void *lhs, const void *rhs, size_t count)
 }
 
 void *
-memchr(const void *ptr, int ch, size_t count)
+memchr(
+	const void *ptr,
+	int ch,
+	size_t count
+	)
 {
 	const uint8_t *_ptr = (const uint8_t *)ptr;
 
@@ -117,7 +142,10 @@ memchr(const void *ptr, int ch, size_t count)
 /* String manipulation */
 
 char *
-strcpy(char * restrict dest, const char * restrict src)
+strcpy(
+	char * restrict dest,
+	const char * restrict src
+	)
 {
 	char *_dest = dest;
 
@@ -131,7 +159,11 @@ strcpy(char * restrict dest, const char * restrict src)
 }
 
 char *
-strncpy(char * restrict dest, const char * restrict src, size_t count)
+strncpy(
+	char * restrict dest,
+	const char * restrict src,
+	size_t count
+	)
 {
 	char *_dest = dest;
 
@@ -147,7 +179,10 @@ strncpy(char * restrict dest, const char * restrict src, size_t count)
 }
 
 int
-strcmp(const char *lhs, const char *rhs)
+strcmp(
+	const char *lhs,
+	const char *rhs
+	)
 {
 	while (1) {
 		char a = *(lhs++),

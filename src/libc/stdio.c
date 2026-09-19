@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: MIT
- * Copyright (c) 2023 spicyjpeg
+ * Copyright (c) 2023-2026 spicyjpeg
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
 */
 
@@ -11,22 +11,18 @@
 void
 putc(char c)
 {
-	while ((SIO_STAT(1) & (SIO_STAT_TX_NOT_FULL |
-		SIO_STAT_CTS)) == SIO_STAT_CTS) {
-
-		(void)0;
+	while (!(SIO_STAT(1) & SIO_STAT_TX_NOT_FULL)) {
+		__asm__ __volatile__("");
 	}
 
-	if (SIO_STAT(1) & SIO_STAT_CTS) {
-		SIO_DATA(1) = c;
-	}
+	SIO_DATA(1) = c;
 }
 
 char
 getc(void)
 {
 	while (!(SIO_STAT(1) & SIO_STAT_RX_NOT_EMPTY)) {
-		(void)0;
+		__asm__ __volatile__("");
 	}
 
 	return (SIO_DATA(1));

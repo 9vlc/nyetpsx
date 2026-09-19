@@ -8,7 +8,10 @@
 #include <crc32.h>
 
 uint32_t
-crc32(const char *data, const size_t data_len)
+crc32(
+	const char *data,
+	const size_t data_len
+	)
 {
 	uint32_t crc = UINT32_MAX;
 
