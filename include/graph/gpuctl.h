@@ -6,6 +6,7 @@
 #ifndef _GRAPH__GPUCTL_H
 #define _GRAPH__GPUCTL_H
 
+#include <sys/irq.h>
 #include <sys/gpu.h>
 
 #include <stdbool.h>
