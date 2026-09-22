@@ -43,11 +43,13 @@ CFLAGS+= -mno-mt -mno-abicalls -mno-check-zero-division
 
 .if ${NYETPSX_USE_SDATA} == 1
 CFLAGS+= -mgpopt -G8
+LDFLAGS:= -G8
 .else
 CFLAGS+= -mno-gpopt -G0
+LDFLAGS:= -G0
 .endif
 
 CFLAGS+= -I${INCDIR} -I${INCDIR}/psx -Wall -pedantic -std=c23 -Os ${CFLAGS_ADD}
-LDFLAGS:= -L${OBJDIR}/out -g -G8 -static -nostdlib ${LDFLAGS_ADD}
+LDFLAGS+= -L${OBJDIR}/out -g -static -nostdlib ${LDFLAGS_ADD}
 
 .endif # NYETPSX_SOURCE_TC
