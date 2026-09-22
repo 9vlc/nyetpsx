@@ -1,6 +1,7 @@
 NYETPSX_TC?= GCC
 NYETPSX_USE_SDATA?= 1
 NYETPSX_BUILD_EXAMPLE?= 1
+NYETPSX_SOURCE_TC?= 0
 
 .if ${NYETPSX_TC:tu} == "GCC"
 CC!= ${.PARSEDIR}/scripts/find_tc.sh gcc gcc
@@ -34,6 +35,8 @@ CFLAGS:= -target mipsel-none-elf -march=mips1 -mabi=32 -mfp32 -Wextra
 
 ASFLAGS:= ${CFLAGS}
 
+.if ${NYETPSX_SOURCE_TC} != 1
+
 CFLAGS+= -ffreestanding -fno-builtin -nostdlib -fno-pic
 CFLAGS+= -fdata-sections -ffunction-sections -fsigned-char -mno-extern-sdata
 CFLAGS+= -mno-mt -mno-abicalls -mno-check-zero-division
@@ -46,3 +49,5 @@ CFLAGS+= -mno-gpopt -G0
 
 CFLAGS+= -I${INCDIR} -I${INCDIR}/psx -Wall -pedantic -std=c23 -Os ${CFLAGS_ADD}
 LDFLAGS:= -L${OBJDIR}/out -g -G8 -static -nostdlib ${LDFLAGS_ADD}
+
+.endif # NYETPSX_SOURCE_TC
