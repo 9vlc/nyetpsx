@@ -226,7 +226,7 @@ _gp0_polygon(
 }
 
 DEF(uint32_t)
-gp0_triangle(
+gp0_tri(
 	bool textured,
 	bool blend
 	)
@@ -235,7 +235,7 @@ gp0_triangle(
 }
 
 DEF(uint32_t)
-gp0_shaded_triangle(
+gp0_shad_tri(
 	bool gouraud,
 	bool textured,
 	bool blend
@@ -254,7 +254,7 @@ gp0_quad(
 }
 
 DEF(uint32_t)
-gp0_shaded_quad(
+gp0_shad_quad(
 	bool gouraud,
 	bool textured,
 	bool blend
@@ -287,7 +287,7 @@ gp0_poly_line(
 }
 
 DEF(uint32_t)
-_gp0_rectangle(
+_gp0_rect(
 	uint8_t size,
 	bool textured,
 	bool unshaded,
@@ -302,43 +302,43 @@ _gp0_rectangle(
 }
 
 DEF(uint32_t)
-gp0_rectangle(
+gp0_rect(
 	bool textured,
 	bool unshaded,
 	bool blend
 	)
 {
-	return (_gp0_rectangle(0, textured, unshaded, blend));
+	return (_gp0_rect(0, textured, unshaded, blend));
 }
 
 DEF(uint32_t)
-gp0_rectangle1x1(
+gp0_rect1x1(
 	bool textured,
 	bool unshaded,
 	bool blend
 	)
 {
-	return (_gp0_rectangle(1, textured, unshaded, blend));
+	return (_gp0_rect(1, textured, unshaded, blend));
 }
 
 DEF(uint32_t)
-gp0_rectangle8x8(
+gp0_rect8x8(
 	bool textured,
 	bool unshaded,
 	bool blend
 	)
 {
-	return (_gp0_rectangle(2, textured, unshaded, blend));
+	return (_gp0_rect(2, textured, unshaded, blend));
 }
 
 DEF(uint32_t)
-gp0_rectangle16x16(
+gp0_rect16x16(
 	bool textured,
 	bool unshaded,
 	bool blend
 	)
 {
-	return (_gp0_rectangle(3, textured, unshaded, blend));
+	return (_gp0_rect(3, textured, unshaded, blend));
 }
 
 

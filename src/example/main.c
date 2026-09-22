@@ -65,7 +65,7 @@ main(void)
 	);
 
 	/* Set page and screen origin */
-	graph_wait_for_gpu();
+	graph_await_cmd();
 	GPU_GP0 = gp0_set_page(0, true, false);
 	GPU_GP0 = gp0_fb_offset1(0, 0);
 	GPU_GP0 = gp0_fb_offset2(SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1);
@@ -77,13 +77,14 @@ main(void)
 	uint8_t rcc = 0;
 	int inc = 1;
 	while (1) {
-		graph_rect(
+		graph_d_rect(
 			GRAPH_RECT(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
-			GRAPH_XRGB(0x000000)
+			GRAPH_XRGB(0x000000),
+			false
 		);
 
 		/* Triangle on left side */
-		graph_shaded_tri(
+		graph_d_shad_tri(
 			GRAPH_TRI(
 				0, 0,
 				0, SCREEN_HEIGHT,
@@ -91,11 +92,12 @@ main(void)
 			),
 			GRAPH_XRGB(0x000000),
 			GRAPH_XRGB(rcc << 16),
-			GRAPH_XRGB(0x000000)
+			GRAPH_XRGB(0x000000),
+			false
 		);
 
 		/* Triangle on right side */
-		graph_shaded_tri(
+		graph_d_shad_tri(
 			GRAPH_TRI(
 				0, 0,
 				SCREEN_WIDTH, 0,
@@ -103,11 +105,12 @@ main(void)
 			),
 			GRAPH_XRGB(0x000000),
 			GRAPH_XRGB(rcc << 16),
-			GRAPH_XRGB(0x000000)
+			GRAPH_XRGB(0x000000),
+			false
 		);
 
-		graph_wait_for_gpu();
-		graph_wait_for_vsync();
+		graph_await_cmd();
+		graph_await_vsync();
 
 		rcc += inc;
 		if (rcc >= 200) {

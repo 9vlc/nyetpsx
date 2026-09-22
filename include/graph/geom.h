@@ -14,15 +14,16 @@
 #include <stdint.h>
 
 #define DEF(type) static inline type __attribute__((always_inline))
+#define PACKED __attribute__((packed))
 
 /*
  * Structs
  */
 
 union graph_rgb {
-	struct { uint8_t b, g, r; };
+	struct { uint8_t r, g, b; } PACKED;
 	uint32_t raw;
-};
+} PACKED;
 typedef union graph_rgb graph_rgb_t;
 #define GRAPH_RGB(R, G, B) (graph_rgb_t){.r=(R), .g=(G), .b=(B)}
 #define GRAPH_XRGB(X) (graph_rgb_t){.raw=gp0_xrgb(X)}
@@ -62,32 +63,49 @@ typedef struct graph_quad graph_quad_t;
 	.p1.x=(X1), .p1.y=(Y1), .p2.x=(X2), .p2.y=(Y2), \
 	.p3.x=(X3), .p3.y=(Y3), .p4.x=(X4), .p4.y=(Y4)}
 
+struct graph_texture {
+	uint16_t page, clut;
+};
+typedef struct graph_texture graph_texture_t;
+#define GRAPH_TEXTURE(PAGE, CLUT) (graph_texture_t){.page=(PAGE), .clut=(CLUT)}
+
+struct graph_uv {
+	uint8_t u, v;
+};
+typedef struct graph_uv graph_uv_t;
+#define GRAPH_UV(U, V) (graph_uv_t){.u=(U), .v=(V)}
+
 /*
- * Inline functions
+ * Direct draw
  */
 
 DEF(void)
-graph_rect(
-	graph_rect_t rect,
-	graph_rgb_t col
+graph_d_tri(
+	graph_tri_t tri,
+	graph_rgb_t col,
+	bool blend
 	)
 {
-	graph_wait_for_gpu();
-	GPU_GP0 = col.raw | gp0_vram_fill();
-	GPU_GP0 = gp0_xy(rect.x, rect.y);
-	GPU_GP0 = gp0_xy(rect.w, rect.h);
+	graph_await_cmd();
+
+	GPU_GP0 = col.raw | gp0_tri(false, blend);
+	GPU_GP0 = gp0_xy(tri.p1.x, tri.p1.y);
+	GPU_GP0 = gp0_xy(tri.p2.x, tri.p2.y);
+	GPU_GP0 = gp0_xy(tri.p3.x, tri.p3.y);
 }
 
 DEF(void)
-graph_shaded_tri(
+graph_d_shad_tri(
 	graph_tri_t tri,
 	graph_rgb_t col1,
 	graph_rgb_t col2,
-	graph_rgb_t col3
+	graph_rgb_t col3,
+	bool blend
 	)
 {
-	graph_wait_for_gpu();
-	GPU_GP0 = col1.raw | gp0_shaded_triangle(true, false, false);
+	graph_await_cmd();
+
+	GPU_GP0 = col1.raw | gp0_shad_tri(true, false, blend);
 	GPU_GP0 = gp0_xy(tri.p1.x, tri.p1.y);
 	GPU_GP0 = col2.raw;
 	GPU_GP0 = gp0_xy(tri.p2.x, tri.p2.y);
@@ -95,7 +113,363 @@ graph_shaded_tri(
 	GPU_GP0 = gp0_xy(tri.p3.x, tri.p3.y);
 }
 
+DEF(void)
+graph_d_tex_tri(
+	graph_tri_t tri,
+	graph_rgb_t col,
+	graph_texture_t tex,
+	graph_uv_t uv1,
+	graph_uv_t uv2,
+	graph_uv_t uv3,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col.raw | gp0_tri(true, blend);
+	GPU_GP0 = gp0_xy(tri.p1.x, tri.p1.y);
+	GPU_GP0 = gp0_uv(uv1.u, uv1.v, tex.clut);
+	GPU_GP0 = gp0_xy(tri.p2.x, tri.p2.y);
+	GPU_GP0 = gp0_uv(uv2.u, uv2.v, tex.page);
+	GPU_GP0 = gp0_xy(tri.p3.x, tri.p3.y);
+	GPU_GP0 = gp0_uv(uv3.u, uv3.v, 0);
+}
+
+DEF(void)
+graph_d_shad_tex_tri(
+	graph_tri_t tri,
+	graph_texture_t tex,
+	graph_rgb_t col1,
+	graph_rgb_t col2,
+	graph_rgb_t col3,
+	graph_uv_t uv1,
+	graph_uv_t uv2,
+	graph_uv_t uv3,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col1.raw | gp0_shad_tri(true, true, blend);
+	GPU_GP0 = gp0_xy(tri.p1.x, tri.p1.y);
+	GPU_GP0 = gp0_uv(uv1.u, uv1.v, tex.clut);
+	GPU_GP0 = col2.raw;
+	GPU_GP0 = gp0_xy(tri.p2.x, tri.p2.y);
+	GPU_GP0 = gp0_uv(uv2.u, uv2.v, tex.page);
+	GPU_GP0 = col3.raw;
+	GPU_GP0 = gp0_xy(tri.p3.x, tri.p3.y);
+	GPU_GP0 = gp0_uv(uv3.u, uv3.v, 0);
+}
+
+DEF(void)
+graph_d_quad(
+	graph_quad_t quad,
+	graph_rgb_t col,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col.raw | gp0_quad(false, blend);
+	GPU_GP0 = gp0_xy(quad.p1.x, quad.p1.y);
+	GPU_GP0 = gp0_xy(quad.p2.x, quad.p2.y);
+	GPU_GP0 = gp0_xy(quad.p3.x, quad.p3.y);
+	GPU_GP0 = gp0_xy(quad.p4.x, quad.p4.y);
+}
+
+DEF(void)
+graph_d_shad_quad(
+	graph_quad_t quad,
+	graph_rgb_t col1,
+	graph_rgb_t col2,
+	graph_rgb_t col3,
+	graph_rgb_t col4,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col1.raw | gp0_shad_quad(true, false, blend);
+	GPU_GP0 = gp0_xy(quad.p1.x, quad.p1.y);
+	GPU_GP0 = col2.raw;
+	GPU_GP0 = gp0_xy(quad.p2.x, quad.p2.y);
+	GPU_GP0 = col3.raw;
+	GPU_GP0 = gp0_xy(quad.p3.x, quad.p3.y);
+	GPU_GP0 = col4.raw;
+	GPU_GP0 = gp0_xy(quad.p4.x, quad.p4.y);
+}
+
+DEF(void)
+graph_d_tex_quad(
+	graph_quad_t quad,
+	graph_rgb_t col,
+	graph_texture_t tex,
+	graph_uv_t uv1,
+	graph_uv_t uv2,
+	graph_uv_t uv3,
+	graph_uv_t uv4,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col.raw | gp0_quad(true, blend);
+	GPU_GP0 = gp0_xy(quad.p1.x, quad.p1.y);
+	GPU_GP0 = gp0_uv(uv1.u, uv1.v, tex.clut);
+	GPU_GP0 = gp0_xy(quad.p2.x, quad.p2.y);
+	GPU_GP0 = gp0_uv(uv2.u, uv2.v, tex.page);
+	GPU_GP0 = gp0_xy(quad.p3.x, quad.p3.y);
+	GPU_GP0 = gp0_uv(uv3.u, uv3.v, 0);
+	GPU_GP0 = gp0_xy(quad.p4.x, quad.p4.y);
+	GPU_GP0 = gp0_uv(uv4.u, uv4.v, 0);
+}
+
+DEF(void)
+graph_d_shad_tex_quad(
+	graph_quad_t quad,
+	graph_texture_t tex,
+	graph_rgb_t col1,
+	graph_rgb_t col2,
+	graph_rgb_t col3,
+	graph_rgb_t col4,
+	graph_uv_t uv1,
+	graph_uv_t uv2,
+	graph_uv_t uv3,
+	graph_uv_t uv4,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col1.raw | gp0_shad_quad(true, true, blend);
+	GPU_GP0 = gp0_xy(quad.p1.x, quad.p1.y);
+	GPU_GP0 = gp0_uv(uv1.u, uv1.v, tex.clut);
+	GPU_GP0 = col2.raw;
+	GPU_GP0 = gp0_xy(quad.p2.x, quad.p2.y);
+	GPU_GP0 = gp0_uv(uv2.u, uv2.v, tex.page);
+	GPU_GP0 = col3.raw;
+	GPU_GP0 = gp0_xy(quad.p3.x, quad.p3.y);
+	GPU_GP0 = gp0_uv(uv3.u, uv3.v, 0);
+	GPU_GP0 = col4.raw;
+	GPU_GP0 = gp0_xy(quad.p4.x, quad.p4.y);
+	GPU_GP0 = gp0_uv(uv4.u, uv4.v, 0);
+}
+
+DEF(void)
+graph_d_line(
+	graph_line_t line,
+	graph_rgb_t col,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col.raw | gp0_line(false, blend);
+	GPU_GP0 = gp0_xy(line.p1.x, line.p1.y);
+	GPU_GP0 = gp0_xy(line.p2.x, line.p2.y);
+}
+
+DEF(void)
+graph_d_shad_line(
+	graph_line_t line,
+	graph_rgb_t col1,
+	graph_rgb_t col2,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col1.raw | gp0_line(true, blend);
+	GPU_GP0 = gp0_xy(line.p1.x, line.p1.y);
+	GPU_GP0 = col2.raw;
+	GPU_GP0 = gp0_xy(line.p2.x, line.p2.y);
+}
+
+DEF(void)
+graph_d_line3(
+	graph_tri_t tri,
+	graph_rgb_t col,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col.raw | gp0_poly_line(false, blend);
+	GPU_GP0 = gp0_xy(tri.p1.x, tri.p1.y);
+	GPU_GP0 = gp0_xy(tri.p2.x, tri.p2.y);
+	GPU_GP0 = gp0_xy(tri.p3.x, tri.p3.y);
+	GPU_GP0 = 0x55555555;
+}
+
+DEF(void)
+graph_d_shad_line3(
+	graph_tri_t tri,
+	graph_rgb_t col1,
+	graph_rgb_t col2,
+	graph_rgb_t col3,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col1.raw | gp0_poly_line(true, blend);
+	GPU_GP0 = gp0_xy(tri.p1.x, tri.p1.y);
+	GPU_GP0 = col2.raw;
+	GPU_GP0 = gp0_xy(tri.p2.x, tri.p2.y);
+	GPU_GP0 = col3.raw;
+	GPU_GP0 = gp0_xy(tri.p3.x, tri.p3.y);
+	GPU_GP0 = 0x55555555;
+}
+
+DEF(void)
+graph_d_line4(
+	graph_quad_t quad,
+	graph_rgb_t col,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col.raw | gp0_poly_line(false, blend);
+	GPU_GP0 = gp0_xy(quad.p1.x, quad.p1.y);
+	GPU_GP0 = gp0_xy(quad.p2.x, quad.p2.y);
+	GPU_GP0 = gp0_xy(quad.p3.x, quad.p3.y);
+	GPU_GP0 = gp0_xy(quad.p4.x, quad.p4.y);
+	GPU_GP0 = 0x55555555;
+}
+
+DEF(void)
+graph_d_shad_line4(
+	graph_quad_t quad,
+	graph_rgb_t col1,
+	graph_rgb_t col2,
+	graph_rgb_t col3,
+	graph_rgb_t col4,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col1.raw | gp0_poly_line(true, blend);
+	GPU_GP0 = gp0_xy(quad.p1.x, quad.p1.y);
+	GPU_GP0 = col2.raw;
+	GPU_GP0 = gp0_xy(quad.p2.x, quad.p2.y);
+	GPU_GP0 = col3.raw;
+	GPU_GP0 = gp0_xy(quad.p3.x, quad.p3.y);
+	GPU_GP0 = col4.raw;
+	GPU_GP0 = gp0_xy(quad.p4.x, quad.p4.y);
+	GPU_GP0 = 0x55555555;
+}
+
+DEF(void)
+graph_d_rect(
+	graph_rect_t rect,
+	graph_rgb_t col,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col.raw | gp0_rect(false, false, blend);
+	GPU_GP0 = gp0_xy(rect.x, rect.y);
+	GPU_GP0 = gp0_xy(rect.w, rect.h);
+}
+
+DEF(void)
+graph_d_rect1x1(
+	graph_point_t pos,
+	graph_rgb_t col,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col.raw | gp0_rect1x1(false, false, blend);
+	GPU_GP0 = gp0_xy(pos.x, pos.y);
+}
+
+DEF(void)
+graph_d_rect8x8(
+	graph_point_t pos,
+	graph_rgb_t col,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col.raw | gp0_rect8x8(false, false, blend);
+	GPU_GP0 = gp0_xy(pos.x, pos.y);
+}
+
+DEF(void)
+graph_d_rect16x16(
+	graph_point_t pos,
+	graph_rgb_t col,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = col.raw | gp0_rect16x16(false, false, blend);
+	GPU_GP0 = gp0_xy(pos.x, pos.y);
+}
+
+DEF(void)
+graph_d_sprite(
+	graph_rect_t rect,
+	graph_rgb_t col,
+	graph_texture_t tex,
+	graph_uv_t uv,
+	bool raw,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = GP0_CMD_TPAGE | tex.page;
+	GPU_GP0 = col.raw | gp0_rect(true, raw, blend);
+	GPU_GP0 = gp0_xy(rect.x, rect.y);
+	GPU_GP0 = gp0_uv(uv.u, uv.v, tex.clut);
+	GPU_GP0 = gp0_xy(rect.w, rect.h);
+}
+
+DEF(void)
+graph_d_sprite8x8(
+	graph_point_t pos,
+	graph_rgb_t col,
+	graph_texture_t tex,
+	graph_uv_t uv,
+	bool raw,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = GP0_CMD_TPAGE | tex.page;
+	GPU_GP0 = col.raw | gp0_rect8x8(true, raw, blend);
+	GPU_GP0 = gp0_xy(pos.x, pos.y);
+	GPU_GP0 = gp0_uv(uv.u, uv.v, tex.clut);
+}
+
+DEF(void)
+graph_d_sprite16x16(
+	graph_point_t pos,
+	graph_rgb_t col,
+	graph_texture_t tex,
+	graph_uv_t uv,
+	bool raw,
+	bool blend
+	)
+{
+	graph_await_cmd();
+
+	GPU_GP0 = GP0_CMD_TPAGE | tex.page;
+	GPU_GP0 = col.raw | gp0_rect16x16(true, raw, blend);
+	GPU_GP0 = gp0_xy(pos.x, pos.y);
+	GPU_GP0 = gp0_uv(uv.u, uv.v, tex.clut);
+}
 
 #undef DEF
+#undef PACKED
 
 #endif /* _GRAPH__GEOM_H */

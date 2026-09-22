@@ -14,19 +14,26 @@
 #define DEF(type) static inline type __attribute__((always_inline))
 
 DEF(void)
-graph_wait_for_gpu(void)
+graph_await_dma(void)
 {
 	while (!(GPU_GP1 & GP1_STAT_WRITE_READY)) {
 		__asm__ __volatile__("");
 	}
 }
 
+DEF(void)
+graph_await_cmd(void)
+{
+	while (!(GPU_GP1 & GP1_STAT_CMD_READY)) {
+		__asm__ __volatile__("");
+	}
+}
 
 DEF(void)
-graph_wait_for_vsync(void)
+graph_await_vsync(void)
 {
 	while (!(IRQ_STAT & (1 << IRQ_VSYNC))) {
-		__asm__ volatile("");
+		__asm__ __volatile__("");
 	}
 
 	IRQ_STAT = ~(1 << IRQ_VSYNC);
