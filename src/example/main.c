@@ -79,7 +79,7 @@ main(void)
 	while (1) {
 		graph_d_rect(
 			GRAPH_RECT(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
-			GRAPH_XRGB(0x000000),
+			GRAPH_XRGB(0),
 			false
 		);
 
@@ -90,9 +90,9 @@ main(void)
 				0, SCREEN_HEIGHT,
 				SCREEN_WIDTH, SCREEN_HEIGHT
 			),
-			GRAPH_XRGB(0x000000),
-			GRAPH_XRGB(rcc << 16),
-			GRAPH_XRGB(0x000000),
+			GRAPH_XRGB(0),
+			GRAPH_RGB(rcc, 0, 0),
+			GRAPH_XRGB(0),
 			false
 		);
 
@@ -103,9 +103,9 @@ main(void)
 				SCREEN_WIDTH, 0,
 				SCREEN_WIDTH, SCREEN_HEIGHT
 			),
-			GRAPH_XRGB(0x000000),
-			GRAPH_XRGB(rcc << 16),
-			GRAPH_XRGB(0x000000),
+			GRAPH_XRGB(0),
+			GRAPH_RGB(rcc, 0, 0),
+			GRAPH_XRGB(0),
 			false
 		);
 
