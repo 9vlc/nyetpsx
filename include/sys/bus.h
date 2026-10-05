@@ -9,24 +9,24 @@
 
 #include <sys/mmio.h>
 
-enum biu_control_flag {
-	BIU_CTRL_WRITE_DELAY_BITMASK	= 15u <<  0,
-	BIU_CTRL_READ_DELAY_BITMASK	= 15u <<  4,
-	BIU_CTRL_RECOVERY		=  1u <<  8,
-	BIU_CTRL_HOLD			=  1u <<  9,
-	BIU_CTRL_FLOAT			=  1u << 10,
-	BIU_CTRL_PRESTROBE		=  1u << 11,
-	BIU_CTRL_WIDTH_8		=  0u << 12,
-	BIU_CTRL_WIDTH_16		=  1u << 12,
-	BIU_CTRL_AUTO_INCR		=  1u << 13,
-	BIU_CTRL_SIZE_BITMASK		= 31u << 16,
-	BIU_CTRL_DMA_DELAY_BITMASK	= 15u << 24,
-	BIU_CTRL_ADDR_ERROR		=  1u << 28,
-	BIU_CTRL_DMA_DELAY		=  1u << 29,
-	BIU_CTRL_DMA32			=  1u << 30,
-	BIU_CTRL_WAIT			=  1u << 31
-};
-typedef enum biu_control_flag biu_control_flag_t;
+#include <stdint.h>
+
+#define BIU_CTRL_WRITE_DELAY_BITMASK	(15u <<  0)
+#define BIU_CTRL_READ_DELAY_BITMASK	(15u <<  4)
+#define BIU_CTRL_RECOVERY		(1u <<  8)
+#define BIU_CTRL_HOLD			(1u <<  9)
+#define BIU_CTRL_FLOAT			(1u << 10)
+#define BIU_CTRL_PRESTROBE		(1u << 11)
+#define BIU_CTRL_WIDTH_8		(0u << 12)
+#define BIU_CTRL_WIDTH_16		(1u << 12)
+#define BIU_CTRL_AUTO_INCR		(1u << 13)
+#define BIU_CTRL_SIZE_BITMASK		(31u << 16)
+#define BIU_CTRL_DMA_DELAY_BITMASK	(15u << 24)
+#define BIU_CTRL_ADDR_ERROR		(1u << 28)
+#define BIU_CTRL_DMA_DELAY		(1u << 29)
+#define BIU_CTRL_DMA32			(1u << 30)
+#define BIU_CTRL_WAIT			(1u << 31)
+typedef uint32_t biu_control_flag_t;
 
 #define BIU_DEV0_ADDR		MMIO32(IO_BASE | 0x000) /* PIO/arcade */
 #define BIU_DEV8_ADDR		MMIO32(IO_BASE | 0x004) /* PIO/debug */

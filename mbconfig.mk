@@ -1,7 +1,7 @@
 NYETPSX_TC?= GCC
 NYETPSX_USE_SDATA?= 1
 NYETPSX_BUILD_EXAMPLE?= 1
-NYETPSX_SOURCE_TC?= 0
+NYETPSX_SOURCE_TC?= 0 # Set to 1 to just get the toolchain from a different project
 
 .if ${NYETPSX_TC:tu} == "GCC"
 CC!= ${.PARSEDIR}/scripts/find_tc.sh gcc gcc
@@ -38,7 +38,7 @@ ASFLAGS:= ${CFLAGS}
 .if ${NYETPSX_SOURCE_TC} != 1
 
 CFLAGS+= -ffreestanding -fno-builtin -nostdlib -fno-pic
-CFLAGS+= -fdata-sections -ffunction-sections -fsigned-char -mno-extern-sdata
+CFLAGS+= -fdata-sections -ffunction-sections -fsigned-char #-mno-extern-sdata
 CFLAGS+= -mno-mt -mno-abicalls -mno-check-zero-division
 
 .if ${NYETPSX_USE_SDATA} == 1
@@ -49,7 +49,7 @@ CFLAGS+= -mno-gpopt -G0
 LDFLAGS:= -G0
 .endif
 
-CFLAGS+= -I${INCDIR} -I${INCDIR}/psx -Wall -pedantic -std=c23 -Os ${CFLAGS_ADD}
+CFLAGS+= -I${INCDIR} -I${INCDIR}/psx -Wall -pedantic -std=c99 -Os -flto ${CFLAGS_ADD}
 LDFLAGS+= -L${OBJDIR}/out -g -static -nostdlib ${LDFLAGS_ADD}
 
 .endif # NYETPSX_SOURCE_TC

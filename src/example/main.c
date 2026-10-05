@@ -10,7 +10,9 @@
 #include <sys/sio.h>
 #include <sys/gpu.h>
 
+#include <graph/gpu.h>
 #include <graph/geom.h>
+#include <graph/directdraw.h>
 
 #include <crc32.h>
 #include <string.h>
@@ -78,34 +80,34 @@ main(void)
 	int inc = 1;
 	while (1) {
 		graph_d_rect(
-			GRAPH_RECT(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
-			GRAPH_XRGB(0),
+			&GRAPH_RECT(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
+			&GRAPH_XRGB(0),
 			false
 		);
 
 		/* Triangle on left side */
 		graph_d_shad_tri(
-			GRAPH_TRI(
+			&GRAPH_TRI(
 				0, 0,
 				0, SCREEN_HEIGHT,
 				SCREEN_WIDTH, SCREEN_HEIGHT
 			),
-			GRAPH_XRGB(0),
-			GRAPH_RGB(rcc, 0, 0),
-			GRAPH_XRGB(0),
+			&GRAPH_XRGB(0),
+			&GRAPH_RGB(rcc, 0, 0),
+			&GRAPH_XRGB(0),
 			false
 		);
 
 		/* Triangle on right side */
 		graph_d_shad_tri(
-			GRAPH_TRI(
+			&GRAPH_TRI(
 				0, 0,
 				SCREEN_WIDTH, 0,
 				SCREEN_WIDTH, SCREEN_HEIGHT
 			),
-			GRAPH_XRGB(0),
-			GRAPH_RGB(rcc, 0, 0),
-			GRAPH_XRGB(0),
+			&GRAPH_XRGB(0),
+			&GRAPH_RGB(rcc, 0, 0),
+			&GRAPH_XRGB(0),
 			false
 		);
 

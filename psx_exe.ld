@@ -19,8 +19,8 @@ MEMORY {
 	 * AHDR never actually loaded in memory at ARAM_BASE - 2K, but just need
 	 *   to do this trick to copy the .text section correctly with objdump
 	 */
-	AHDR (r)   : ORIGIN = ARAM_BASE - 2K, LENGTH = 2K
-	ARAM (rwx) : ORIGIN = ARAM_BASE, LENGTH = ARAM_SIZE
+	AHDR : ORIGIN = ARAM_BASE - 2K, LENGTH = 2K
+	ARAM : ORIGIN = ARAM_BASE, LENGTH = ARAM_SIZE
 }
 
 SECTIONS {

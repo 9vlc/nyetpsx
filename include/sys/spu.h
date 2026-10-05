@@ -9,47 +9,45 @@
 
 #include <sys/mmio.h>
 
+#include <stdint.h>
+
 /*
  * SPU register flag definitions
  */
 
-enum spu_status_flag {
-	SPU_STAT_I2SA_ENABLE		= 1u << 0,
-	SPU_STAT_I2SB_ENABLE		= 1u << 1,
-	SPU_STAT_I2SA_REVERB		= 1u << 2,
-	SPU_STAT_I2SB_REVERB		= 1u << 3,
-	SPU_STAT_XFER_BITMASK		= 3u << 4,
-	SPU_STAT_XFER_NONE		= 0u << 4,
-	SPU_STAT_XFER_WRITE		= 1u << 4,
-	SPU_STAT_XFER_DMA_WRITE		= 2u << 4,
-	SPU_STAT_XFER_DMA_READ		= 3u << 4,
-	SPU_STAT_IRQ			= 1u << 6,
-	SPU_STAT_DREQ			= 1u << 7,
-	SPU_STAT_WRITE_REQ		= 1u << 8,
-	SPU_STAT_READ_REQ		= 1u << 9,
-	SPU_STAT_BUSY			= 1u << 10,
-	SPU_STAT_CAPTURE_BUF		= 1u << 11
-};
-typedef enum spu_status_flag spu_status_flag_t;
+#define SPU_STAT_I2SA_ENABLE		(1u << 0)
+#define SPU_STAT_I2SB_ENABLE		(1u << 1)
+#define SPU_STAT_I2SA_REVERB		(1u << 2)
+#define SPU_STAT_I2SB_REVERB		(1u << 3)
+#define SPU_STAT_XFER_BITMASK		(3u << 4)
+#define SPU_STAT_XFER_NONE		(0u << 4)
+#define SPU_STAT_XFER_WRITE		(1u << 4)
+#define SPU_STAT_XFER_DMA_WRITE		(2u << 4)
+#define SPU_STAT_XFER_DMA_READ		(3u << 4)
+#define SPU_STAT_IRQ			(1u << 6)
+#define SPU_STAT_DREQ			(1u << 7)
+#define SPU_STAT_WRITE_REQ		(1u << 8)
+#define SPU_STAT_READ_REQ		(1u << 9)
+#define SPU_STAT_BUSY			(1u << 10)
+#define SPU_STAT_CAPTURE_BUF		(1u << 11)
+typedef uint32_t spu_status_flag_t;
 
-enum spu_control_flag {
-	SPU_CTRL_I2SA_ENABLE		=  1u << 0,
-	SPU_CTRL_I2SB_ENABLE		=  1u << 1,
-	SPU_CTRL_I2SA_REVERB		=  1u << 2,
-	SPU_CTRL_I2SB_REVERB		=  1u << 3,
-	SPU_CTRL_XFER_BITMASK		=  3u << 4,
-	SPU_CTRL_XFER_NONE		=  0u << 4,
-	SPU_CTRL_XFER_WRITE		=  1u << 4,
-	SPU_CTRL_XFER_DMA_WRITE		=  2u << 4,
-	SPU_CTRL_XFER_DMA_READ		=  3u << 4,
-	SPU_CTRL_IRQ_ENABLE		=  1u << 6,
-	SPU_CTRL_REVERB_ENABLE		=  1u << 7,
-	SPU_CTRL_NOISE_STEP_BITMASK	=  3u << 8,
-	SPU_CTRL_NOISE_SHIFT_BITMASK	= 15u << 10,
-	SPU_CTRL_DAC_ENABLE		=  1u << 14,
-	SPU_CTRL_ENABLE			=  1u << 15
-};
-typedef enum spu_control_flag spu_control_flag_t;
+#define SPU_CTRL_I2SA_ENABLE		(1u << 0)
+#define SPU_CTRL_I2SB_ENABLE		(1u << 1)
+#define SPU_CTRL_I2SA_REVERB		(1u << 2)
+#define SPU_CTRL_I2SB_REVERB		(1u << 3)
+#define SPU_CTRL_XFER_BITMASK		(3u << 4)
+#define SPU_CTRL_XFER_NONE		(0u << 4)
+#define SPU_CTRL_XFER_WRITE		(1u << 4)
+#define SPU_CTRL_XFER_DMA_WRITE		(2u << 4)
+#define SPU_CTRL_XFER_DMA_READ		(3u << 4)
+#define SPU_CTRL_IRQ_ENABLE		(1u << 6)
+#define SPU_CTRL_REVERB_ENABLE		(1u << 7)
+#define SPU_CTRL_NOISE_STEP_BITMASK	(3u << 8)
+#define SPU_CTRL_NOISE_SHIFT_BITMASK	(15u << 10)
+#define SPU_CTRL_DAC_ENABLE		(1u << 14)
+#define SPU_CTRL_ENABLE			(1u << 15)
+typedef uint32_t spu_control_flag_t;
 
 /*
  * SPU register addresses

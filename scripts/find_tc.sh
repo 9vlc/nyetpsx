@@ -6,16 +6,14 @@ usage()
 	exit 1
 }
 
-if [ -z "${1:-}" ] || [ -z "${2:-}" ]
-then
+if [ -z "${1:-}" ] || [ -z "${2:-}" ]; then
 	usage
 fi
 
 a_tcpart="$2"
 
 # GCC: Probe various toolchain prefixes
-if [ "$1" = gcc ]
-then
+if [ "$1" = gcc ]; then
 	for f_tc in \
 		mipsel-none-elf- \
 		mipsel-unknown-elf- \
@@ -24,16 +22,14 @@ then
 	do
 		w_ex="$f_tc$a_tcpart"
 
-		if command -v "$w_ex" >/dev/null
-		then
+		if command -v "$w_ex" >/dev/null; then
 			echo "$w_ex"
 			exit 0
 		fi
 	done
 
 # LLVM: Pick the latest version on the machine
-elif [ "$1" = llvm ]
-then
+elif [ "$1" = llvm ]; then
 	w_matches="$(
 		echo "$PATH" | tr ':' '\n' | while IFS= read -r d
 		do
@@ -45,8 +41,7 @@ then
 		command -v "$a_tcpart"
 	)"
 
-	if [ "$w_matches" ]
-	then
+	if [ "$w_matches" ]; then
 		echo "$w_matches" | sed 1q
 		exit 0
 	fi

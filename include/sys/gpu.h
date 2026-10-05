@@ -17,74 +17,68 @@
 #define GPU_GP0 MMIO32(IO_BASE | 0x810)
 #define GPU_GP1 MMIO32(IO_BASE | 0x814)
 
-enum gp1_status_flag {
-	GP1_STAT_PAGE_X_BITMASK		= 15u <<  0, /* GP0_CMD_TPAGE */
-	GP1_STAT_PAGE_Y0		=  1u <<  4, /* GP0_CMD_TPAGE */
-	GP1_STAT_BLEND_BITMASK		=  3u <<  5, /* GP0_CMD_TPAGE */
-	GP1_STAT_BLEND_SEMITRANS	=  0u <<  5, /* GP0_CMD_TPAGE */
-	GP1_STAT_BLEND_ADD		=  1u <<  5, /* GP0_CMD_TPAGE */
-	GP1_STAT_BLEND_SUBTRACT		=  2u <<  5, /* GP0_CMD_TPAGE */
-	GP1_STAT_BLEND_DIV4_ADD		=  3u <<  5, /* GP0_CMD_TPAGE */
-	GP1_STAT_COLOR_BITMASK		=  3u <<  7, /* GP0_CMD_TPAGE */
-	GP1_STAT_COLOR_4BPP		=  0u <<  7, /* GP0_CMD_TPAGE */
-	GP1_STAT_COLOR_8BPP		=  1u <<  7, /* GP0_CMD_TPAGE */
-	GP1_STAT_COLOR_16BPP		=  2u <<  7, /* GP0_CMD_TPAGE */
-	GP1_STAT_DITHER			=  1u <<  9, /* GP0_CMD_TPAGE */
-	GP1_STAT_UNLOCK_FB		=  1u << 10, /* GP0_CMD_TPAGE */
-	GP1_STAT_SET_MASK		=  1u << 11, /* GP0_CMD_FB_MASK */
-	GP1_STAT_USE_MASK		=  1u << 12, /* GP0_CMD_FB_MASK */
-	GP1_STAT_DISP_FIELD_BITMASK	=  1u << 13,
-	GP1_STAT_DISP_FIELD_EVEN	=  0u << 13,
-	GP1_STAT_DISP_FIELD_ODD		=  1u << 13,
-	GP1_STAT_PAGE_Y1		=  1u << 15, /* GP0_CMD_TPAGE */
-	GP1_STAT_FB_HRES_BITMASK	=  7u << 16, /* GP1_CMD_FB_MODE */
-	GP1_STAT_FB_VRES_BITMASK	=  1u << 19, /* GP1_CMD_FB_MODE */
-	GP1_STAT_FB_VRES_256		=  0u << 19, /* GP1_CMD_FB_MODE */
-	GP1_STAT_FB_VRES_512		=  1u << 19, /* GP1_CMD_FB_MODE */
-	GP1_STAT_FB_MODE_BITMASK	=  1u << 20, /* GP1_CMD_FB_MODE */
-	GP1_STAT_FB_MODE_NTSC		=  0u << 20, /* GP1_CMD_FB_MODE */
-	GP1_STAT_FB_MODE_PAL		=  1u << 20, /* GP1_CMD_FB_MODE */
-	GP1_STAT_FB_COLOR_BITMASK	=  1u << 21, /* GP1_CMD_FB_MODE */
-	GP1_STAT_FB_COLOR_16BPP		=  0u << 21, /* GP1_CMD_FB_MODE */
-	GP1_STAT_FB_COLOR_24BPP		=  1u << 21, /* GP1_CMD_FB_MODE */
-	GP1_STAT_FB_INTERLACE		=  1u << 22, /* GP1_CMD_FB_MODE */
-	GP1_STAT_DISP_BLANK		=  1u << 23, /* GP1_CMD_DISP_BLANK */
-	GP1_STAT_IRQ			=  1u << 24,
-	GP1_STAT_DREQ			=  1u << 25,
-	GP1_STAT_CMD_READY		=  1u << 26,
-	GP1_STAT_READ_READY		=  1u << 27,
-	GP1_STAT_WRITE_READY		=  1u << 28,
-	GP1_STAT_DREQ_MODE_BITMASK	=  3u << 29, /* GP1_CMD_DREQ_MODE */
-	GP1_STAT_DREQ_MODE_NONE		=  0u << 29, /* GP1_CMD_DREQ_MODE */
-	GP1_STAT_DREQ_MODE_FIFO		=  1u << 29, /* GP1_CMD_DREQ_MODE */
-	GP1_STAT_DREQ_MODE_GP0_WRITE	=  2u << 29, /* GP1_CMD_DREQ_MODE */
-	GP1_STAT_DREQ_MODE_GP0_READ	=  3u << 29, /* GP1_CMD_DREQ_MODE */
-	GP1_STAT_DRAW_FIELD_BITMASK	=  1u << 31,
-	GP1_STAT_DRAW_FIELD_EVEN	=  0u << 31,
-	GP1_STAT_DRAW_FIELD_ODD		=  1u << 31
-};
-typedef enum gp1_status_flag gp1_status_flag_t;
+#define GP1_STAT_PAGE_X_BITMASK		(15u << 0) /* GP0_CMD_TPAGE */
+#define GP1_STAT_PAGE_Y0		(1u <<  4) /* GP0_CMD_TPAGE */
+#define GP1_STAT_BLEND_BITMASK		(3u <<  5) /* GP0_CMD_TPAGE */
+#define GP1_STAT_BLEND_SEMITRANS	(0u <<  5) /* GP0_CMD_TPAGE */
+#define GP1_STAT_BLEND_ADD		(1u <<  5) /* GP0_CMD_TPAGE */
+#define GP1_STAT_BLEND_SUBTRACT		(2u <<  5) /* GP0_CMD_TPAGE */
+#define GP1_STAT_BLEND_DIV4_ADD		(3u <<  5) /* GP0_CMD_TPAGE */
+#define GP1_STAT_COLOR_BITMASK		(3u <<  7) /* GP0_CMD_TPAGE */
+#define GP1_STAT_COLOR_4BPP		(0u <<  7) /* GP0_CMD_TPAGE */
+#define GP1_STAT_COLOR_8BPP		(1u <<  7) /* GP0_CMD_TPAGE */
+#define GP1_STAT_COLOR_16BPP		(2u <<  7) /* GP0_CMD_TPAGE */
+#define GP1_STAT_DITHER			(1u <<  9) /* GP0_CMD_TPAGE */
+#define GP1_STAT_UNLOCK_FB		(1u << 10) /* GP0_CMD_TPAGE */
+#define GP1_STAT_SET_MASK		(1u << 11) /* GP0_CMD_FB_MASK */
+#define GP1_STAT_USE_MASK		(1u << 12) /* GP0_CMD_FB_MASK */
+#define GP1_STAT_DISP_FIELD_BITMASK	(1u << 13)
+#define GP1_STAT_DISP_FIELD_EVEN	(0u << 13)
+#define GP1_STAT_DISP_FIELD_ODD		(1u << 13)
+#define GP1_STAT_PAGE_Y1		(1u << 15) /* GP0_CMD_TPAGE */
+#define GP1_STAT_FB_HRES_BITMASK	(7u << 16) /* GP1_CMD_FB_MODE */
+#define GP1_STAT_FB_VRES_BITMASK	(1u << 19) /* GP1_CMD_FB_MODE */
+#define GP1_STAT_FB_VRES_256		(0u << 19) /* GP1_CMD_FB_MODE */
+#define GP1_STAT_FB_VRES_512		(1u << 19) /* GP1_CMD_FB_MODE */
+#define GP1_STAT_FB_MODE_BITMASK	(1u << 20) /* GP1_CMD_FB_MODE */
+#define GP1_STAT_FB_MODE_NTSC		(0u << 20) /* GP1_CMD_FB_MODE */
+#define GP1_STAT_FB_MODE_PAL		(1u << 20) /* GP1_CMD_FB_MODE */
+#define GP1_STAT_FB_COLOR_BITMASK	(1u << 21) /* GP1_CMD_FB_MODE */
+#define GP1_STAT_FB_COLOR_16BPP		(0u << 21) /* GP1_CMD_FB_MODE */
+#define GP1_STAT_FB_COLOR_24BPP		(1u << 21) /* GP1_CMD_FB_MODE */
+#define GP1_STAT_FB_INTERLACE		(1u << 22) /* GP1_CMD_FB_MODE */
+#define GP1_STAT_DISP_BLANK		(1u << 23) /* GP1_CMD_DISP_BLANK */
+#define GP1_STAT_IRQ			(1u << 24)
+#define GP1_STAT_DREQ			(1u << 25)
+#define GP1_STAT_CMD_READY		(1u << 26)
+#define GP1_STAT_READ_READY		(1u << 27)
+#define GP1_STAT_WRITE_READY		(1u << 28)
+#define GP1_STAT_DREQ_MODE_BITMASK	(3u << 29) /* GP1_CMD_DREQ_MODE */
+#define GP1_STAT_DREQ_MODE_NONE		(0u << 29) /* GP1_CMD_DREQ_MODE */
+#define GP1_STAT_DREQ_MODE_FIFO		(1u << 29) /* GP1_CMD_DREQ_MODE */
+#define GP1_STAT_DREQ_MODE_GP0_WRITE	(2u << 29) /* GP1_CMD_DREQ_MODE */
+#define GP1_STAT_DREQ_MODE_GP0_READ	(3u << 29) /* GP1_CMD_DREQ_MODE */
+#define GP1_STAT_DRAW_FIELD_BITMASK	(1u << 31)
+#define GP1_STAT_DRAW_FIELD_EVEN	(0u << 31)
+#define GP1_STAT_DRAW_FIELD_ODD		(1u << 31)
+typedef uint32_t gp1_status_flag_t;
 
 /*
  * Drawing attributes
  */
 
-enum gp0_blend_mode {
-	GP0_BLEND_BITMASK	= 3,
-	GP0_BLEND_SEMITRANS	= 0,
-	GP0_BLEND_ADD		= 1,
-	GP0_BLEND_SUBTRACT	= 2,
-	GP0_BLEND_DIV4_ADD	= 3
-};
-typedef enum gp0_blend_mode gp0_blend_mode_t;
+#define GP0_BLEND_BITMASK	3
+#define GP0_BLEND_SEMITRANS	0
+#define GP0_BLEND_ADD		1
+#define GP0_BLEND_SUBTRACT	2
+#define GP0_BLEND_DIV4_ADD	3
+typedef uint32_t gp0_blend_mode_t;
 
-enum gp0_color_depth {
-	GP0_COLOR_BITMASK	= 3,
-	GP0_COLOR_4BPP		= 0,
-	GP0_COLOR_8BPP		= 1,
-	GP0_COLOR_16BPP		= 2
-};
-typedef enum gp0_color_depth gp0_color_depth_t;
+#define GP0_COLOR_BITMASK	3
+#define GP0_COLOR_4BPP		0
+#define GP0_COLOR_8BPP		1
+#define GP0_COLOR_16BPP		2
+typedef uint32_t gp0_color_depth_t;
 
 DEF(uint16_t)
 gp0_page(
@@ -177,36 +171,30 @@ gp0_end_tag(uint32_t length)
  * GP0 drawing commands
  */
 
-enum gp0_command {
-	GP0_CMD_MISC		= 0u << 29,
-	GP0_CMD_POLYGON		= 1u << 29,
-	GP0_CMD_LINE		= 2u << 29,
-	GP0_CMD_RECTANGLE	= 3u << 29,
-	GP0_CMD_VRAM_BLIT	= 4u << 29,
-	GP0_CMD_VRAM_WRITE	= 5u << 29,
-	GP0_CMD_VRAM_READ	= 6u << 29,
-	GP0_CMD_ATTRIBUTE	= 7u << 29
-};
-typedef enum gp0_command gp0_command_t;
+#define GP0_CMD_MISC		(0u << 29)
+#define GP0_CMD_POLYGON		(1u << 29)
+#define GP0_CMD_LINE		(2u << 29)
+#define GP0_CMD_RECTANGLE	(3u << 29)
+#define GP0_CMD_VRAM_BLIT	(4u << 29)
+#define GP0_CMD_VRAM_WRITE	(5u << 29)
+#define GP0_CMD_VRAM_READ	(6u << 29)
+#define GP0_CMD_ATTRIBUTE	(7u << 29)
+typedef uint32_t gp0_command_t;
 
-enum gp0_misc_command {
-	GP0_CMD_NOP		= GP0_CMD_MISC | ( 0u << 24),
-	GP0_CMD_FLUSH_CACHE	= GP0_CMD_MISC | ( 1u << 24),
-	GP0_CMD_VRAM_FILL	= GP0_CMD_MISC | ( 2u << 24),
-	GP0_CMD_NOP2		= GP0_CMD_MISC | ( 3u << 24),
-	GP0_CMD_IRQ		= GP0_CMD_MISC | (31u << 24)
-};
-typedef enum gp0_misc_command gp0_misc_command_t;
+#define GP0_CMD_NOP		(GP0_CMD_MISC | ( 0u << 24))
+#define GP0_CMD_FLUSH_CACHE	(GP0_CMD_MISC | ( 1u << 24))
+#define GP0_CMD_VRAM_FILL	(GP0_CMD_MISC | ( 2u << 24))
+#define GP0_CMD_NOP2		(GP0_CMD_MISC | ( 3u << 24))
+#define GP0_CMD_IRQ		(GP0_CMD_MISC | (31u << 24))
+typedef uint32_t gp0_misc_command_t;
 
-enum gp0_attr_command {
-	GP0_CMD_TPAGE		= GP0_CMD_ATTRIBUTE | (1u << 24),
-	GP0_CMD_TWINDOW		= GP0_CMD_ATTRIBUTE | (2u << 24),
-	GP0_CMD_FB_OFFSET1	= GP0_CMD_ATTRIBUTE | (3u << 24),
-	GP0_CMD_FB_OFFSET2	= GP0_CMD_ATTRIBUTE | (4u << 24),
-	GP0_CMD_FB_ORIGIN	= GP0_CMD_ATTRIBUTE | (5u << 24),
-	GP0_CMD_FB_MASK		= GP0_CMD_ATTRIBUTE | (6u << 24)
-};
-typedef enum gp0_attr_command gp0_attr_command_t;
+#define GP0_CMD_TPAGE		(GP0_CMD_ATTRIBUTE | (1u << 24))
+#define GP0_CMD_TWINDOW		(GP0_CMD_ATTRIBUTE | (2u << 24))
+#define GP0_CMD_FB_OFFSET1	(GP0_CMD_ATTRIBUTE | (3u << 24))
+#define GP0_CMD_FB_OFFSET2	(GP0_CMD_ATTRIBUTE | (4u << 24))
+#define GP0_CMD_FB_ORIGIN	(GP0_CMD_ATTRIBUTE | (5u << 24))
+#define GP0_CMD_FB_MASK		(GP0_CMD_ATTRIBUTE | (6u << 24))
+typedef uint32_t gp0_attr_command_t;
 
 DEF(uint32_t)
 _gp0_polygon(
@@ -456,67 +444,53 @@ gp0_fb_mask(
  * GP1 display control commands
  */
 
-enum gp1_hres {
-	GP1_HRES_BITMASK	= (3u << 0) | (1u << 6),
-	GP1_HRES_256		= 0u << 0, /* Dotclock divided by 10 */
-	GP1_HRES_320		= 1u << 0, /* Dotclock divided by 8 */
-	GP1_HRES_368		= 1u << 6, /* Dotclock divided by 7 */
-	GP1_HRES_512		= 2u << 0, /* Dotclock divided by 5 */
-	GP1_HRES_640		= 3u << 0  /* Dotclock divided by 4 */
-};
-typedef enum gp1_hres gp1_hres_t;
+#define GP1_HRES_BITMASK	((3u << 0) | (1u << 6))
+#define GP1_HRES_256		(0u << 0) /* Dotclock divided by 10 */
+#define GP1_HRES_320		(1u << 0) /* Dotclock divided by 8 */
+#define GP1_HRES_368		(1u << 6) /* Dotclock divided by 7 */
+#define GP1_HRES_512		(2u << 0) /* Dotclock divided by 5 */
+#define GP1_HRES_640		(3u << 0) /* Dotclock divided by 4 */
+typedef uint32_t gp1_hres_t;
 
-enum gp1_vres {
-	GP1_VRES_BITMASK	= 1,
-	GP1_VRES_256		= 0,
-	GP1_VRES_512		= 1
-};
-typedef enum gp1_vres gp1_vres_t;
+#define GP1_VRES_BITMASK	1
+#define GP1_VRES_256		0
+#define GP1_VRES_512		1
+typedef uint32_t gp1_vres_t;
 
-enum gp1_video_mode {
-	GP1_MODE_BITMASK	= 1,
-	GP1_MODE_NTSC		= 0,
-	GP1_MODE_PAL		= 1
-};
-typedef enum gp1_video_mode gp1_video_mode_t;
+#define GP1_MODE_BITMASK	1
+#define GP1_MODE_NTSC		0
+#define GP1_MODE_PAL		1
+typedef uint32_t gp1_video_mode_t;
 
-enum gp1_color_depth {
-	GP1_COLOR_BITMASK	= 1,
-	GP1_COLOR_16BPP		= 0,
-	GP1_COLOR_24BPP		= 1
-};
-typedef enum gp1_color_depth gp1_color_depth_t;
+#define GP1_COLOR_BITMASK	1
+#define GP1_COLOR_16BPP		0
+#define GP1_COLOR_24BPP		1
+typedef uint32_t gp1_color_depth_t;
 
-enum gp1_dma_request_mode {
-	GP1_DREQ_BITMASK	= 3,
-	GP1_DREQ_NONE		= 0,
-	GP1_DREQ_FIFO		= 1,
-	GP1_DREQ_GP0_WRITE	= 2,
-	GP1_DREQ_GP0_READ	= 3
-};
-typedef enum gp1_dma_request_mode gp1_dma_request_mode_t;
+#define GP1_DREQ_BITMASK	3
+#define GP1_DREQ_NONE		0
+#define GP1_DREQ_FIFO		1
+#define GP1_DREQ_GP0_WRITE	2
+#define GP1_DREQ_GP0_READ	3
+typedef uint32_t gp1_dma_request_mode_t;
 
-enum gp1_vram_size {
-	GP1_VRAM_BITMASK	= 1,
-	GP1_VRAM_1MB		= 0,
-	GP1_VRAM_2MB		= 1
-};
-typedef enum gp1_vram_size gp1_vram_size_t;
+#define GP1_VRAM_BITMASK	1
+#define GP1_VRAM_1MB		0
+#define GP1_VRAM_2MB		1
+typedef uint32_t gp1_vram_size_t;
 
-enum gp1_command {
-	GP1_CMD_RESET_GPU	=  0u << 24,
-	GP1_CMD_RESET_FIFO	=  1u << 24,
-	GP1_CMD_ACKNOWLEDGE	=  2u << 24,
-	GP1_CMD_DISP_BLANK	=  3u << 24,
-	GP1_CMD_DREQ_MODE	=  4u << 24,
-	GP1_CMD_FB_OFFSET	=  5u << 24,
-	GP1_CMD_FB_RANGE_H	=  6u << 24,
-	GP1_CMD_FB_RANGE_V	=  7u << 24,
-	GP1_CMD_FB_MODE		=  8u << 24,
-	GP1_CMD_VRAM_SIZE	=  9u << 24,
-	GP1_CMD_GET_INFO	= 16u << 24
-};
-typedef enum gp1_command gp1_command_t;
+#define GP1_CMD_RESET_GPU	(0u << 24)
+#define GP1_CMD_RESET_FIFO	(1u << 24)
+#define GP1_CMD_ACKNOWLEDGE	(2u << 24)
+#define GP1_CMD_DISP_BLANK	(3u << 24)
+#define GP1_CMD_DREQ_MODE	(4u << 24)
+#define GP1_CMD_FB_OFFSET	(5u << 24)
+#define GP1_CMD_FB_RANGE_H	(6u << 24)
+#define GP1_CMD_FB_RANGE_V	(7u << 24)
+#define GP1_CMD_FB_MODE		(8u << 24)
+#define GP1_CMD_VRAM_SIZE	(9u << 24)
+#define GP1_CMD_GET_INFO	(16u << 24)
+typedef uint32_t gp1_command_t;
 
 DEF(uint32_t)
 gp1_clock_mult_h(gp1_hres_t hres)
