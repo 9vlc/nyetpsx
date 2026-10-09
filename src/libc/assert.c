@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 void
-_assertAbort(
+_assert_abort(
 	const char *file,
 	int line,
 	const char *expr

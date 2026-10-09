@@ -4,121 +4,110 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#include <sys/freq.h>
-#include <sys/irq.h>
-#include <sys/timer.h>
-#include <sys/sio.h>
 #include <sys/gpu.h>
 
 #include <graph/gpu.h>
+#include <graph/gte.h>
 #include <graph/geom.h>
-#include <graph/directdraw.h>
+#include <graph/dmadraw.h>
 
-#include <crc32.h>
-#include <string.h>
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 
-#define SCREEN_HRES	GP1_HRES_320
-#define SCREEN_VRES	GP1_VRES_256
-#define SCREEN_WIDTH	320
-#define SCREEN_HEIGHT	240
+#define SCREEN_HRES	GP1_HRES_640
+#define SCREEN_VRES	GP1_VRES_512
+#define SCREEN_WIDTH	640
+#define SCREEN_HEIGHT	480
+
+#define BLACK		GRAPH_XRGB(0)
+#define WHITE		GRAPH_XRGB(0xFFFFFF)
+#define RED		GRAPH_XRGB(0xFF0000)
+
+#define BG		BLACK
 
 static void
-gpu_init(
-	gp1_hres_t hres,
-	gp1_vres_t vres,
-	uint32_t width,
-	uint32_t height
-	)
+draw_clear_bg(graph_dma_chain_t *chain)
 {
-	bool is_pal = ((GPU_GP1 & GP1_STAT_FB_MODE_BITMASK) == GP1_STAT_FB_MODE_PAL);
+	graph_m_rect(
+		chain,
+		&GRAPH_RECT(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
+		BG,
+		false
+	);
+}
 
-	int x = 0x760;
-	int y = (is_pal ? 0xA3 : 0x88);
-
-	int off_x = (width * gp1_clock_mult_h(hres)) / 2;
-	int off_y = (height * gp1_clock_div_v(vres)) / 2;
-
-	GPU_GP1 = gp1_reset_gpu();
-	GPU_GP1 = gp1_fb_range_h(x - off_x, x + off_x);
-	GPU_GP1 = gp1_fb_range_v(y - off_y, y + off_y);
-
-	GPU_GP1 = gp1_fb_mode(
-		hres,
-		vres,
-		(is_pal ? GP1_MODE_PAL : GP1_MODE_NTSC),
-		GP1_COLOR_16BPP,
-		(vres == GP1_VRES_512) /* Interlace on hires */
+static uint8_t grad_rcc = 0;
+static int32_t grad_inc = 1;
+static void
+draw_grad(graph_dma_chain_t *chain)
+{
+	/* Triangle on left side */
+	graph_m_shad_tri(
+		chain,
+		&GRAPH_TRI(
+			0, 0,
+			0, SCREEN_HEIGHT,
+			SCREEN_WIDTH, SCREEN_HEIGHT
+		),
+		BG,
+		GRAPH_RGB(grad_rcc, 0, 0),
+		BG,
+		false
 	);
 
-	GPU_GP1 = gp1_disp_blank(false);
+	/* Triangle on right side */
+	graph_m_shad_tri(
+		chain,
+		&GRAPH_TRI(
+			0, 0,
+			SCREEN_WIDTH, 0,
+			SCREEN_WIDTH, SCREEN_HEIGHT
+		),
+		BG,
+		GRAPH_RGB(grad_rcc, 0, 0),
+		BG,
+		false
+	);
+
+	grad_rcc += grad_inc;
+
+	if ((grad_rcc >= 200 && grad_inc > 0) ||
+		(grad_rcc <= 100 && grad_inc < 0)) {
+
+		grad_inc *= -1;
+	}
+}
+
+/* TODO */
+static void
+draw_cube_wireframe(graph_dma_chain_t *chain)
+{
+
 }
 
 int
 main(void)
 {
-	gpu_init(
+	graph_init_gpu(
 		SCREEN_HRES,
 		SCREEN_VRES,
 		SCREEN_WIDTH,
 		SCREEN_HEIGHT
 	);
 
-	/* Set page and screen origin */
-	graph_await_cmd();
-	GPU_GP0 = gp0_set_page(0, true, false);
-	GPU_GP0 = gp0_fb_offset1(0, 0);
-	GPU_GP0 = gp0_fb_offset2(SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1);
-	GPU_GP0 = gp0_fb_origin(0, 0);
-
-	/*
-	 * Breathing animation thingy
-	 */
-	uint8_t rcc = 0;
-	int inc = 1;
+	graph_dma_chain_t chain;
 	while (1) {
-		graph_d_rect(
-			&GRAPH_RECT(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
-			&GRAPH_XRGB(0),
-			false
-		);
+		graph_await_dma();
+		chain.next = chain.data;
 
-		/* Triangle on left side */
-		graph_d_shad_tri(
-			&GRAPH_TRI(
-				0, 0,
-				0, SCREEN_HEIGHT,
-				SCREEN_WIDTH, SCREEN_HEIGHT
-			),
-			&GRAPH_XRGB(0),
-			&GRAPH_RGB(rcc, 0, 0),
-			&GRAPH_XRGB(0),
-			false
-		);
+		draw_clear_bg(&chain);
+		draw_grad(&chain);
+		draw_cube_wireframe(&chain);
+		graph_m_end(&chain);
 
-		/* Triangle on right side */
-		graph_d_shad_tri(
-			&GRAPH_TRI(
-				0, 0,
-				SCREEN_WIDTH, 0,
-				SCREEN_WIDTH, SCREEN_HEIGHT
-			),
-			&GRAPH_XRGB(0),
-			&GRAPH_RGB(rcc, 0, 0),
-			&GRAPH_XRGB(0),
-			false
-		);
-
-		graph_await_cmd();
 		graph_await_vsync();
-
-		rcc += inc;
-		if (rcc >= 200) {
-			inc = -1;
-		} else if (rcc <= 100) {
-			inc = 1;
-		}
+		graph_send_chain(chain.data);
 	}
+
+	return (0);
 }

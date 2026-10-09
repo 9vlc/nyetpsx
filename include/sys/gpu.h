@@ -12,7 +12,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define DEF(type) static inline type __attribute__((always_inline))
+#define DEF(T) static inline T __attribute__((always_inline))
 
 #define GPU_GP0 MMIO32(IO_BASE | 0x810)
 #define GPU_GP1 MMIO32(IO_BASE | 0x814)

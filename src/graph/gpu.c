@@ -10,10 +10,9 @@
 
 #include <graph/geom.h>
 #include <graph/gpu.h>
-#include <graph/directdraw.h>
-#include <graph/dmadraw.h>
 
 #include <assert.h>
+#include <stddef.h>
 #include <stdint.h>
 
 void
@@ -47,7 +46,7 @@ graph_await_vsync(void)
 }
 
 void
-graph_gpu_init(
+graph_init_gpu(
 	gp1_hres_t hres,
 	gp1_vres_t vres,
 	int width,
@@ -75,8 +74,9 @@ graph_gpu_init(
 	GPU_GP1 = gp1_disp_blank(false);
 
 	graph_await_dma();
-	DMA_DPCR |= DMA_DPCR_CH_ENABLE(DMA_GPU);
+	DMA_DPCR |= DMA_DPCR_CH_ENABLE(DMA_GPU) | DMA_DPCR_CH_ENABLE(DMA_OTC);
 	DMA_CHCR(DMA_GPU) = 0;
+	DMA_CHCR(DMA_OTC) = 0;
 
 	graph_await_cmd();
 	GPU_GP0 = gp0_set_page(0, true, false);
@@ -86,12 +86,11 @@ graph_gpu_init(
 }
 
 void
-graph_vram_read(
+graph_read_vram(
 	void *data,
 	graph_rect_t *box
 	)
 {
-	/* Data pointer must be aligned */
 	assert(((uint32_t)data % 4) == 0);
 
 	uint32_t len = (box->w * box->h + 1) / 2;
@@ -118,17 +117,19 @@ graph_vram_read(
 	GPU_GP1 = gp1_dma_request_mode(GP1_DREQ_GP0_READ);
 
 	DMA_MADR(DMA_GPU) = (uint32_t)data;
-	DMA_BCR(DMA_GPU)  = chunk_size | chunk_num << 16;
-	DMA_CHCR(DMA_GPU) = DMA_CHCR_READ | DMA_CHCR_MODE_SLICE | DMA_CHCR_ENABLE;
+	DMA_BCR(DMA_GPU) = chunk_size | chunk_num << 16;
+	DMA_CHCR(DMA_GPU) = 0
+		| DMA_CHCR_READ
+		| DMA_CHCR_MODE_SLICE
+		| DMA_CHCR_ENABLE;
 }
 
 void
-graph_vram_write(
+graph_write_vram(
 	const void *data,
 	graph_rect_t *box
 	)
 {
-	/* Data pointer must be aligned */
 	assert(((uint32_t)data % 4) == 0);
 
 	uint32_t len = (box->w * box->h + 1) / 2;
@@ -155,21 +156,135 @@ graph_vram_write(
 	GPU_GP1 = gp1_dma_request_mode(GP1_DREQ_GP0_WRITE);
 
 	DMA_MADR(DMA_GPU) = (uint32_t)data;
-	DMA_BCR(DMA_GPU)  = chunk_size | chunk_num << 16;
-	DMA_CHCR(DMA_GPU) = DMA_CHCR_WRITE | DMA_CHCR_MODE_SLICE | DMA_CHCR_ENABLE;
+	DMA_BCR(DMA_GPU) = chunk_size | chunk_num << 16;
+	DMA_CHCR(DMA_GPU) = 0
+		| DMA_CHCR_WRITE
+		| DMA_CHCR_MODE_SLICE
+		| DMA_CHCR_ENABLE;
 }
-/*
-uint32_t
-graph_chain_alloc_packet()*/
 
 void
-graph_chain_send(const graph_dma_link_t *dma_chain)
+graph_send_texture(
+	graph_texture_info_t *info,
+	graph_texture_data_t *data
+	)
 {
-	assert(((uint32_t)dma_chain % 4) == 0);
+	assert((data->w <= 256) && (data->h <= 256));
 
+	int ncol = 0, wdiv = 0;
+
+	if (data->pal != NULL) {
+		assert(data->depth != GP0_COLOR_16BPP);
+
+		ncol = (data->depth == GP0_COLOR_8BPP ? 256 : 16);
+		wdiv = (data->depth == GP0_COLOR_8BPP ? 1 : 2);
+
+		assert(!(data->px % 16) && ((data->px + ncol) <= 1024));
+
+		graph_write_vram(data->pal, &GRAPH_RECT(
+			data->px,
+			data->py,
+			ncol,
+			1
+		));
+		graph_await_dma();
+	} else {
+		data->depth = GP0_COLOR_16BPP;
+	}
+
+	graph_write_vram(data->img, &GRAPH_RECT(
+		data->x,
+		data->y,
+		data->w >> wdiv,
+		data->h
+	));
+	graph_await_dma();
+
+	GPU_GP0 = gp0_flush_cache();
+
+	info->page = gp0_page(
+		data->x / 64,
+		data->y / 256,
+		GP0_BLEND_SEMITRANS,
+		data->depth
+	);
+	info->clut = 0;
+	info->u = (uint8_t)((data->x % 64) << wdiv);
+	info->v = (uint8_t)(data->y % 256);
+	info->w = (uint16_t)data->w;
+	info->h = (uint16_t)data->h;
+}
+
+uint32_t *
+graph_alloc_chain_packet(
+	graph_dma_chain_t *chain,
+	size_t cmds
+	)
+{
+	assert(cmds <= GRAPH_DMA_MAX_CHUNK_SIZE);
+
+	uint32_t *ptr = chain->next;
+	chain->next += cmds + 1;
+
+	ptr[0] = gp0_tag(cmds, chain->next);
+
+	assert(chain->next < &(chain->data)[GRAPH_DMA_CHAIN_BUF_SIZE]);
+
+	return (&ptr[1]);
+}
+
+uint32_t *
+graph_alloc_ord_chain_packet(
+	graph_dma_ord_chain_t *chain,
+	uint32_t z,
+	size_t cmds
+	)
+{
+	assert(cmds <= GRAPH_DMA_MAX_CHUNK_SIZE);
+	assert(z < GRAPH_DMA_CHAIN_OT_SIZE);
+
+	uint32_t *ptr = chain->next;
+	chain->next += cmds + 1;
+
+	ptr[0] = gp0_tag(cmds, (void *)chain->ot[z]);
+	chain->ot[z] = gp0_tag(0, ptr);
+
+	assert(chain->next < &(chain->data)[GRAPH_DMA_CHAIN_BUF_SIZE]);
+
+	return (&ptr[1]);
+}
+
+void
+graph_send_chain(const uint32_t *data)
+{
 	graph_await_dma();
 	GPU_GP1 = gp1_dma_request_mode(GP1_DREQ_GP0_WRITE);
 
-	DMA_MADR(DMA_GPU) = (uint32_t)dma_chain;
-	DMA_CHCR(DMA_GPU) = DMA_CHCR_WRITE | DMA_CHCR_MODE_LIST | DMA_CHCR_ENABLE;
+	DMA_MADR(DMA_GPU) = (uint32_t)data;
+	DMA_CHCR(DMA_GPU) = 0
+		| DMA_CHCR_WRITE
+		| DMA_CHCR_MODE_LIST
+		| DMA_CHCR_ENABLE;
+}
+
+void
+graph_clear_ot(
+	uint32_t *ot,
+	size_t size
+	)
+{
+	assert(!((uint32_t)ot % 4));
+
+	DMA_MADR(DMA_OTC) = (uint32_t)&ot[size - 1];
+	DMA_BCR(DMA_OTC) = size;
+	DMA_CHCR(DMA_OTC) = 0
+		| DMA_CHCR_READ
+		| DMA_CHCR_REVERSE
+		| DMA_CHCR_MODE_BURST
+		| DMA_CHCR_ENABLE
+		| DMA_CHCR_TRIGGER;
+
+	while (DMA_CHCR(DMA_OTC) & DMA_CHCR_ENABLE) {
+		__asm__ __volatile__("");
+	}
 }

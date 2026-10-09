@@ -21,6 +21,8 @@ AR!= ${.PARSEDIR}/scripts/find_tc.sh llvm llvm-ar
 RANLIB!= ${.PARSEDIR}/scripts/find_tc.sh llvm llvm-ranlib
 OBJCOPY!= ${.PARSEDIR}/scripts/find_tc.sh llvm llvm-objcopy
 
+_t!= >&2 echo "Warning: LLVM does not support some COP2 instructions, GTE will not work!"
+
 CFLAGS:= -target mipsel-none-elf -march=mips1 -mabi=32 -mfp32 -Wextra
 
 .else
@@ -38,7 +40,7 @@ ASFLAGS:= ${CFLAGS}
 .if ${NYETPSX_SOURCE_TC} != 1
 
 CFLAGS+= -ffreestanding -fno-builtin -nostdlib -fno-pic
-CFLAGS+= -fdata-sections -ffunction-sections -fsigned-char #-mno-extern-sdata
+CFLAGS+= -fdata-sections -ffunction-sections -fsigned-char -mno-extern-sdata
 CFLAGS+= -mno-mt -mno-abicalls -mno-check-zero-division
 
 .if ${NYETPSX_USE_SDATA} == 1

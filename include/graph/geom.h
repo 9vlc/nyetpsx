@@ -49,14 +49,8 @@ struct graph_quad {
 };
 typedef struct graph_quad graph_quad_t;
 #define GRAPH_QUAD(X0, Y0, X1, Y1, X2, Y2, X3, Y3) (graph_quad_t){ \
-	.p0.x=(X0), .p0.y=(Y0), .p0.x=(X1), .p0.y=(Y1), \
-	.p1.x=(X2), .p1.y=(Y2), .p2.x=(X3), .p2.y=(Y3)}
-
-struct graph_texture {
-	uint16_t page, clut;
-};
-typedef struct graph_texture graph_texture_t;
-#define GRAPH_TEXTURE(PAGE, CLUT) (graph_texture_t){.page=(PAGE), .clut=(CLUT)}
+	.p0.x=(X0), .p0.y=(Y0), .p1.x=(X1), .p1.y=(Y1), \
+	.p2.x=(X2), .p2.y=(Y2), .p3.x=(X3), .p3.y=(Y3)}
 
 struct graph_uv {
 	uint8_t u, v;
