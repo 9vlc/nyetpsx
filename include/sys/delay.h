@@ -8,6 +8,7 @@
 #define _SYS__DELAY_H
 
 #include <sys/cpu.h>
+#include <sys/freq.h>
 
 #include <stdint.h>
 

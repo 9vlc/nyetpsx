@@ -15,8 +15,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
-void putc(char c);
-char getc(void);
+#include <sys/sio.h>
+
+#define putc sio1_putc
+#define getc sio1_getc
 
 void putx8(uint8_t x);
 void putx16(uint16_t x);

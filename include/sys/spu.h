@@ -9,6 +9,7 @@
 
 #include <sys/mmio.h>
 
+#include <stddef.h>
 #include <stdint.h>
 
 /*
@@ -48,6 +49,59 @@ typedef uint32_t spu_status_flag_t;
 #define SPU_CTRL_DAC_ENABLE		(1u << 14)
 #define SPU_CTRL_ENABLE			(1u << 15)
 typedef uint32_t spu_control_flag_t;
+
+#define SPU_VOL_SLIDE_STEP_BITMASK	(3u <<  0)
+#define SPU_VOL_SLIDE_STEP_7		(0u <<  0)
+#define SPU_VOL_SLIDE_STEP_6		(1u <<  0)
+#define SPU_VOL_SLIDE_STEP_5		(2u <<  0)
+#define SPU_VOL_SLIDE_STEP_4		(3u <<  0)
+#define SPU_VOL_SLIDE_RATE_BITMASK	(31u << 2)
+#define SPU_VOL_SLIDE_NEG		(1u << 12)
+#define SPU_VOL_SLIDE_DEC		(1u << 13)
+#define SPU_VOL_SLIDE_EXP		(1u << 14)
+#define SPU_VOL_SLIDE_ENABLE		(1u << 15)
+typedef uint32_t spu_vol_slide_flag_t;
+
+#define SPU_VOL_SLIDE_RATE(rate)	(((rate) & 31u) << 2)
+
+#define SPU_ADSR1_SL_BITMASK		(15u <<  0)
+#define SPU_ADSR1_DR_BITMASK		(15u <<  4)
+#define SPU_ADSR1_ASTEP_BITMASK		(3u <<  8)
+#define SPU_ADSR1_ASTEP_7		(0u <<  8)
+#define SPU_ADSR1_ASTEP_6		(1u <<  8)
+#define SPU_ADSR1_ASTEP_5		(2u <<  8)
+#define SPU_ADSR1_ASTEP_4		(3u <<  8)
+#define SPU_ADSR1_AR_BITMASK		(31u << 10)
+#define SPU_ADSR1_AEXP			(1u << 15)
+typedef uint32_t spu_adsr1_flag_t;
+
+#define SPU_ADSR1_SL(level)		(((level) & 15u) <<  0)
+#define SPU_ADSR1_DR(rate)		(((rate)  & 15u) <<  4)
+#define SPU_ADSR1_AR(rate)		(((rate)  & 31u) << 10)
+
+#define SPU_ADSR2_RR_BITMASK		(31u <<  0)
+#define SPU_ADSR2_REXP			(1u <<  5)
+#define SPU_ADSR2_SSTEP_BITMASK		(3u <<  6)
+#define SPU_ADSR2_SSTEP_7		(0u <<  6)
+#define SPU_ADSR2_SSTEP_6		(1u <<  6)
+#define SPU_ADSR2_SSTEP_5		(2u <<  6)
+#define SPU_ADSR2_SSTEP_4		(3u <<  6)
+#define SPU_ADSR2_SR_BITMASK		(31u <<  8)
+#define SPU_ADSR2_SDEC			(1u << 14)
+#define SPU_ADSR2_SEXP			(1u << 15)
+typedef uint32_t spu_adsr2_flag_t;
+
+#define SPU_ADSR2_RR(rate)		(((rate) & 31u) << 0)
+#define SPU_ADSR2_SR(rate)		(((rate) & 31u) << 8)
+
+#define SPU_RAM_CTRL_UNKNOWN		(1u << 0)
+#define SPU_RAM_CTRL_BANKS_BITMASK	(1u << 1)
+#define SPU_RAM_CTRL_BANKS_1		(0u << 1)
+#define SPU_RAM_CTRL_BANKS_2		(1u << 1)
+#define SPU_RAM_CTRL_SIZE_BITMASK	(3u << 2)
+#define SPU_RAM_CTRL_SIZE_512KB		(1u << 2)
+#define SPU_RAM_CTRL_SIZE_2MB		(2u << 2)
+typedef uint32_t spu_ram_ctrl_flag_t;
 
 /*
  * SPU register addresses
@@ -106,7 +160,6 @@ typedef uint32_t spu_control_flag_t;
 #define SPU_REVERB_VCOMB2		MMIO16(IO_BASE | 0xDC8)
 #define SPU_REVERB_VCOMB3		MMIO16(IO_BASE | 0xDCA)
 #define SPU_REVERB_VCOMB4		MMIO16(IO_BASE | 0xDCC)
-#define SPU_REVERB_VCOMB4		MMIO16(IO_BASE | 0xDCC)
 #define SPU_REVERB_VWALL		MMIO16(IO_BASE | 0xDCE)
 #define SPU_REVERB_VAPF1		MMIO16(IO_BASE | 0xDD0)
 #define SPU_REVERB_VAPF2		MMIO16(IO_BASE | 0xDD2)
@@ -134,5 +187,42 @@ typedef uint32_t spu_control_flag_t;
 #define SPU_REVERB_VRIN			MMIO16(IO_BASE | 0xDFE)
 #define SPU_CH_VOLXL(N)			MMIO16((IO_BASE | 0xE00) + (4u * (N)))
 #define SPU_CH_VOLXR(N)			MMIO16((IO_BASE | 0xE02) + (4u * (N)))
+
+/*
+ * SPU driver
+ */
+
+#define SPU_RAM_ADDR_UNIT		8u
+#define SPU_RAM_SIZE			(0x10000u * SPU_RAM_ADDR_UNIT)
+#define SPU_SAMPLE_OFFSET		0x1000u
+
+#define SPU_NUM_CHANNELS		24
+#define SPU_PITCH_UNIT			(1u << 12)
+
+void spu_init(void);
+void spu_await_dma(void);
+void spu_reset(void);
+int spu_find_free_channel(void);
+
+void
+spu_send_data(
+	const void *data,
+	uint32_t off,
+	size_t len
+	);
+
+void
+spu_recv_data(
+	void *data,
+	uint32_t off,
+	size_t len
+	);
+
+int
+spu_play_sample(
+	uint32_t off,
+	uint32_t rate,
+	int16_t vol
+	);
 
 #endif /* _SYS__SPU_H */

@@ -86,8 +86,14 @@ draw_cube_wireframe(graph_dma_chain_t *chain)
 }
 
 int
-main(void)
+main(
+	int argc,
+	char **argv
+	)
 {
+	(void)argc;
+	(void)argv;
+
 	graph_init_gpu(
 		SCREEN_HRES,
 		SCREEN_VRES,
@@ -97,7 +103,7 @@ main(void)
 
 	graph_dma_chain_t chain;
 	while (1) {
-		graph_await_dma();
+		gpu_await_dma();
 		chain.next = chain.data;
 
 		draw_clear_bg(&chain);
@@ -105,7 +111,7 @@ main(void)
 		draw_cube_wireframe(&chain);
 		graph_m_end(&chain);
 
-		graph_await_vsync();
+		gpu_await_vsync();
 		graph_send_chain(chain.data);
 	}
 

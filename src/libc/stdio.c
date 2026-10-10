@@ -8,26 +8,6 @@
 
 #include <stdio.h>
 
-void
-putc(char c)
-{
-	while (!(SIO_STAT(1) & SIO_STAT_TX_NOT_FULL)) {
-		__asm__ __volatile__("");
-	}
-
-	SIO_DATA(1) = c;
-}
-
-char
-getc(void)
-{
-	while (!(SIO_STAT(1) & SIO_STAT_RX_NOT_EMPTY)) {
-		__asm__ __volatile__("");
-	}
-
-	return (SIO_DATA(1));
-}
-
 static inline void
 putxn(uint8_t n)
 {

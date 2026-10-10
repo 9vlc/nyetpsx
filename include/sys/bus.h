@@ -23,10 +23,30 @@
 #define BIU_CTRL_SIZE_BITMASK		(31u << 16)
 #define BIU_CTRL_DMA_DELAY_BITMASK	(15u << 24)
 #define BIU_CTRL_ADDR_ERROR		(1u << 28)
-#define BIU_CTRL_DMA_DELAY		(1u << 29)
+#define BIU_CTRL_DMA_DELAY_ENABLE	(1u << 29)
 #define BIU_CTRL_DMA32			(1u << 30)
 #define BIU_CTRL_WAIT			(1u << 31)
 typedef uint32_t biu_control_flag_t;
+
+#define BIU_CTRL_WRITE_DELAY(value)	(((value) & 15u) <<  0)
+#define BIU_CTRL_READ_DELAY(value)	(((value) & 15u) <<  4)
+#define BIU_CTRL_SIZE(value)		(((value) & 31u) << 16)
+#define BIU_CTRL_DMA_DELAY(value)	(((value) & 15u) << 24)
+
+/*
+ * Common bus delay flags (BIU_COM_DELAY)
+ */
+
+#define BIU_COM_RECOVERY_BITMASK	(15u <<  0)
+#define BIU_COM_HOLD_BITMASK		(15u <<  4)
+#define BIU_COM_FLOAT_BITMASK		(15u <<  8)
+#define BIU_COM_PRESTROBE_BITMASK	(15u << 12)
+typedef uint32_t biu_common_delay_flag_t;
+
+#define BIU_COM_RECOVERY(value)		(((value) & 15u) <<  0)
+#define BIU_COM_HOLD(value)		(((value) & 15u) <<  4)
+#define BIU_COM_FLOAT(value)		(((value) & 15u) <<  8)
+#define BIU_COM_PRESTROBE(value)	(((value) & 15u) << 12)
 
 #define BIU_DEV0_ADDR		MMIO32(IO_BASE | 0x000) /* PIO/arcade */
 #define BIU_DEV8_ADDR		MMIO32(IO_BASE | 0x004) /* PIO/debug */

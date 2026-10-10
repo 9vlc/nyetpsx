@@ -9,6 +9,8 @@
 
 #include <sys/mmio.h>
 
+#include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 #define DEF(T) static inline T __attribute__((always_inline))
@@ -115,7 +117,9 @@ struct cdrom_xa_header {
 #define CDROM_XA_SM_END_OF_FILE		(1u << 7)
 typedef uint32_t cdrom_xa_submode_flag_t;
 
-#define CDROM_XA_CI_STEREO		(1u << 0)
+#define CDROM_XA_CI_CHANNELS_BITMASK	(3u << 0)
+#define CDROM_XA_CI_CHANNELS_MONO	(0u << 0)
+#define CDROM_XA_CI_CHANNELS_STEREO	(1u << 0)
 #define CDROM_XA_CI_SAMPLE_RATE_BITMASK	(3u << 2)
 #define CDROM_XA_CI_SAMPLE_RATE_37800	(0u << 2)
 #define CDROM_XA_CI_SAMPLE_RATE_18900	(1u << 2)
@@ -211,34 +215,42 @@ struct cdrom_report_packet {
 typedef struct cdrom_report_packet cdrom_report_packet_t;
 
 DEF(uint8_t)
-cdrom_encode_bcd(uint8_t value)
+cdrom_encode_bcd(
+	uint8_t val
+	)
 {
 	/*
 	 * output = units + tens * 16
 	 *        = units + tens * 10 + tens * 6
-	 *        = value             + tens * 6
+	 *        = val               + tens * 6
 	 */
-	return (value + (value / 10) * 6);
+	return (val + (val / 10) * 6);
 }
 
 DEF(uint8_t)
-cdrom_decode_bcd(uint8_t value)
+cdrom_decode_bcd(
+	uint8_t val
+	)
 {
 	/*
 	 * output = low + high * 10
 	 *        = low + high * 16 - high * 6
-	 *        = value           - high * 6
+	 *        = val             - high * 6
 	 */
-	return (value - (value >> 4) * 6);
+	return (val - (val >> 4) * 6);
 }
 
 DEF(void)
-cdrom_convert_lba_to_msf(
+cdrom_lba_to_msf(
 	cdrom_msf_t *msf,
 	uint32_t lba
 	)
 {
-	lba += 150; /* Skip lead-in area (LBA 0 is always at 00:02:00) */
+	/*
+	 * The 2-second lead-in area at 00:00:00 can't hold any audio or data
+	 *   and must be skipped.
+	 */
+	lba += 150;
 
 	msf->minute = cdrom_encode_bcd(lba / (75 * 60));
 	msf->second = cdrom_encode_bcd((lba / 75) % 60);
@@ -246,7 +258,9 @@ cdrom_convert_lba_to_msf(
 }
 
 DEF(uint32_t)
-cdrom_convert_msf_to_lba(const cdrom_msf_t *msf)
+cdrom_msf_to_lba(
+	const cdrom_msf_t *msf
+	)
 {
 	return (cdrom_decode_bcd(msf->minute) * (75 * 60) +
 		cdrom_decode_bcd(msf->second) * 75 +
@@ -287,14 +301,13 @@ cdrom_convert_msf_to_lba(const cdrom_msf_t *msf)
 #define CDROM_CMD_READ_TOC	0x1E /* Versions 0xC1 and later only */
 #define CDROM_CMD_UNLOCK0	0x50 /* Versions 0xC1 and later only */
 #define CDROM_CMD_UNLOCK1	0x51 /* Versions 0xC1 and later only */
-#define CDROM_CMD_UNLOCK1	0x51 /* Versions 0xC1 and later only */
 #define CDROM_CMD_UNLOCK2	0x52 /* Versions 0xC1 and later only */
 #define CDROM_CMD_UNLOCK3	0x53 /* Versions 0xC1 and later only */
 #define CDROM_CMD_UNLOCK4	0x54 /* Versions 0xC1 and later only */
 #define CDROM_CMD_UNLOCK5	0x55 /* Versions 0xC1 and later only */
 #define CDROM_CMD_UNLOCK6	0x56 /* Versions 0xC1 and later only */
 #define CDROM_CMD_LOCK		0x57 /* Versions 0xC1 and later only */
-typedef uint32_t cdrom_command_t;
+typedef uint32_t cdrom_cmd_t;
 
 #define CDROM_TEST_READ_ID		0x04
 #define CDROM_TEST_GET_ID_COUNTERS	0x05
@@ -311,7 +324,7 @@ typedef uint32_t cdrom_command_t;
 #define CDROM_TEST_DECODER_SET_REG	0x72 /* Versions 0xC1 and later only */
 #define CDROM_TEST_DECODER_GET_SRAM_PTR	0x75 /* Versions 0xC1 and later only */
 #define CDROM_TEST_DECODER_SET_SRAM_PTR	0x76 /* Versions 0xC1 and later only */
-typedef uint32_t cdrom_test_command_t;
+typedef uint32_t cdrom_test_cmd_t;
 
 #define CDROM_IRQ_NONE		0
 #define CDROM_IRQ_DATA_READY	1
@@ -329,7 +342,7 @@ typedef uint32_t cdrom_irq_type_t;
 #define CDROM_CMD_STAT_READING		(1u << 5)
 #define CDROM_CMD_STAT_SEEKING		(1u << 6)
 #define CDROM_CMD_STAT_PLAYING		(1u << 7)
-typedef uint32_t cdrom_command_status_flag_t;
+typedef uint32_t cdrom_cmd_stat_flag_t;
 
 #define CDROM_CMD_ERR_SEEK_FAILED		(1u << 2)
 #define CDROM_CMD_ERR_LID_OPENED		(1u << 3)
@@ -337,7 +350,7 @@ typedef uint32_t cdrom_command_status_flag_t;
 #define CDROM_CMD_ERR_INVALID_PARAM_COUNT	(1u << 5)
 #define CDROM_CMD_ERR_INVALID_COMMAND		(1u << 6)
 #define CDROM_CMD_ERR_NO_DISC			(1u << 7)
-typedef uint32_t cdrom_command_error_flag_t;
+typedef uint32_t cdrom_cmd_error_flag_t;
 
 #define CDROM_MODE_CDDA			(1u << 0)
 #define CDROM_MODE_AUTO_PAUSE		(1u << 1)
@@ -345,13 +358,89 @@ typedef uint32_t cdrom_command_error_flag_t;
 #define CDROM_MODE_XA_FILTER		(1u << 3)
 #define CDROM_MODE_SIZE_BITMASK		(3u << 4)
 #define CDROM_MODE_SIZE_2048		(0u << 4)
+#define CDROM_MODE_SIZE_2328		(1u << 4)
 #define CDROM_MODE_SIZE_2340		(2u << 4)
 #define CDROM_MODE_XA_ADPCM		(1u << 6)
 #define CDROM_MODE_SPEED_1X		(0u << 7)
 #define CDROM_MODE_SPEED_2X		(1u << 7)
 typedef uint32_t cdrom_mode_flag_t;
 
+DEF(size_t)
+cdrom_sector_len(
+	uint8_t mode
+	)
+{
+	switch (mode & CDROM_MODE_SIZE_BITMASK) {
+	case CDROM_MODE_SIZE_2048:
+		return (2048);
+
+	case CDROM_MODE_SIZE_2328:
+		return (2328);
+
+	case CDROM_MODE_SIZE_2340:
+		return (2340);
+
+	default:
+		return (0);
+	}
+}
+
 #undef DEF
 #undef PACKED
+
+/*
+ * CD-ROM driver
+ */
+
+void cdrom_init(void);
+void cdrom_setup_audio(bool mono);
+void cdrom_await_dma(void);
+bool cdrom_pause_read(void);
+
+void
+cdrom_cmd(
+	cdrom_cmd_t cmd,
+	const uint8_t *params,
+	size_t param_len
+	);
+
+cdrom_irq_type_t
+cdrom_check_irq(
+	uint8_t *resp,
+	size_t max_resp_len
+	);
+
+cdrom_irq_type_t
+cdrom_await_irq(
+	uint8_t *resp,
+	size_t max_resp_len
+	);
+
+bool
+cdrom_play_cdda(
+	uint32_t track,
+	uint8_t mode
+	);
+
+bool
+cdrom_start_read(
+	uint32_t lba,
+	uint8_t mode,
+	bool retry
+	);
+
+void
+cdrom_read_sector(
+	void *data,
+	size_t len
+	);
+
+size_t
+cdrom_read_sectors(
+	void *data,
+	uint32_t lba,
+	size_t num_sectors,
+	uint8_t mode
+	);
 
 #endif /* _SYS__CDROM_H */

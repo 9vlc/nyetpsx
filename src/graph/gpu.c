@@ -5,7 +5,6 @@
  */
 
 #include <sys/dma.h>
-#include <sys/irq.h>
 #include <sys/gpu.h>
 
 #include <graph/geom.h>
@@ -14,36 +13,6 @@
 #include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
-
-void
-graph_await_dma(void)
-{
-	while (DMA_CHCR(DMA_GPU) & DMA_CHCR_ENABLE) {
-		__asm__ volatile("");
-	}
-
-	while (!(GPU_GP1 & GP1_STAT_WRITE_READY)) {
-		__asm__ __volatile__("");
-	}
-}
-
-void
-graph_await_cmd(void)
-{
-	while (!(GPU_GP1 & GP1_STAT_CMD_READY)) {
-		__asm__ __volatile__("");
-	}
-}
-
-void
-graph_await_vsync(void)
-{
-	while (!(IRQ_STAT & (1 << IRQ_VSYNC))) {
-		__asm__ __volatile__("");
-	}
-
-	IRQ_STAT = ~(1 << IRQ_VSYNC);
-}
 
 void
 graph_init_gpu(
@@ -73,12 +42,12 @@ graph_init_gpu(
 	);
 	GPU_GP1 = gp1_disp_blank(false);
 
-	graph_await_dma();
+	gpu_await_dma();
 	DMA_DPCR |= DMA_DPCR_CH_ENABLE(DMA_GPU) | DMA_DPCR_CH_ENABLE(DMA_OTC);
 	DMA_CHCR(DMA_GPU) = 0;
 	DMA_CHCR(DMA_OTC) = 0;
 
-	graph_await_cmd();
+	gpu_await_cmd();
 	GPU_GP0 = gp0_set_page(0, true, false);
 	GPU_GP0 = gp0_fb_offset1(0, 0);
 	GPU_GP0 = gp0_fb_offset2(width, height);
@@ -106,10 +75,10 @@ graph_read_vram(
 		assert((len % GRAPH_DMA_MAX_CHUNK_SIZE) != 0);
 	}
 
-	graph_await_dma();
+	gpu_await_dma();
 	GPU_GP1 = gp1_dma_request_mode(GP1_DREQ_NONE);
 
-	graph_await_cmd();
+	gpu_await_cmd();
 	GPU_GP0 = gp0_vram_read();
 	GPU_GP0 = gp0_xy(box->x, box->y);
 	GPU_GP0 = gp0_xy(box->w, box->h);
@@ -145,10 +114,10 @@ graph_write_vram(
 		assert((len % GRAPH_DMA_MAX_CHUNK_SIZE) != 0);
 	}
 
-	graph_await_dma();
+	gpu_await_dma();
 	GPU_GP1 = gp1_dma_request_mode(GP1_DREQ_NONE);
 
-	graph_await_cmd();
+	gpu_await_cmd();
 	GPU_GP0 = gp0_vram_write();
 	GPU_GP0 = gp0_xy(box->x, box->y);
 	GPU_GP0 = gp0_xy(box->w, box->h);
@@ -187,7 +156,7 @@ graph_send_texture(
 			ncol,
 			1
 		));
-		graph_await_dma();
+		gpu_await_dma();
 	} else {
 		data->depth = GP0_COLOR_16BPP;
 	}
@@ -198,7 +167,7 @@ graph_send_texture(
 		data->w >> wdiv,
 		data->h
 	));
-	graph_await_dma();
+	gpu_await_dma();
 
 	GPU_GP0 = gp0_flush_cache();
 
@@ -255,9 +224,11 @@ graph_alloc_ord_chain_packet(
 }
 
 void
-graph_send_chain(const uint32_t *data)
+graph_send_chain(
+	const uint32_t *data
+	)
 {
-	graph_await_dma();
+	gpu_await_dma();
 	GPU_GP1 = gp1_dma_request_mode(GP1_DREQ_GP0_WRITE);
 
 	DMA_MADR(DMA_GPU) = (uint32_t)data;

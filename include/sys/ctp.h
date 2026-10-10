@@ -14,7 +14,7 @@
 #define CTP_ADDR_IMODE			0x41 /* PS1 i-Mode adapter cable */
 #define CTP_ADDR_REMOTE			0x61 /* PS2 DVD remote receiver */
 #define CTP_ADDR_MEMORY_CARD		0x81 /* PS1 memory card or PocketStation */
-typedef uint32_t ctp_device_address_t;
+typedef uint32_t ctp_dev_addr_t;
 
 /* Controller commands */
 #define CTP_PAD_READ_DATA		0x42

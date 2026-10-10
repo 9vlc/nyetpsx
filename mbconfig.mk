@@ -6,9 +6,9 @@ NYETPSX_SOURCE_TC?= 0 # Set to 1 to just get the toolchain from a different proj
 .if ${NYETPSX_TC:tu} == "GCC"
 CC!= ${.PARSEDIR}/scripts/find_tc.sh gcc gcc
 AS!= ${.PARSEDIR}/scripts/find_tc.sh gcc gcc
-LD!= ${.PARSEDIR}/scripts/find_tc.sh gcc ld.bfd
-AR!= ${.PARSEDIR}/scripts/find_tc.sh gcc ar
-RANLIB!= ${.PARSEDIR}/scripts/find_tc.sh gcc ranlib
+LD!= ${.PARSEDIR}/scripts/find_tc.sh gcc gcc # Link through driver
+AR!= ${.PARSEDIR}/scripts/find_tc.sh gcc gcc-ar
+RANLIB!= ${.PARSEDIR}/scripts/find_tc.sh gcc gcc-ranlib
 OBJCOPY!= ${.PARSEDIR}/scripts/find_tc.sh gcc objcopy
 
 CFLAGS:= -march=r3000 -mabi=32 -mno-llsc -mfp32

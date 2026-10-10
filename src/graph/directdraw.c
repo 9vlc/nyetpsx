@@ -18,7 +18,7 @@ graph_d_tri(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col.raw | gp0_tri(false, blend);
 	GPU_GP0 = gp0_xy(tri->p0.x, tri->p0.y);
@@ -35,7 +35,7 @@ graph_d_shad_tri(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col0.raw | gp0_shad_tri(true, false, blend);
 	GPU_GP0 = gp0_xy(tri->p0.x, tri->p0.y);
@@ -56,7 +56,7 @@ graph_d_tex_tri(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col.raw | gp0_tri(true, blend);
 	GPU_GP0 = gp0_xy(tri->p0.x, tri->p0.y);
@@ -80,7 +80,7 @@ graph_d_shad_tex_tri(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col0.raw | gp0_shad_tri(true, true, blend);
 	GPU_GP0 = gp0_xy(tri->p0.x, tri->p0.y);
@@ -100,7 +100,7 @@ graph_d_quad(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col.raw | gp0_quad(false, blend);
 	GPU_GP0 = gp0_xy(quad->p0.x, quad->p0.y);
@@ -119,7 +119,7 @@ graph_d_shad_quad(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col0.raw | gp0_shad_quad(true, false, blend);
 	GPU_GP0 = gp0_xy(quad->p0.x, quad->p0.y);
@@ -143,7 +143,7 @@ graph_d_tex_quad(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col.raw | gp0_quad(true, blend);
 	GPU_GP0 = gp0_xy(quad->p0.x, quad->p0.y);
@@ -171,7 +171,7 @@ graph_d_shad_tex_quad(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col0.raw | gp0_shad_quad(true, true, blend);
 	GPU_GP0 = gp0_xy(quad->p0.x, quad->p0.y);
@@ -194,7 +194,7 @@ graph_d_line(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col.raw | gp0_line(false, blend);
 	GPU_GP0 = gp0_xy(line->p0.x, line->p0.y);
@@ -209,7 +209,7 @@ graph_d_shad_line(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col0.raw | gp0_line(true, blend);
 	GPU_GP0 = gp0_xy(line->p0.x, line->p0.y);
@@ -224,7 +224,7 @@ graph_d_line3(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col.raw | gp0_poly_line(false, blend);
 	GPU_GP0 = gp0_xy(tri->p0.x, tri->p0.y);
@@ -242,7 +242,7 @@ graph_d_shad_line3(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col0.raw | gp0_poly_line(true, blend);
 	GPU_GP0 = gp0_xy(tri->p0.x, tri->p0.y);
@@ -260,7 +260,7 @@ graph_d_line4(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col.raw | gp0_poly_line(false, blend);
 	GPU_GP0 = gp0_xy(quad->p0.x, quad->p0.y);
@@ -280,7 +280,7 @@ graph_d_shad_line4(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col0.raw | gp0_poly_line(true, blend);
 	GPU_GP0 = gp0_xy(quad->p0.x, quad->p0.y);
@@ -300,7 +300,7 @@ graph_d_rect(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col.raw | gp0_rect(false, false, blend);
 	GPU_GP0 = gp0_xy(rect->x, rect->y);
@@ -314,7 +314,7 @@ graph_d_rect1x1(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col.raw | gp0_rect1x1(false, false, blend);
 	GPU_GP0 = gp0_xy(pos->x, pos->y);
@@ -327,7 +327,7 @@ graph_d_rect8x8(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col.raw | gp0_rect8x8(false, false, blend);
 	GPU_GP0 = gp0_xy(pos->x, pos->y);
@@ -340,7 +340,7 @@ graph_d_rect16x16(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = col.raw | gp0_rect16x16(false, false, blend);
 	GPU_GP0 = gp0_xy(pos->x, pos->y);
@@ -356,7 +356,7 @@ graph_d_sprite(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = GP0_CMD_TPAGE | tex->page;
 	GPU_GP0 = col.raw | gp0_rect(true, raw, blend);
@@ -375,7 +375,7 @@ graph_d_sprite8x8(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = GP0_CMD_TPAGE | tex->page;
 	GPU_GP0 = col.raw | gp0_rect8x8(true, raw, blend);
@@ -393,7 +393,7 @@ graph_d_sprite16x16(
 	bool blend
 	)
 {
-	graph_await_cmd();
+	gpu_await_cmd();
 
 	GPU_GP0 = GP0_CMD_TPAGE | tex->page;
 	GPU_GP0 = col.raw | gp0_rect16x16(true, raw, blend);

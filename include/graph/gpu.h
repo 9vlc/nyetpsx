@@ -47,9 +47,9 @@ struct graph_texture_data {
 };
 typedef struct graph_texture_data graph_texture_data_t;
 
-void graph_await_dma(void);
-void graph_await_cmd(void);
-void graph_await_vsync(void);
+void gpu_await_dma(void);
+void gpu_await_cmd(void);
+void gpu_await_vsync(void);
 
 void
 graph_init_gpu(

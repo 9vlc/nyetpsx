@@ -619,4 +619,8 @@ gp1_vram_size(gp1_vram_size_t size)
 
 #undef DEF
 
+void gpu_await_dma(void);
+void gpu_await_cmd(void);
+void gpu_await_vsync(void);
+
 #endif /* _SYS__GPU_H */

@@ -24,26 +24,26 @@
  * accesses (see gte_load_data_reg() and gte_store_data_reg()), the structures below
  * must always be aligned to 32 bits.
  */
-struct gte_vector16 {
+struct gte_vec16 {
 	int16_t x;
 	int16_t y;
 	int16_t z;
 	int16_t _padding;
 } ALIGNED(4);
-typedef struct gte_vector16 gte_vector16_t;
+typedef struct gte_vec16 gte_vec16_t;
 
-struct gte_vector32 {
+struct gte_vec32 {
 	int32_t x;
 	int32_t y;
 	int32_t z;
 } ALIGNED(4);
-typedef struct gte_vector32 gte_vector32_t;
+typedef struct gte_vec32 gte_vec32_t;
 
-struct gte_matrix {
+struct gte_mtx {
 	int16_t v[3][3];
 	int16_t _padding;
 } ALIGNED(4);
-typedef struct gte_matrix gte_matrix_t;
+typedef struct gte_mtx gte_mtx_t;
 
 /*
  * Command definitions
@@ -87,7 +87,7 @@ typedef struct gte_matrix gte_matrix_t;
 #define GTE_MX_LLM	(1u << 17) /* Use light matrix as operand for MVMVA */
 #define GTE_MX_LCM	(2u << 17) /* Use light color matrix as operand for MVMVA */
 #define GTE_SF		(1u << 19) /* Shift results by 12 bits */
-typedef uint32_t gte_command_t;
+typedef uint32_t gte_cmd_t;
 
 /*
  * At least two dummy cycles are required after the last register write prior to
@@ -104,7 +104,7 @@ gte_load_delay(void)
 }
 
 DEF(void)
-gte_command(const uint32_t cmd)
+gte_cmd(const uint32_t cmd)
 {
 	gte_load_delay();
 	__asm__ volatile("cop2 %0\n" :: "i"(cmd));
@@ -145,7 +145,7 @@ gte_command(const uint32_t cmd)
 #define GTE_ZSF3	29 /* Average Z scale factor */
 #define GTE_ZSF4	30 /* Average Z scale factor */
 #define GTE_FLAG	31 /* Error/overflow flags */
-typedef uint32_t gte_control_reg_t;
+typedef uint32_t gte_ctrl_reg_t;
 
 /*
  * Status flag definitions
@@ -178,8 +178,8 @@ typedef uint32_t gte_flag_t;
  * through immediates.
  */
 DEF(void)
-gte_set_control_reg(
-	gte_control_reg_t reg,
+gte_set_ctrl_reg(
+	gte_ctrl_reg_t reg,
 	uint32_t value
 	)
 {
@@ -187,7 +187,7 @@ gte_set_control_reg(
 }
 
 DEF(uint32_t)
-gte_get_control_reg(gte_control_reg_t reg)
+gte_get_ctrl_reg(gte_ctrl_reg_t reg)
 {
 	uint32_t value;
 
@@ -203,46 +203,46 @@ gte_get_control_reg(gte_control_reg_t reg)
 		int16_t v31, int16_t v32, int16_t v33 \
 		) \
 	{ \
-		gte_set_control_reg(REG0, ((uint16_t)v11) | ((uint16_t)v12 << 16)); \
-		gte_set_control_reg(REG1, ((uint16_t)v13) | ((uint16_t)v21 << 16)); \
-		gte_set_control_reg(REG2, ((uint16_t)v22) | ((uint16_t)v23 << 16)); \
-		gte_set_control_reg(REG3, ((uint16_t)v31) | ((uint16_t)v32 << 16)); \
-		gte_set_control_reg(REG4, v33); \
+		gte_set_ctrl_reg(REG0, ((uint16_t)v11) | ((uint16_t)v12 << 16)); \
+		gte_set_ctrl_reg(REG1, ((uint16_t)v13) | ((uint16_t)v21 << 16)); \
+		gte_set_ctrl_reg(REG2, ((uint16_t)v22) | ((uint16_t)v23 << 16)); \
+		gte_set_ctrl_reg(REG3, ((uint16_t)v31) | ((uint16_t)v32 << 16)); \
+		gte_set_ctrl_reg(REG4, v33); \
 	} \
 	\
 	DEF(void) \
-	gte_load_##NAME(const gte_matrix_t *in) \
+	gte_load_##NAME(const gte_mtx_t *in) \
 	{ \
-		gte_set_control_reg(REG0, ((uint16_t)in->v[0][0]) | ((uint16_t)in->v[0][1] << 16)); \
-		gte_set_control_reg(REG1, ((uint16_t)in->v[0][2]) | ((uint16_t)in->v[1][0] << 16)); \
-		gte_set_control_reg(REG2, ((uint16_t)in->v[1][1]) | ((uint16_t)in->v[1][2] << 16)); \
-		gte_set_control_reg(REG3, ((uint16_t)in->v[2][0]) | ((uint16_t)in->v[2][1] << 16)); \
-		gte_set_control_reg(REG4, ((uint16_t)in->v[2][2])); \
+		gte_set_ctrl_reg(REG0, ((uint16_t)in->v[0][0]) | ((uint16_t)in->v[0][1] << 16)); \
+		gte_set_ctrl_reg(REG1, ((uint16_t)in->v[0][2]) | ((uint16_t)in->v[1][0] << 16)); \
+		gte_set_ctrl_reg(REG2, ((uint16_t)in->v[1][1]) | ((uint16_t)in->v[1][2] << 16)); \
+		gte_set_ctrl_reg(REG3, ((uint16_t)in->v[2][0]) | ((uint16_t)in->v[2][1] << 16)); \
+		gte_set_ctrl_reg(REG4, ((uint16_t)in->v[2][2])); \
 	} \
 	\
 	DEF(void) \
-	gte_store_##NAME(gte_matrix_t *output) \
+	gte_store_##NAME(gte_mtx_t *out) \
 	{ \
-		uint32_t v0 = gte_get_control_reg(REG0); \
-		uint32_t v1 = gte_get_control_reg(REG1); \
-		uint32_t v2 = gte_get_control_reg(REG2); \
-		uint32_t v3 = gte_get_control_reg(REG3); \
-		uint32_t v4 = gte_get_control_reg(REG4); \
+		uint32_t v0 = gte_get_ctrl_reg(REG0); \
+		uint32_t v1 = gte_get_ctrl_reg(REG1); \
+		uint32_t v2 = gte_get_ctrl_reg(REG2); \
+		uint32_t v3 = gte_get_ctrl_reg(REG3); \
+		uint32_t v4 = gte_get_ctrl_reg(REG4); \
 		\
-		output->v[0][0] = (int16_t) (v0 >>  0); \
-		output->v[0][1] = (int16_t) (v0 >> 16); \
-		output->v[0][2] = (int16_t) (v1 >>  0); \
-		output->v[1][0] = (int16_t) (v1 >> 16); \
-		output->v[1][1] = (int16_t) (v2 >>  0); \
-		output->v[1][2] = (int16_t) (v2 >> 16); \
-		output->v[2][0] = (int16_t) (v3 >>  0); \
-		output->v[2][1] = (int16_t) (v3 >> 16); \
-		output->v[2][2] = (int16_t) (v4 >>  0); \
+		out->v[0][0] = (int16_t)(v0 >>  0); \
+		out->v[0][1] = (int16_t)(v0 >> 16); \
+		out->v[0][2] = (int16_t)(v1 >>  0); \
+		out->v[1][0] = (int16_t)(v1 >> 16); \
+		out->v[1][1] = (int16_t)(v2 >>  0); \
+		out->v[1][2] = (int16_t)(v2 >> 16); \
+		out->v[2][0] = (int16_t)(v3 >>  0); \
+		out->v[2][1] = (int16_t)(v3 >> 16); \
+		out->v[2][2] = (int16_t)(v4 >>  0); \
 	}
 
-MATRIX_FUNCTIONS(GTE_RT11RT12, GTE_RT13RT21, GTE_RT22RT23, GTE_RT31RT32, GTE_RT33, rotation_matrix)
-MATRIX_FUNCTIONS(GTE_L11L12, GTE_L13L21, GTE_L22L23, GTE_L31L32, GTE_L33, light_matrix)
-MATRIX_FUNCTIONS(GTE_LC11LC12, GTE_LC13LC21, GTE_LC22LC23, GTE_LC31LC32, GTE_LC33, light_color_matrix)
+MATRIX_FUNCTIONS(GTE_RT11RT12, GTE_RT13RT21, GTE_RT22RT23, GTE_RT31RT32, GTE_RT33, rot_mtx)
+MATRIX_FUNCTIONS(GTE_L11L12, GTE_L13L21, GTE_L22L23, GTE_L31L32, GTE_L33, light_mtx)
+MATRIX_FUNCTIONS(GTE_LC11LC12, GTE_LC13LC21, GTE_LC22LC23, GTE_LC31LC32, GTE_LC33, light_col_mtx)
 
 #undef MATRIX_FUNCTIONS
 
@@ -256,30 +256,30 @@ MATRIX_FUNCTIONS(GTE_LC11LC12, GTE_LC13LC21, GTE_LC22LC23, GTE_LC31LC32, GTE_LC3
 #define GTE_VXY2	4 /* Input vector 2 */
 #define GTE_VZ2		5 /* Input vector 2 */
 #define GTE_RGBC	6 /* Input color and GPU command */
-#define GTE_OTZ		7 /* Average Z value output */
+#define GTE_OTZ		7 /* Average Z value out */
 #define GTE_IR0		8 /* Scalar accumulator */
 #define GTE_IR1		9 /* Vector accumulator */
 #define GTE_IR2		10 /* Vector accumulator */
 #define GTE_IR3		11 /* Vector accumulator */
-#define GTE_SXY0	12 /* X/Y coordinate output FIFO */
-#define GTE_SXY1	13 /* X/Y coordinate output FIFO */
-#define GTE_SXY2	14 /* X/Y coordinate output FIFO */
-#define GTE_SXYP	15 /* X/Y coordinate output FIFO */
-#define GTE_SZ0		16 /* Z coordinate output FIFO */
-#define GTE_SZ1		17 /* Z coordinate output FIFO */
-#define GTE_SZ2		18 /* Z coordinate output FIFO */
-#define GTE_SZ3		19 /* Z coordinate output FIFO */
-#define GTE_RGB0	20 /* Color and GPU command output FIFO */
-#define GTE_RGB1	21 /* Color and GPU command output FIFO */
-#define GTE_RGB2	22 /* Color and GPU command output FIFO */
+#define GTE_SXY0	12 /* X/Y coordinate out FIFO */
+#define GTE_SXY1	13 /* X/Y coordinate out FIFO */
+#define GTE_SXY2	14 /* X/Y coordinate out FIFO */
+#define GTE_SXYP	15 /* X/Y coordinate out FIFO */
+#define GTE_SZ0		16 /* Z coordinate out FIFO */
+#define GTE_SZ1		17 /* Z coordinate out FIFO */
+#define GTE_SZ2		18 /* Z coordinate out FIFO */
+#define GTE_SZ3		19 /* Z coordinate out FIFO */
+#define GTE_RGB0	20 /* Color and GPU command out FIFO */
+#define GTE_RGB1	21 /* Color and GPU command out FIFO */
+#define GTE_RGB2	22 /* Color and GPU command out FIFO */
 #define GTE_MAC0	24 /* Extended scalar accumulator */
 #define GTE_MAC1	25 /* Extended vector accumulator */
 #define GTE_MAC2	26 /* Extended vector accumulator */
 #define GTE_MAC3	27 /* Extended vector accumulator */
 #define GTE_IRGB	28 /* RGB conversion input */
-#define GTE_ORGB	29 /* RGB conversion output */
+#define GTE_ORGB	29 /* RGB conversion out */
 #define GTE_LZCS	30 /* Leading zero count input */
-#define GTE_LZCR	31 /* Leading zero count output */
+#define GTE_LZCR	31 /* Leading zero count out */
 typedef uint32_t gte_data_reg_t;
 
 DEF(void)
@@ -325,29 +325,31 @@ gte_store_data_reg(
 	__asm__ volatile("swc2 $%0, %1(%2)\n" :: "i"(reg), "i"(offset), "r"(ptr) : "memory");
 }
 
-#define VECTOR_FUNCTIONS(reg0, reg1, name) \
-	DEF(void) \
-	gte_set_##name( \
-		int16_t x, \
-		int16_t y, \
-		int16_t z \
-		) \
-	{ \
-		gte_set_data_reg(reg0, ((uint16_t) x) | ((uint16_t) y << 16)); \
-		gte_set_data_reg(reg1, z); \
-	} \
-	\
-	DEF(void) \
-	gte_load_##name(const gte_vector16_t *input) { \
-		gte_load_data_reg(reg0, 0, input); \
-		gte_load_data_reg(reg1, 4, input); \
-	} \
-	\
-	DEF(void) \
-	gte_store_##name(gte_vector16_t *output) { \
-		gte_store_data_reg(reg0, 0, output); \
-		gte_store_data_reg(reg1, 4, output); \
-	}
+#define VECTOR_FUNCTIONS(REG0, REG1, NAME) \
+DEF(void) \
+gte_set_##NAME( \
+	int16_t x, \
+	int16_t y, \
+	int16_t z \
+	) \
+{ \
+	gte_set_data_reg(REG0, ((uint16_t)x) | ((uint16_t)y << 16)); \
+	gte_set_data_reg(REG1, z); \
+} \
+\
+DEF(void) \
+gte_load_##NAME(const gte_vec16_t *input) \
+{ \
+	gte_load_data_reg(REG0, 0, input); \
+	gte_load_data_reg(REG1, 4, input); \
+} \
+\
+DEF(void) \
+gte_store_##NAME(gte_vec16_t *out) \
+{ \
+	gte_store_data_reg(REG0, 0, out); \
+	gte_store_data_reg(REG1, 4, out); \
+}
 
 VECTOR_FUNCTIONS(GTE_VXY0, GTE_VZ0, V0)
 VECTOR_FUNCTIONS(GTE_VXY1, GTE_VZ1, V1)
@@ -356,7 +358,7 @@ VECTOR_FUNCTIONS(GTE_VXY2, GTE_VZ2, V2)
 #undef VECTOR_FUNCTIONS
 
 DEF(void)
-gte_set_row_vectors(
+gte_set_row_vecs(
 	int16_t v11, int16_t v12, int16_t v13,
 	int16_t v21, int16_t v22, int16_t v23,
 	int16_t v31, int16_t v32, int16_t v33
@@ -371,7 +373,7 @@ gte_set_row_vectors(
 }
 
 DEF(void)
-gte_set_column_vectors(
+gte_set_col_vecs(
 	int16_t v11, int16_t v12, int16_t v13,
 	int16_t v21, int16_t v22, int16_t v23,
 	int16_t v31, int16_t v32, int16_t v33

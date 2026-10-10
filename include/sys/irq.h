@@ -13,9 +13,6 @@
 
 /*
  * Interrupt channel definitions
- *
- * I_STAT and I_MASK share the same bit assignments. I_STAT is edge triggered
- * and must be acknowledged by writing the corresponding bit back to it.
  */
 
 #define IRQ_VSYNC	0 /* Vblank */

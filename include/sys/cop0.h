@@ -88,7 +88,9 @@ cop0_set_reg(
 }
 
 DEF(uint32_t)
-cop0_get_reg(const cop0_reg_t reg)
+cop0_get_reg(
+	const cop0_reg_t reg
+	)
 {
 	uint32_t value;
 
@@ -97,7 +99,9 @@ cop0_get_reg(const cop0_reg_t reg)
 }
 
 DEF(void)
-cop0_enable_interrupts(void)
+cop0_enable_interrupts(
+	void
+	)
 {
 	uint32_t status = cop0_get_reg(COP0_STATUS);
 
@@ -105,7 +109,9 @@ cop0_enable_interrupts(void)
 }
 
 DEF(uint32_t)
-cop0_disable_interrupts(void)
+cop0_disable_interrupts(
+	void
+	)
 {
 	uint32_t status = cop0_get_reg(COP0_STATUS);
 

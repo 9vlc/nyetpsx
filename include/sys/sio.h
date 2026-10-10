@@ -7,14 +7,17 @@
 #ifndef _SYS__SIO_H
 #define _SYS__SIO_H
 
+#include <sys/ctp.h>
 #include <sys/mmio.h>
+#include <sys/sio.h>
 
+#include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 /*
  * SIO status flags
  */
-
 #define SIO_STAT_TX_NOT_FULL		(1u << 0)
 #define SIO_STAT_RX_NOT_EMPTY		(1u << 1)
 #define SIO_STAT_TX_EMPTY		(1u << 2)
@@ -25,12 +28,11 @@
 #define SIO_STAT_DSR			(1u << 7) /* DSR is /ACK on SIO0 */
 #define SIO_STAT_CTS			(1u << 8) /* SIO1 only */
 #define SIO_STAT_IRQ			(1u << 9)
-typedef uint32_t sio_status_flag_t;
+typedef uint32_t sio_stat_flag_t;
 
 /*
  * SIO mode flags
  */
-
 #define SIO_MODE_BAUD_BITMASK		(3u << 0)
 #define SIO_MODE_BAUD_DIV1		(1u << 0)
 #define SIO_MODE_BAUD_DIV16		(2u << 0)
@@ -54,7 +56,6 @@ typedef uint32_t sio_mode_flag_t;
 /*
  * SIO control flags
  */
-
 #define SIO_CTRL_TX_ENABLE		(1u << 0)
 #define SIO_CTRL_DTR			(1u << 1) /* DTR is /CS on SIO0 */
 #define SIO_CTRL_RX_ENABLE		(1u << 2)
@@ -65,9 +66,10 @@ typedef uint32_t sio_mode_flag_t;
 #define SIO_CTRL_TX_IRQ_ENABLE		(1u << 10)
 #define SIO_CTRL_RX_IRQ_ENABLE		(1u << 11)
 #define SIO_CTRL_DSR_IRQ_ENABLE		(1u << 12) /* DSR is /ACK on SIO0 */
+#define SIO_CTRL_CS_PORT_BITMASK	(1u << 13) /* SIO0 only */
 #define SIO_CTRL_CS_PORT_1		(0u << 13) /* SIO0 only */
 #define SIO_CTRL_CS_PORT_2		(1u << 13) /* SIO0 only */
-typedef uint32_t sio_control_flag_t;
+typedef uint32_t sio_ctrl_flag_t;
 
 /*
  * SIO_DATA is a 32-bit register, but some emulators do not implement it
@@ -79,6 +81,23 @@ typedef uint32_t sio_control_flag_t;
 #define SIO_CTRL(N)			MMIO16((IO_BASE | 0x04A) + (16u * (N)))
 #define SIO_BAUD(N)			MMIO16((IO_BASE | 0x04E) + (16u * (N)))
 
-void sio_init(int sio, int baud);
+void sio1_init(int baud);
+char sio1_getc(void);
+void sio1_putc(char c);
+
+void sio0_init(void);
+void sio0_sel_port(int port);
+bool sio0_await_ack(void);
+uint8_t sio0_xchg_byte(uint8_t value);
+uint16_t sio0_poll_pad(int port);
+
+size_t
+sio0_xchg_ctp_packet(
+	ctp_dev_addr_t addr,
+	const uint8_t *req,
+	uint8_t *resp,
+	size_t req_len,
+	size_t max_resp_len
+	);
 
 #endif /* _SYS__SIO_H */

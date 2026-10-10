@@ -14,7 +14,9 @@
 int isin(int x);
 
 DEF(int)
-icos(int x)
+icos(
+	int x
+	)
 {
 	return (isin(x + (1 << ISIN_SHIFT)));
 }
