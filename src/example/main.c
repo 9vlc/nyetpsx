@@ -11,6 +11,7 @@
 #include <graph/geom.h>
 #include <graph/dmadraw.h>
 
+#include <string.h>
 #include <stdint.h>
 #include <stdio.h>
 
@@ -24,6 +25,10 @@
 #define RED		GRAPH_XRGB(0xFF0000)
 
 #define BG		BLACK
+#define FG		RED
+
+#define CUBE_SIZE	1500
+#define CUBE_POV_DEPTH	5000
 
 static void
 draw_clear_bg(
@@ -82,13 +87,63 @@ draw_grad(
 	}
 }
 
-/* TODO */
+static const gte_vec16_t cube_verts[] = {
+	{ -CUBE_SIZE, -CUBE_SIZE, -CUBE_SIZE, 0 },
+	{  CUBE_SIZE, -CUBE_SIZE, -CUBE_SIZE, 0 },
+	{ -CUBE_SIZE,  CUBE_SIZE, -CUBE_SIZE, 0 },
+	{  CUBE_SIZE,  CUBE_SIZE, -CUBE_SIZE, 0 },
+	{ -CUBE_SIZE, -CUBE_SIZE,  CUBE_SIZE, 0 },
+	{  CUBE_SIZE, -CUBE_SIZE,  CUBE_SIZE, 0 },
+	{ -CUBE_SIZE,  CUBE_SIZE,  CUBE_SIZE, 0 },
+	{  CUBE_SIZE,  CUBE_SIZE,  CUBE_SIZE, 0 }
+};
+
+static const uint8_t cube_edges[][2] = {
+	{ 0, 1 }, { 1, 3 }, { 3, 2 }, { 2, 0 },
+	{ 4, 5 }, { 5, 7 }, { 7, 6 }, { 6, 4 },
+	{ 0, 4 }, { 1, 5 }, { 2, 6 }, { 3, 7 }
+};
+
+static int cube_frame = 0;
 static void
 draw_cube_wireframe(
 	graph_dma_chain_t *chain
 	)
 {
+	graph_point_t points[8];
+	graph_line_t line;
+	uint32_t sxy;
 
+	gte_set_rot_mtx(
+		GRAPH_GTE_UNIT, 0, 0,
+		0, GRAPH_GTE_UNIT, 0,
+		0, 0, GRAPH_GTE_UNIT
+	);
+	graph_rot_mtx_x(cube_frame * 12);
+	graph_rot_mtx_y(cube_frame * 16);
+
+	gte_set_ctrl_reg(GTE_TRX, 0);
+	gte_set_ctrl_reg(GTE_TRY, 0);
+	gte_set_ctrl_reg(GTE_TRZ, CUBE_POV_DEPTH);
+
+	for (int i = 0; i < 8; i++) {
+		gte_load_V0(&cube_verts[i]);
+		gte_cmd(GTE_CMD_RTPS | GTE_SF);
+		gte_load_delay();
+
+		sxy = gte_get_data_reg(GTE_SXY2);
+		points[i].x = (int16_t)(sxy & 0xFFFF);
+		points[i].y = (int16_t)(sxy >> 16);
+	}
+
+	for (int i = 0; i < 12; i++) {
+		line.p0 = points[cube_edges[i][0]];
+		line.p1 = points[cube_edges[i][1]];
+
+		graph_m_line(chain, &line, FG, false);
+	}
+
+	cube_frame++;
 }
 
 int
@@ -106,6 +161,7 @@ main(
 		SCREEN_WIDTH,
 		SCREEN_HEIGHT
 	);
+	graph_init_gte(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	graph_dma_chain_t chain;
 	while (1) {
