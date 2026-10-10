@@ -16,7 +16,9 @@
 #define DIV(N, D) (((N) + (D) / 2) / (D))
 
 DEF(void)
-delay_cycles(uint32_t time)
+delay_cycles(
+	uint32_t time
+	)
 {
 	__asm__ volatile(
 		".set push\n"
@@ -29,7 +31,9 @@ delay_cycles(uint32_t time)
 }
 
 DEF(void)
-delay_us(uint32_t time)
+delay_us(
+	uint32_t time
+	)
 {
 	delay_cycles(DIV(time * DIV(F_CPU * 8, 1000000), 8));
 }

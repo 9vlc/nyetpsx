@@ -95,7 +95,9 @@ typedef uint32_t gte_cmd_t;
  * or LZCR).
  */
 DEF(void)
-gte_load_delay(void)
+gte_load_delay(
+	void
+	)
 {
 	__asm__ volatile(
 		"nop\n"
@@ -104,7 +106,9 @@ gte_load_delay(void)
 }
 
 DEF(void)
-gte_cmd(const uint32_t cmd)
+gte_cmd(
+	const uint32_t cmd
+	)
 {
 	gte_load_delay();
 	__asm__ volatile("cop2 %0\n" :: "i"(cmd));
@@ -187,7 +191,9 @@ gte_set_ctrl_reg(
 }
 
 DEF(uint32_t)
-gte_get_ctrl_reg(gte_ctrl_reg_t reg)
+gte_get_ctrl_reg(
+	gte_ctrl_reg_t reg
+	)
 {
 	uint32_t value;
 
@@ -292,7 +298,9 @@ gte_set_data_reg(
 }
 
 DEF(uint32_t)
-gte_get_data_reg(gte_data_reg_t reg)
+gte_get_data_reg(
+	gte_data_reg_t reg
+	)
 {
 	uint32_t value;
 

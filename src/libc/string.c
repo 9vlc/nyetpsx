@@ -197,7 +197,11 @@ strcmp(
 }
 
 int
-strncmp(const char *lhs, const char *rhs, size_t count)
+strncmp(
+	const char *lhs,
+	const char *rhs,
+	size_t count
+	)
 {
 	for (; count && *lhs && *rhs; count--) {
 		char a = *(lhs++),
@@ -212,7 +216,10 @@ strncmp(const char *lhs, const char *rhs, size_t count)
 }
 
 char *
-strchr(const char *str, int ch)
+strchr(
+	const char *str,
+	int ch
+	)
 {
 	for (; *str; str++) {
 		if (*str == ch) {
@@ -224,7 +231,10 @@ strchr(const char *str, int ch)
 }
 
 char *
-strrchr(const char *str, int ch)
+strrchr(
+	const char *str,
+	int ch
+	)
 {
 	size_t length = strlen(str);
 
@@ -239,7 +249,10 @@ strrchr(const char *str, int ch)
 }
 
 char *
-strpbrk(const char *str, const char *breakSet)
+strpbrk(
+	const char *str,
+	const char *breakSet
+	)
 {
 	for (; *str; str++) {
 		char a = *str;
@@ -255,7 +268,10 @@ strpbrk(const char *str, const char *breakSet)
 }
 
 char *
-strstr(const char *str, const char *substr)
+strstr(
+	const char *str,
+	const char *substr
+	)
 {
 	size_t length = strlen(substr);
 
@@ -273,7 +289,9 @@ strstr(const char *str, const char *substr)
 }
 
 size_t
-strlen(const char *str)
+strlen(
+	const char *str
+	)
 {
 	size_t length = 0;
 
@@ -286,7 +304,10 @@ strlen(const char *str)
 
 
 char *
-strcat(char * restrict dest, const char * restrict src)
+strcat(
+	char * restrict dest,
+	const char * restrict src
+	)
 {
 	char *_dest = &dest[strlen(dest)];
 
@@ -299,7 +320,11 @@ strcat(char * restrict dest, const char * restrict src)
 }
 
 char *
-strncat(char * restrict dest, const char * restrict src, size_t count)
+strncat(
+	char * restrict dest,
+	const char * restrict src,
+	size_t count
+	)
 {
 	char *_dest = &dest[strlen(dest)];
 

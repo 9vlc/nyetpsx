@@ -24,12 +24,47 @@ void putx8(uint8_t x);
 void putx16(uint16_t x);
 void putx32(uint32_t x);
 
-int uvprintf(const char *fmt, va_list ap);
-int uprintf(const char *fmt, ...);
-int uvsprintf(char *str, const char *fmt, va_list ap);
-int usprintf(char *str, const char *fmt, ...);
-int uvsnprintf(char *str, size_t size, const char *fmt, va_list ap);
-int usnprintf(char *str, size_t size, const char *fmt, ...);
+int
+uvprintf(
+	const char *fmt,
+	va_list ap
+	);
+
+int
+uprintf(
+	const char *fmt,
+	...
+	);
+
+int
+uvsprintf(
+	char *str,
+	const char *fmt,
+	va_list ap
+	);
+
+int
+usprintf(
+	char *str,
+	const char *fmt,
+	...
+	);
+
+int
+uvsnprintf(
+	char *str,
+	size_t size,
+	const char *fmt,
+	va_list ap
+	);
+
+int
+usnprintf(
+	char *str,
+	size_t size,
+	const char *fmt,
+	...
+	);
 
 #define vprintf uvprintf
 #define printf uprintf

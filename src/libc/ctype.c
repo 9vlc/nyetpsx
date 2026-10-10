@@ -7,43 +7,57 @@
 #include <ctype.h>
 
 int
-isprint(int ch)
+isprint(
+	int ch
+	)
 {
 	return ((ch >= ' ') && (ch <= '~'));
 }
 
 int
-isgraph(int ch)
+isgraph(
+	int ch
+	)
 {
 	return ((ch > ' ') && (ch <= '~'));
 }
 
 int
-isspace(int ch)
+isspace(
+	int ch
+	)
 {
 	return ((ch == ' ') || ((ch >= '\t') && (ch <= '\r')));
 }
 
 int
-isblank(int ch)
+isblank(
+	int ch
+	)
 {
 	return ((ch == ' ') || (ch == '\t'));
 }
 
 int
-isalpha(int ch)
+isalpha(
+	int ch
+	)
 {
 	return (((ch >= 'A') && (ch <= 'Z')) || ((ch >= 'a') && (ch <= 'z')));
 }
 
 int
-isdigit(int ch)
+isdigit(
+	int ch
+	)
 {
 	return ((ch >= '0') && (ch <= '9'));
 }
 
 int
-tolower(int ch)
+tolower(
+	int ch
+	)
 {
 	if ((ch >= 'A') && (ch <= 'Z')) {
 		ch += 'a' - 'A';
@@ -53,7 +67,9 @@ tolower(int ch)
 }
 
 int
-toupper(int ch)
+toupper(
+	int ch
+	)
 {
 	if ((ch >= 'a') && (ch <= 'z')) {
 		ch += 'A' - 'a';
@@ -63,37 +79,49 @@ toupper(int ch)
 }
 
 int
-islower(int ch)
+islower(
+	int ch
+	)
 {
 	return ((ch >= 'a') && (ch <= 'z'));
 }
 
 int
-isupper(int ch)
+isupper(
+	int ch
+	)
 {
 	return ((ch >= 'A') && (ch <= 'Z'));
 }
 
 int
-isalnum(int ch)
+isalnum(
+	int ch
+	)
 {
 	return (isalpha(ch) || isdigit(ch));
 }
 
 int
-iscntrl(int ch)
+iscntrl(
+	int ch
+	)
 {
 	return (((ch >= '\0') && (ch <= '\x1F')) || (ch == '\x7F'));
 }
 
 int
-ispunct(int ch)
+ispunct(
+	int ch
+	)
 {
 	return (isprint(ch) && !isalnum(ch) && !isspace(ch));
 }
 
 int
-isxdigit(int ch)
+isxdigit(
+	int ch
+	)
 {
 	return (isdigit(ch) ||
 		((ch >= 'A') && (ch <= 'F')) ||

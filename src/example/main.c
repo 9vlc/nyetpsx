@@ -26,7 +26,9 @@
 #define BG		BLACK
 
 static void
-draw_clear_bg(graph_dma_chain_t *chain)
+draw_clear_bg(
+	graph_dma_chain_t *chain
+	)
 {
 	graph_m_rect(
 		chain,
@@ -39,7 +41,9 @@ draw_clear_bg(graph_dma_chain_t *chain)
 static uint8_t grad_rcc = 0;
 static int32_t grad_inc = 1;
 static void
-draw_grad(graph_dma_chain_t *chain)
+draw_grad(
+	graph_dma_chain_t *chain
+	)
 {
 	/* Triangle on left side */
 	graph_m_shad_tri(
@@ -80,7 +84,9 @@ draw_grad(graph_dma_chain_t *chain)
 
 /* TODO */
 static void
-draw_cube_wireframe(graph_dma_chain_t *chain)
+draw_cube_wireframe(
+	graph_dma_chain_t *chain
+	)
 {
 
 }

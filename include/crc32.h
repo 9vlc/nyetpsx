@@ -32,6 +32,10 @@ crc32_step(
 	return (crc);
 }
 
-uint32_t crc32(const char *data, const size_t len);
+uint32_t
+crc32(
+	const char *data,
+	const size_t len
+	);
 
 #endif /* _CRC32_H */

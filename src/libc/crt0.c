@@ -20,7 +20,11 @@ extern const vfunc _fini_array_start[], _fini_array_end[];
 /*
  * Program entry point
  */
-int main(int argc, const char **argv);
+int
+main(
+	int argc,
+	const char **argv
+	);
 
 int
 _start(

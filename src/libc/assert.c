@@ -23,7 +23,9 @@ _assert_abort(
 }
 
 void
-abort(void)
+abort(
+	void
+	)
 {
 #ifndef NDEBUG
 	uprintf("abort\n");
@@ -35,7 +37,9 @@ abort(void)
 }
 
 void
-__cxa_pure_virtual(void)
+__cxa_pure_virtual(
+	void
+	)
 {
 #ifndef NDEBUG
 	uprintf("__cxa_pure_virtual()\n");

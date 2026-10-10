@@ -140,7 +140,9 @@ gp0_rgb(
 
 /* RRGGBB -> BBGGRR */
 DEF(uint32_t)
-gp0_xrgb(uint32_t c)
+gp0_xrgb(
+	uint32_t c
+	)
 {
 	return (((c & 0xFF0000) >> 16) |
 		((c & 0x00FF00) <<  0) |
@@ -162,7 +164,9 @@ gp0_tag(
 }
 
 DEF(uint32_t)
-gp0_end_tag(uint32_t length)
+gp0_end_tag(
+	uint32_t length
+	)
 {
 	return (gp0_tag(length, (void *)0xFFFFFF));
 }
@@ -331,38 +335,50 @@ gp0_rect16x16(
 
 
 DEF(uint32_t)
-gp0_vram_blit(void)
+gp0_vram_blit(
+	void
+	)
 {
 	return (GP0_CMD_VRAM_BLIT);
 }
 
 DEF(uint32_t)
-gp0_vram_write(void)
+gp0_vram_write(
+	void
+	)
 {
 	return (GP0_CMD_VRAM_WRITE);
 }
 
 DEF(uint32_t)
-gp0_vram_read(void)
+gp0_vram_read(
+	void
+	)
 {
 	return (GP0_CMD_VRAM_READ);
 }
 
 
 DEF(uint32_t)
-gp0_flush_cache(void)
+gp0_flush_cache(
+	void
+	)
 {
 	return (GP0_CMD_FLUSH_CACHE);
 }
 
 DEF(uint32_t)
-gp0_vram_fill(void)
+gp0_vram_fill(
+	void
+	)
 {
 	return (GP0_CMD_VRAM_FILL);
 }
 
 DEF(uint32_t)
-gp0_irq(void)
+gp0_irq(
+	void
+	)
 {
 	return (GP0_CMD_IRQ);
 }
@@ -493,7 +509,9 @@ typedef uint32_t gp1_vram_size_t;
 typedef uint32_t gp1_command_t;
 
 DEF(uint32_t)
-gp1_clock_mult_h(gp1_hres_t hres)
+gp1_clock_mult_h(
+	gp1_hres_t hres
+	)
 {
 	switch (hres) {
 	case GP1_HRES_256:
@@ -517,7 +535,9 @@ gp1_clock_mult_h(gp1_hres_t hres)
 }
 
 DEF(uint32_t)
-gp1_clock_div_v(gp1_vres_t vres)
+gp1_clock_div_v(
+	gp1_vres_t vres
+	)
 {
 	switch (vres) {
 	case GP1_VRES_256:
@@ -532,31 +552,41 @@ gp1_clock_div_v(gp1_vres_t vres)
 }
 
 DEF(uint32_t)
-gp1_reset_gpu(void)
+gp1_reset_gpu(
+	void
+	)
 {
 	return (GP1_CMD_RESET_GPU);
 }
 
 DEF(uint32_t)
-gp1_reset_fifo(void)
+gp1_reset_fifo(
+	void
+	)
 {
 	return (GP1_CMD_RESET_FIFO);
 }
 
 DEF(uint32_t)
-gp1_acknowledge(void)
+gp1_acknowledge(
+	void
+	)
 {
 	return (GP1_CMD_ACKNOWLEDGE);
 }
 
 DEF(uint32_t)
-gp1_disp_blank(bool blank)
+gp1_disp_blank(
+	bool blank
+	)
 {
 	return (GP1_CMD_DISP_BLANK | blank);
 }
 
 DEF(uint32_t)
-gp1_dma_request_mode(gp1_dma_request_mode_t mode)
+gp1_dma_request_mode(
+	gp1_dma_request_mode_t mode
+	)
 {
 	return (GP1_CMD_DREQ_MODE | mode);
 }
@@ -612,7 +642,9 @@ gp1_fb_mode(
 }
 
 DEF(uint32_t)
-gp1_vram_size(gp1_vram_size_t size)
+gp1_vram_size(
+	gp1_vram_size_t size
+	)
 {
 	return (GP1_CMD_VRAM_SIZE | size);
 }

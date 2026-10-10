@@ -19,7 +19,9 @@
 #define DSR_TIMEOUT	100
 
 void
-sio0_init(void)
+sio0_init(
+	void
+	)
 {
 	SIO_CTRL(0) = SIO_CTRL_RESET;
 
@@ -38,7 +40,9 @@ sio0_init(void)
 }
 
 void
-sio0_sel_port(int port)
+sio0_sel_port(
+	int port
+	)
 {
 	uint16_t cr = ((port) ? SIO_CTRL_CS_PORT_2 : SIO_CTRL_CS_PORT_1);
 
@@ -46,7 +50,9 @@ sio0_sel_port(int port)
 }
 
 bool
-sio0_await_ack(void)
+sio0_await_ack(
+	void
+	)
 {
 	for (int t_o = DSR_TIMEOUT; t_o > 0; t_o -= 5) {
 		if (IRQ_STAT & (1u << IRQ_SIO0)) {
@@ -66,7 +72,9 @@ sio0_await_ack(void)
 }
 
 uint8_t
-sio0_xchg_byte(uint8_t value)
+sio0_xchg_byte(
+	uint8_t value
+	)
 {
 	while (!(SIO_STAT(0) & SIO_STAT_TX_NOT_FULL)) {
 		__asm__ __volatile__("");
@@ -121,7 +129,9 @@ sio0_xchg_ctp_packet(
 }
 
 uint16_t
-sio0_poll_pad(int port)
+sio0_poll_pad(
+	int port
+	)
 {
 	uint8_t req[4], resp[8];
 
@@ -175,7 +185,9 @@ sio0_poll_pad(int port)
 }
 
 void
-sio1_init(int baud)
+sio1_init(
+	int baud
+	)
 {
 	SIO_CTRL(1) = SIO_CTRL_RESET;
 
@@ -193,7 +205,9 @@ sio1_init(int baud)
 }
 
 char
-sio1_getc(void)
+sio1_getc(
+	void
+	)
 {
 	while (!(SIO_STAT(1) & SIO_STAT_RX_NOT_EMPTY)) {
 		__asm__ __volatile__("");
@@ -203,7 +217,9 @@ sio1_getc(void)
 }
 
 void
-sio1_putc(char c)
+sio1_putc(
+	char c
+	)
 {
 	while (!(SIO_STAT(1) & SIO_STAT_TX_NOT_FULL)) {
 		__asm__ __volatile__("");
