@@ -51,7 +51,7 @@ CFLAGS+= -mno-gpopt -G0
 LDFLAGS:= -G0
 .endif
 
-CFLAGS+= -I${INCDIR} -I${INCDIR}/psx -Wall -pedantic -std=c99 -Os -flto ${CFLAGS_ADD}
+CFLAGS+= -I${INCDIR} -I${INCDIR}/psx -Wall -pedantic -std=c99 -Os ${CFLAGS_ADD}
 LDFLAGS+= -L${OBJDIR}/out -g -static -nostdlib ${LDFLAGS_ADD}
 
 .endif # NYETPSX_SOURCE_TC
