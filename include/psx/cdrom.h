@@ -4,10 +4,10 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__CDROM_H
-#define _SYS__CDROM_H
+#ifndef _PSX__CDROM_H
+#define _PSX__CDROM_H
 
-#include <sys/mmio.h>
+#include <psx/mmio.h>
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -443,4 +443,4 @@ cdrom_read_sectors(
 	uint8_t mode
 	);
 
-#endif /* _SYS__CDROM_H */
+#endif /* _PSX__CDROM_H */

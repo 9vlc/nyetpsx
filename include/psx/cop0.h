@@ -4,8 +4,8 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__COP0_H
-#define _SYS__COP0_H
+#ifndef _PSX__COP0_H
+#define _PSX__COP0_H
 
 #include <stdint.h>
 
@@ -119,4 +119,4 @@ cop0_disable_interrupts(
 	return (status & COP0_STATUS_IEC);
 }
 
-#endif /* _SYS__COP0_H */
+#endif /* _PSX__COP0_H */

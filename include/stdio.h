@@ -15,7 +15,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <sys/sio.h>
+#include <psx/sio.h>
 
 #define putc sio1_putc
 #define getc sio1_getc

@@ -4,10 +4,10 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__MDEC_H
-#define _SYS__MDEC_H
+#ifndef _PSX__MDEC_H
+#define _PSX__MDEC_H
 
-#include <sys/mmio.h>
+#include <psx/mmio.h>
 
 #include <stdint.h>
 
@@ -73,4 +73,4 @@ typedef uint32_t mdec_control_flag_t;
 #define MDEC0	MMIO32(IO_BASE | 0x820) /* command; response */
 #define MDEC1	MMIO32(IO_BASE | 0x824) /* control; status */
 
-#endif /* _SYS__MDEC_H */
+#endif /* _PSX__MDEC_H */

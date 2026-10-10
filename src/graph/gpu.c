@@ -4,8 +4,8 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#include <sys/dma.h>
-#include <sys/gpu.h>
+#include <psx/dma.h>
+#include <psx/gpu.h>
 
 #include <graph/geom.h>
 #include <graph/gpu.h>

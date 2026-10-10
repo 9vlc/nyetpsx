@@ -4,9 +4,9 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#include <sys/dma.h>
-#include <sys/gpu.h>
-#include <sys/irq.h>
+#include <psx/dma.h>
+#include <psx/gpu.h>
+#include <psx/irq.h>
 
 void
 gpu_await_dma(

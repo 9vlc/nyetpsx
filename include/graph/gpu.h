@@ -6,7 +6,7 @@
 #ifndef _GRAPH__GPU_H
 #define _GRAPH__GPU_H
 
-#include <sys/gpu.h>
+#include <psx/gpu.h>
 
 #include <graph/geom.h>
 

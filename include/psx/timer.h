@@ -4,10 +4,10 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__TIMER_H
-#define _SYS__TIMER_H
+#ifndef _PSX__TIMER_H
+#define _PSX__TIMER_H
 
-#include <sys/mmio.h>
+#include <psx/mmio.h>
 
 #include <stdint.h>
 
@@ -44,4 +44,4 @@ typedef uint32_t timer_control_flag_t;
 #define TIMER_CTRL(N)			MMIO16((IO_BASE | 0x104) + (16u * (N)))
 #define TIMER_RELOAD(N)			MMIO16((IO_BASE | 0x108) + (16u * (N)))
 
-#endif /* _SYS__TIMER_H */
+#endif /* _PSX__TIMER_H */

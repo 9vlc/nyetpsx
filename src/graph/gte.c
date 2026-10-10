@@ -4,8 +4,8 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#include <sys/cop0.h>
-#include <sys/gte.h>
+#include <psx/cop0.h>
+#include <psx/gte.h>
 
 #include <graph/gte.h>
 #include <graph/gpu.h>

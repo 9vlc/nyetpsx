@@ -4,10 +4,10 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__CPU_H
-#define _SYS__CPU_H
+#ifndef _PSX__CPU_H
+#define _PSX__CPU_H
 
-#include <sys/mmio.h>
+#include <psx/mmio.h>
 
 #include <stdint.h>
 
@@ -44,4 +44,4 @@ typedef uint32_t cpu_bcc_flag_t;
 
 void cpu_flush_cache(void);
 
-#endif /* _SYS__CPU_H */
+#endif /* _PSX__CPU_H */

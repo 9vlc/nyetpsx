@@ -4,11 +4,11 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__DELAY_H
-#define _SYS__DELAY_H
+#ifndef _PSX__DELAY_H
+#define _PSX__DELAY_H
 
-#include <sys/cpu.h>
-#include <sys/freq.h>
+#include <psx/cpu.h>
+#include <psx/freq.h>
 
 #include <stdint.h>
 
@@ -41,4 +41,4 @@ delay_us(
 #undef DEF
 #undef DIV
 
-#endif /* _SYS__DELAY_H */
+#endif /* _PSX__DELAY_H */

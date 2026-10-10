@@ -4,10 +4,10 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__GPU_H
-#define _SYS__GPU_H
+#ifndef _PSX__GPU_H
+#define _PSX__GPU_H
 
-#include <sys/mmio.h>
+#include <psx/mmio.h>
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -655,4 +655,4 @@ void gpu_await_dma(void);
 void gpu_await_cmd(void);
 void gpu_await_vsync(void);
 
-#endif /* _SYS__GPU_H */
+#endif /* _PSX__GPU_H */

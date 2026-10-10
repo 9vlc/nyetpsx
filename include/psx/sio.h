@@ -4,12 +4,12 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__SIO_H
-#define _SYS__SIO_H
+#ifndef _PSX__SIO_H
+#define _PSX__SIO_H
 
-#include <sys/ctp.h>
-#include <sys/mmio.h>
-#include <sys/sio.h>
+#include <psx/ctp.h>
+#include <psx/mmio.h>
+#include <psx/sio.h>
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -100,4 +100,4 @@ sio0_xchg_ctp_packet(
 	size_t max_resp_len
 	);
 
-#endif /* _SYS__SIO_H */
+#endif /* _PSX__SIO_H */

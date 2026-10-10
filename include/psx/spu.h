@@ -4,10 +4,10 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__SPU_H
-#define _SYS__SPU_H
+#ifndef _PSX__SPU_H
+#define _PSX__SPU_H
 
-#include <sys/mmio.h>
+#include <psx/mmio.h>
 
 #include <stddef.h>
 #include <stdint.h>
@@ -225,4 +225,4 @@ spu_play_sample(
 	int16_t vol
 	);
 
-#endif /* _SYS__SPU_H */
+#endif /* _PSX__SPU_H */

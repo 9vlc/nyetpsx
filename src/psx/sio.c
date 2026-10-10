@@ -4,11 +4,11 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
 */
 
-#include <sys/ctp.h>
-#include <sys/delay.h>
-#include <sys/freq.h>
-#include <sys/irq.h>
-#include <sys/sio.h>
+#include <psx/ctp.h>
+#include <psx/delay.h>
+#include <psx/freq.h>
+#include <psx/irq.h>
+#include <psx/sio.h>
 
 #include <stdbool.h>
 #include <stddef.h>

@@ -4,10 +4,10 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__DMA_H
-#define _SYS__DMA_H
+#ifndef _PSX__DMA_H
+#define _PSX__DMA_H
 
-#include <sys/mmio.h>
+#include <psx/mmio.h>
 
 #include <stdint.h>
 
@@ -83,4 +83,4 @@ typedef uint32_t dma_dicr_flag_t;
 #define DMA_DPCR	MMIO32(IO_BASE | 0x0F0)
 #define DMA_DICR	MMIO32(IO_BASE | 0x0F4)
 
-#endif /* _SYS__DMA_H */
+#endif /* _PSX__DMA_H */

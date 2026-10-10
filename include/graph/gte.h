@@ -6,7 +6,7 @@
 #ifndef _GRAPH__GTE_H
 #define _GRAPH__GTE_H
 
-#include <sys/gte.h>
+#include <psx/gte.h>
 
 #include <stdint.h>
 

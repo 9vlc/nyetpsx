@@ -4,10 +4,10 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__IRQ_H
-#define _SYS__IRQ_H
+#ifndef _PSX__IRQ_H
+#define _PSX__IRQ_H
 
-#include <sys/mmio.h>
+#include <psx/mmio.h>
 
 #include <stdint.h>
 
@@ -32,4 +32,4 @@ typedef uint32_t irq_channel_t;
 #define IRQ_STAT	MMIO16(IO_BASE | 0x070)
 #define IRQ_MASK	MMIO16(IO_BASE | 0x074)
 
-#endif /* _SYS__IRQ_H */
+#endif /* _PSX__IRQ_H */

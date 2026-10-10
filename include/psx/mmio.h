@@ -4,8 +4,8 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__MMIO_H
-#define _SYS__MMIO_H
+#ifndef _PSX__MMIO_H
+#define _PSX__MMIO_H
 
 #include <stdint.h>
 
@@ -25,4 +25,4 @@
 #define DEV2_BASE	0xBFC00000
 #define CPU_BASE	0xFFFE0000
 
-#endif /* _SYS__MMIO_H */
+#endif /* _PSX__MMIO_H */

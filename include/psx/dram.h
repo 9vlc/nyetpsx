@@ -4,10 +4,10 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__DRAM_H
-#define _SYS__DRAM_H
+#ifndef _PSX__DRAM_H
+#define _PSX__DRAM_H
 
-#include <sys/mmio.h>
+#include <psx/mmio.h>
 
 #include <stdint.h>
 
@@ -48,4 +48,4 @@ typedef uint32_t dram_control_flag_t;
 
 #define DRAM_CTRL			MMIO32(IO_BASE | 0x060)
 
-#endif /* _SYS__DRAM_H */
+#endif /* _PSX__DRAM_H */

@@ -4,10 +4,10 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__BUS_H
-#define _SYS__BUS_H
+#ifndef _PSX__BUS_H
+#define _PSX__BUS_H
 
-#include <sys/mmio.h>
+#include <psx/mmio.h>
 
 #include <stdint.h>
 
@@ -58,4 +58,4 @@ typedef uint32_t biu_common_delay_flag_t;
 #define BIU_DEV8_CTRL		MMIO32(IO_BASE | 0x01C) /* PIO/debug */
 #define BIU_COM_DELAY		MMIO32(IO_BASE | 0x020)
 
-#endif /* _SYS__BUS_H */
+#endif /* _PSX__BUS_H */

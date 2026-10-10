@@ -4,7 +4,7 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
 */
 
-#include <sys/sio.h>
+#include <psx/sio.h>
 
 #include <stdio.h>
 

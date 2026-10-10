@@ -4,8 +4,8 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__CTP_H
-#define _SYS__CTP_H
+#ifndef _PSX__CTP_H
+#define _PSX__CTP_H
 
 #include <stdint.h>
 
@@ -169,4 +169,4 @@ typedef uint32_t taiko_button_flag_t;
 #define BTN_DENSHA_A			BTN_PAD_SQUARE
 typedef uint32_t densha_button_flag_t;
 
-#endif /* _SYS__CTP_H */
+#endif /* _PSX__CTP_H */

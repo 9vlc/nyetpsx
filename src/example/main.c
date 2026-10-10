@@ -4,7 +4,7 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#include <sys/gpu.h>
+#include <psx/gpu.h>
 
 #include <graph/gpu.h>
 #include <graph/gte.h>

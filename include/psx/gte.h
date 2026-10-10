@@ -4,10 +4,10 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#ifndef _SYS__GTE_H
-#define _SYS__GTE_H
+#ifndef _PSX__GTE_H
+#define _PSX__GTE_H
 
-#include <sys/mmio.h>
+#include <psx/mmio.h>
 
 #include <stdint.h>
 
@@ -398,4 +398,4 @@ gte_set_col_vecs(
 #undef DEF
 #undef ALIGNED
 
-#endif /* _SYS__GTE_H */
+#endif /* _PSX__GTE_H */

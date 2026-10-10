@@ -4,10 +4,10 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
-#include <sys/bus.h>
-#include <sys/delay.h>
-#include <sys/dma.h>
-#include <sys/spu.h>
+#include <psx/bus.h>
+#include <psx/delay.h>
+#include <psx/dma.h>
+#include <psx/spu.h>
 
 #include <assert.h>
 #include <stddef.h>
