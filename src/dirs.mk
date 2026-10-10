@@ -1,4 +1,4 @@
-SUBDIRS:= psx libc etc graph out
+SUBDIRS:= psx libc sys etc graph out
 .if ${NYETPSX_BUILD_EXAMPLE} == 1
 SUBDIRS+= example
 .endif
