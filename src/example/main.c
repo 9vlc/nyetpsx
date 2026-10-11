@@ -31,7 +31,7 @@
 #define CUBE_POV_DEPTH	5000
 
 static void
-draw_clear_bg(
+example_clear_bg(
 	graph_dma_chain_t *chain
 	)
 {
@@ -46,7 +46,7 @@ draw_clear_bg(
 static uint8_t grad_rcc = 0;
 static int32_t grad_inc = 1;
 static void
-draw_grad(
+example_gradient(
 	graph_dma_chain_t *chain
 	)
 {
@@ -106,7 +106,7 @@ static const uint8_t cube_edges[][2] = {
 
 static int cube_frame = 0;
 static void
-draw_cube_wireframe(
+example_cube_frame(
 	graph_dma_chain_t *chain
 	)
 {
@@ -155,12 +155,7 @@ main(
 	(void)argc;
 	(void)argv;
 
-	graph_init_gpu(
-		SCREEN_HRES,
-		SCREEN_VRES,
-		SCREEN_WIDTH,
-		SCREEN_HEIGHT
-	);
+	graph_init_gpu(SCREEN_HRES, SCREEN_VRES, SCREEN_WIDTH, SCREEN_HEIGHT);
 	graph_init_gte(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	graph_dma_chain_t chain;
@@ -168,9 +163,10 @@ main(
 		gpu_await_dma();
 		chain.next = chain.data;
 
-		draw_clear_bg(&chain);
-		draw_grad(&chain);
-		draw_cube_wireframe(&chain);
+		example_clear_bg(&chain);
+		example_gradient(&chain);
+		example_cube_frame(&chain);
+
 		graph_m_end(&chain);
 
 		gpu_await_vsync();
