@@ -6,6 +6,7 @@
 #ifndef _GRAPH__DIRECTDRAW_H
 #define _GRAPH__DIRECTDRAW_H
 
+#include <graph/gpu.h>
 #include <graph/geom.h>
 
 #include <stdbool.h>
