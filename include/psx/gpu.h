@@ -194,8 +194,8 @@ typedef uint32_t gp0_misc_command_t;
 
 #define GP0_CMD_TPAGE		(GP0_CMD_ATTRIBUTE | (1u << 24))
 #define GP0_CMD_TWINDOW		(GP0_CMD_ATTRIBUTE | (2u << 24))
-#define GP0_CMD_FB_OFFSET1	(GP0_CMD_ATTRIBUTE | (3u << 24))
-#define GP0_CMD_FB_OFFSET2	(GP0_CMD_ATTRIBUTE | (4u << 24))
+#define GP0_CMD_FB_AREA_TL	(GP0_CMD_ATTRIBUTE | (3u << 24))
+#define GP0_CMD_FB_AREA_BR	(GP0_CMD_ATTRIBUTE | (4u << 24))
 #define GP0_CMD_FB_ORIGIN	(GP0_CMD_ATTRIBUTE | (5u << 24))
 #define GP0_CMD_FB_MASK		(GP0_CMD_ATTRIBUTE | (6u << 24))
 typedef uint32_t gp0_attr_command_t;
@@ -413,29 +413,29 @@ gp0_set_window(
 }
 
 DEF(uint32_t)
-gp0_fb_offset1(
+gp0_draw_area_tl(
 	uint32_t x,
 	uint32_t y
 	)
 {
-	return (GP0_CMD_FB_OFFSET1  |
+	return (GP0_CMD_FB_AREA_TL  |
 		((x & 0x3FF) <<  0) |
 		((y & 0x3FF) << 10));
 }
 
 DEF(uint32_t)
-gp0_fb_offset2(
+gp0_draw_area_br(
 	uint32_t x,
 	uint32_t y
 	)
 {
-	return (GP0_CMD_FB_OFFSET2 |
+	return (GP0_CMD_FB_AREA_BR |
 		((x & 0x3FF) << 0) |
 		((y & 0x3FF) << 10));
 }
 
 DEF(uint32_t)
-gp0_fb_origin(
+gp0_draw_origin(
 	int32_t x,
 	int32_t y
 	)

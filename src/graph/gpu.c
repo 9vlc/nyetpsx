@@ -33,6 +33,7 @@ graph_init_gpu(
 	GPU_GP1 = gp1_reset_gpu();
 	GPU_GP1 = gp1_fb_range_h(x - off_x, x + off_x);
 	GPU_GP1 = gp1_fb_range_v(y - off_y, y + off_y);
+	GPU_GP1 = gp1_fb_offset(0, 0);
 	GPU_GP1 = gp1_fb_mode(
 		hres,
 		vres,
@@ -40,18 +41,19 @@ graph_init_gpu(
 		GP1_COLOR_16BPP,
 		(vres == GP1_VRES_512) /* Interlace on hires */
 	);
-	GPU_GP1 = gp1_disp_blank(false);
+
+	gpu_await_cmd();
+	GPU_GP0 = gp0_set_page(0, true, false);
+	GPU_GP0 = gp0_draw_area_tl(0, 0);
+	GPU_GP0 = gp0_draw_area_br(width - 1, height - 1);
+	GPU_GP0 = gp0_draw_origin(0, 0);
 
 	gpu_await_dma();
 	DMA_DPCR |= DMA_DPCR_CH_ENABLE(DMA_GPU) | DMA_DPCR_CH_ENABLE(DMA_OTC);
 	DMA_CHCR(DMA_GPU) = 0;
 	DMA_CHCR(DMA_OTC) = 0;
 
-	gpu_await_cmd();
-	GPU_GP0 = gp0_set_page(0, true, false);
-	GPU_GP0 = gp0_fb_offset1(0, 0);
-	GPU_GP0 = gp0_fb_offset2(width - 1, height - 1);
-	GPU_GP0 = gp0_fb_origin(0, 0);
+	GPU_GP1 = gp1_disp_blank(false);
 }
 
 void
