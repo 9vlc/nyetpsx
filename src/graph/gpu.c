@@ -31,9 +31,9 @@ graph_init_gpu(
 	int off_y = (height / gp1_clock_div_v(vres)) / 2;
 
 	GPU_GP1 = gp1_reset_gpu();
-	GPU_GP1 = gp1_fb_range_h(x - off_x, x + off_x);
-	GPU_GP1 = gp1_fb_range_v(y - off_y, y + off_y);
-	GPU_GP1 = gp1_fb_offset(0, 0);
+	GPU_GP1 = gp1_fb_range_h(x - off_x, x + off_x - 1);
+	GPU_GP1 = gp1_fb_range_v(y - off_y, y + off_y - 1);
+	GPU_GP1 = gp1_fb_offset(0, (vres == GP1_VRES_512 ? 2 : 0));
 	GPU_GP1 = gp1_fb_mode(
 		hres,
 		vres,
