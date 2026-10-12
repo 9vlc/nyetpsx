@@ -50,7 +50,7 @@ graph_init_gpu(
 	gpu_await_cmd();
 	GPU_GP0 = gp0_set_page(0, true, false);
 	GPU_GP0 = gp0_fb_offset1(0, 0);
-	GPU_GP0 = gp0_fb_offset2(width, height);
+	GPU_GP0 = gp0_fb_offset2(width - 1, height - 1);
 	GPU_GP0 = gp0_fb_origin(0, 0);
 }
 
