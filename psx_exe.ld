@@ -127,6 +127,9 @@ SECTIONS {
 
 		_data_end = .;
 
+		/* Linker is dumb (required for no sdata) */
+		BYTE(0);
+
 		/* Align for CD-ROM load */
 		. = ALIGN(2048);
 	} > ARAM = 0
