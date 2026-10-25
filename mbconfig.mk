@@ -35,7 +35,7 @@ CFLAGS:= -target mipsel-none-elf -march=mips1 -mabi=32 -mfp32 -Wextra
 .  endif
 .endfor
 
-ASFLAGS:= ${CFLAGS}
+ASFLAGS:= ${CFLAGS} -mno-abicalls
 
 .if ${NYETPSX_SOURCE_TC} != 1
 

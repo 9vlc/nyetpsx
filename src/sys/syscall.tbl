@@ -1,0 +1,285 @@
+# table | calladr | return | name | arguments | comment
+
+A0 | 00 | int      | open                              | const char *path, int flags
+A0 | 01 | int      | lseek                             | int fd, int offset, int whence
+A0 | 02 | int      | read                              | int fd, void *buf, int nbytes
+A0 | 03 | int      | write                             | int fd, const void *buf, int nbytes
+A0 | 04 | int      | close                             | int fd
+A0 | 05 | int      | ioctl                             | int fd, int request, int arg
+A0 | 06 | void     | exit                              | int status
+A0 | 07 | int      | isatty                            | int fd
+A0 | 08 | int      | getc                              | int fd
+A0 | 09 | int      | putc                              | int c, int fd
+A0 | 0A | int      | todigit                           | int c
+A0 | 0B | void     | atof                              | void                                           | broken (did dev ps1s have an fpu?)
+A0 | 0C | uint32_t | strtoul                           | const char *nptr, char **endptr, int base
+A0 | 0D | int32_t  | strtol                            | const char *nptr, char **endptr, int base
+A0 | 0E | int      | abs                               | int j
+A0 | 0F | int32_t  | labs                              | int32_t j
+A0 | 10 | int      | atoi                              | const char *nptr
+A0 | 11 | int32_t  | atol                              | const char *nptr
+A0 | 12 | int      | atob                              | const char *src, int *num_dst
+A0 | 13 | int      | save_state                        | void *buf
+A0 | 14 | void     | restore_state                     | void *buf, int param
+A0 | 15 | char *   | strcat                            | char *s, const char *append
+A0 | 16 | char *   | strncat                           | char *s, const char *append, size_t count
+A0 | 17 | int      | strcmp                            | const char *s1, const char *s2
+A0 | 18 | int      | strncmp                           | const char *s1, const char *s2, size_t len
+A0 | 19 | char *   | strcpy                            | char *dst, const char *src
+A0 | 1A | char *   | strncpy                           | char *dst, const char *src, size_t len
+A0 | 1B | size_t   | strlen                            | const char *s
+A0 | 1C | char *   | index                             | const char *s, int c
+A0 | 1D | char *   | rindex                            | const char *s, int c
+A0 | 1E | char *   | strchr                            | const char *s, int c                           | same as index
+A0 | 1F | char *   | strrchr                           | const char *s, int c                           | same as rindex
+A0 | 20 | char *   | strpbrk                           | const char *s, const char *charset
+A0 | 21 | size_t   | strspn                            | const char *s, const char *charset
+A0 | 22 | size_t   | strcspn                           | const char *s, const char *charset
+A0 | 23 | char *   | strtok                            | char *str, const char *sep                     | bugged
+A0 | 24 | char *   | strstr                            | const char *big, const char *little            | bugged
+A0 | 25 | int      | toupper                           | int c
+A0 | 26 | int      | tolower                           | int c
+A0 | 27 | void     | bcopy                             | const void *src, void *dst, size_t len
+A0 | 28 | void     | bzero                             | void *b, size_t len
+A0 | 29 | int      | bcmp                              | const void *b1, const void *b2, size_t len	| bugged
+A0 | 2A | void *   | memcpy                            | void *dst, const void *src, size_t len
+A0 | 2B | void *   | memset                            | void *dest, int c, size_t len
+A0 | 2C | void *   | memmove                           | void *dst, const void *src, size_t len         | bugged
+A0 | 2D | int      | memcmp                            | const void *b1, const void *b2, size_t len     | bugged
+A0 | 2E | void *   | memchr                            | const void *b, int c, size_t len
+A0 | 2F | int      | rand                              | void
+A0 | 30 | void     | srand                             | unsigned int seed
+A0 | 31 | void     | qsort                             | void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)
+A0 | 32 | void     | strtod                            | void                                   | broken (did dev ps1s have an fpu?)
+A0 | 33 | void *   | malloc                            | size_t size
+A0 | 34 | void     | free                              | void *ptr
+A0 | 35 | void *   | lsearch                           | const void *key, void *base, size_t nel, size_t width, int (*compar)(const void *, const void *)
+A0 | 36 | void *   | bsearch                           | const void *key, const void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)
+A0 | 37 | void *   | calloc                            | size_t number, size_t size		| slow
+A0 | 38 | void *   | realloc                           | void *ptr, size_t size			| slow
+A0 | 39 | void     | init_heap                         | void *addr, size_t size
+A0 | 3A | void     | system_error_exit                 | int code
+A0 | 3B | int      | getchar                           | void
+A0 | 3C | int      | putchar                           | int c
+A0 | 3D | char *   | gets                              | char *str
+A0 | 3E | int      | puts                              | const char *str
+A0 | 3F | int      | printf                            | const char *format, ...
+A0 | 40 | void     | system_error_unresolved_exception | void
+A0 | 41 | int      | load_exe_header                   | const char *filename, void *headerbuf
+A0 | 42 | int      | load_exe_file                     | const char *filename, void *headerbuf
+A0 | 43 | int      | do_execute                        | void *headerbuf, int param1, int param2
+A0 | 44 | void     | flush_cache                       | void
+A0 | 45 | void     | init_a0_b0_c0_vectors             | void
+A0 | 46 | void     | gpu_dw                            | int x, int y, int w, int h, const void *src
+A0 | 47 | void     | gpu_send_dma                      | int x, int y, int w, int h, const void *src
+A0 | 48 | void     | send_gp1_command                  | uint32_t cmd
+A0 | 49 | void     | gpu_cw                            | uint32_t cmd
+A0 | 4A | void     | gpu_cwp                           | const uint32_t *src, int num
+A0 | 4B | void     | send_gpu_linked_list              | const void *src
+A0 | 4C | void     | gpu_abort_dma                     | void
+A0 | 4D | uint32_t | get_gpu_status                    | void
+A0 | 4E | void     | gpu_sync                          | void
+A0 | 4F | void     | system_error_a_%A                 | void                                   | stub
+A0 | 50 | void     | system_error_a_%A                 | void                                   | stub
+A0 | 51 | int      | load_and_execute                  | const char *filename, void *stack_base, int stack_offset
+A0 | 52 | void     | system_error_a_%A                 | void                                   | stub
+A0 | 53 | void     | system_error_a_%A                 | void                                   | stub
+A0 | 54 | void     | cd_init                           | void
+A0 | 55 | void     | bu_init                           | void
+A0 | 56 | void     | cd_remove                         | void
+A0 | 57 | int      | return_zero_a_%A                  | void					| stub, returns 0
+A0 | 58 | int      | return_zero_a_%A                  | void					| stub, returns 0
+A0 | 59 | int      | return_zero_a_%A                  | void					| stub, returns 0
+A0 | 5A | int      | return_zero_a_%A                  | void					| stub, returns 0
+A0 | 5B | void     | dev_tty_init                      | void
+A0 | 5C | int      | dev_tty_open                      | void *fcb, const char *path, int mode
+A0 | 5D | int      | dev_tty_in_out                    | void *fcb, int cmd
+A0 | 5E | int      | dev_tty_ioctl                     | void *fcb, int cmd, int arg
+A0 | 5F | int      | dev_cd_open                       | void *fcb, const char *path, int mode
+A0 | 60 | int      | dev_cd_read                       | void *fcb, void *dst, int len
+A0 | 61 | int      | dev_cd_close                      | void *fcb
+A0 | 62 | void *   | dev_cd_firstfile                  | void *fcb, const char *path, void *direntry
+A0 | 63 | void *   | dev_cd_nextfile                   | void *fcb, void *direntry
+A0 | 64 | int      | dev_cd_chdir                      | void *fcb, const char *path
+A0 | 65 | int      | dev_card_open                     | void *fcb, const char *path, int mode
+A0 | 66 | int      | dev_card_read                     | void *fcb, void *dst, int len
+A0 | 67 | int      | dev_card_write                    | void *fcb, const void *src, int len
+A0 | 68 | int      | dev_card_close                    | void *fcb
+A0 | 69 | void *   | dev_card_firstfile                | void *fcb, const char *path, void *direntry
+A0 | 6A | void *   | dev_card_nextfile                 | void *fcb, void *direntry
+A0 | 6B | int      | dev_card_erase                    | void *fcb, const char *path
+A0 | 6C | int      | dev_card_undelete                 | void *fcb, const char *path
+A0 | 6D | int      | dev_card_format                   | void *fcb
+A0 | 6E | int      | dev_card_rename                   | void *fcb1, const char *path1, void *fcb2, const char *path2
+A0 | 6F | void     | dev_card_clear_error              | void *fcb
+A0 | 73 | int      | return_zero_a_%A                  | void					| stub, returns 0
+A0 | 74 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 75 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 76 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 77 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 78 | void     | cd_async_seek_l                   | const void *src
+A0 | 79 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 7A | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 7B | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 7C | int      | cd_async_get_status               | void *dst
+A0 | 7D | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 7E | int      | cd_async_read_sector              | int count, void *dst, int mode
+A0 | 7F | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 80 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 81 | int      | cd_async_set_mode                 | int mode
+A0 | 82 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 83 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 84 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 85 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 86 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 87 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 88 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 89 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 8A | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 8B | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 8C | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 8D | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 8E | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | 8F | int      | return_zero_a_%A                  | void					| stub, returns 0
+A0 | 90 | void     | cdrom_io_irq_func1                | void
+A0 | 91 | void     | cdrom_dma_irq_func1               | void
+A0 | 92 | void     | cdrom_io_irq_func2                | void
+A0 | 93 | void     | cdrom_dma_irq_func2               | void
+A0 | 94 | void     | cdrom_get_int5_err_code           | uint8_t *dst1, uint8_t *dst2
+A0 | 95 | void     | cd_init_sub_func                  | void
+A0 | 96 | void     | add_cdrom_device                  | void
+A0 | 97 | void     | add_mem_card_device               | void
+A0 | 98 | void     | add_duart_tty_device              | void
+A0 | 99 | void     | add_dummy_tty_device              | void
+A0 | 9A | void     | system_error_a_%A                 | void                                   | stub
+A0 | 9B | void     | system_error_a_%A                 | void                                   | stub
+A0 | 9C | void     | set_conf                          | int num_evcb, int num_tcb, void *stack_top
+A0 | 9D | void     | get_conf                          | int *num_evcb_dst, int *num_tcb_dst, void **stack_top_dst
+A0 | 9E | void     | set_cdrom_irq_auto_abort          | int type, int flag
+A0 | 9F | void     | set_mem_size                      | int megabytes
+A0 | A0 | void     | warm_boot                         | void
+A0 | A1 | void     | system_error_boot_or_disk_failure | int type, int error_code
+A0 | A2 | int      | enqueue_cd_intr                   | void
+A0 | A3 | int      | dequeue_cd_intr                   | void
+A0 | A4 | int      | cd_get_lbn                        | const char *filename
+A0 | A5 | int      | cd_read_sector                    | int count, int sector, void *buffer
+A0 | A6 | int      | cd_get_status                     | void
+A0 | A7 | void     | bu_callback_okay                  | void
+A0 | A8 | void     | bu_callback_err_write             | void
+A0 | A9 | void     | bu_callback_err_busy              | void
+A0 | AA | void     | bu_callback_err_eject             | void
+A0 | AB | int      | card_info                         | int port
+A0 | AC | int      | card_async_load_directory         | int port
+A0 | AD | void     | set_card_auto_format              | int flag
+A0 | AE | void     | bu_callback_err_prev_write        | void
+A0 | AF | int      | card_write_test                   | int port
+A0 | B0 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | B1 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | B2 | void     | ioabort_raw                       | int param
+A0 | B3 | int      | return_zero_a_%A                  | void                                   | stub, returns 0
+A0 | B4 | int      | get_system_info                   | int index
+
+B0 | 00 | void *   | alloc_kernel_memory               | size_t size
+B0 | 01 | void     | free_kernel_memory                | void *buf
+B0 | 02 | void     | init_timer                        | int t, int reload, int flags
+B0 | 03 | int      | get_timer                         | int t
+B0 | 04 | void     | enable_timer_irq                  | int t
+B0 | 05 | void     | disable_timer_irq                 | int t
+B0 | 06 | void     | restart_timer                     | int t
+B0 | 07 | int      | deliver_event                     | uint32_t ev_class, int spec
+B0 | 08 | uint32_t | open_event                        | uint32_t ev_class, int spec, int mode, void (*func)(void)
+B0 | 09 | int      | close_event                       | uint32_t event
+B0 | 0A | int      | wait_event                        | uint32_t event
+B0 | 0B | int      | test_event                        | uint32_t event
+B0 | 0C | int      | enable_event                      | uint32_t event
+B0 | 0D | int      | disable_event                     | uint32_t event
+B0 | 0E | uint32_t | open_thread                       | uint32_t reg_pc, uint32_t reg_sp_fp, uint32_t reg_gp
+B0 | 0F | int      | close_thread                      | uint32_t handle
+B0 | 10 | int      | change_thread                     | uint32_t handle
+B0 | 12 | int      | init_pad                          | void *buf1, int size1, void *buf2, int size2
+B0 | 13 | int      | start_pad                         | void
+B0 | 14 | void     | stop_pad                          | void
+B0 | 15 | void     | outdated_pad_init_and_start       | int type, uint32_t *button_dest, int unused1, int unused2
+B0 | 16 | uint32_t | outdated_pad_get_buttons          | void
+B0 | 17 | void     | return_from_exception             | void
+B0 | 18 | void     | set_default_exit_from_exception   | void
+B0 | 19 | void     | set_custom_exit_from_exception    | void *addr
+B0 | 1A | void     | system_error_b_%A                 | void                                   | stub
+B0 | 1B | void     | system_error_b_%A                 | void                                   | stub
+B0 | 1C | void     | system_error_b_%A                 | void                                   | stub
+B0 | 1D | void     | system_error_b_%A                 | void                                   | stub
+B0 | 1E | void     | system_error_b_%A                 | void                                   | stub
+B0 | 1F | void     | system_error_b_%A                 | void                                   | stub
+B0 | 20 | int      | undeliver_event                   | uint32_t ev_class, int spec
+B0 | 21 | void     | system_error_b_%A                 | void                                   | stub
+B0 | 22 | void     | system_error_b_%A                 | void                                   | stub
+B0 | 23 | void     | system_error_b_%A                 | void                                   | stub
+B0 | 2A | void     | system_error_b_%A                 | void                                   | stub
+B0 | 2B | void     | system_error_b_%A                 | void                                   | stub
+B0 | 40 | int      | chdir                             | const char *path
+B0 | 41 | int      | format_device                     | const char *device_name
+B0 | 42 | void *   | firstfile                         | const char *filename, void *direntry
+B0 | 43 | void *   | nextfile                          | void *direntry
+B0 | 44 | int      | file_rename                       | const char *old_filename, const char *new_filename
+B0 | 45 | int      | file_delete                       | const char *filename
+B0 | 46 | int      | file_undelete                     | const char *filename
+B0 | 47 | int      | add_device                        | void *device_info
+B0 | 48 | int      | remove_device                     | const char *device_name_lowercase
+B0 | 49 | void     | print_installed_devices           | void
+B0 | 4A | void     | init_card                         | int pad_enable                         | clobbers $k0 and $k1
+B0 | 4B | void     | start_card                        | void
+B0 | 4C | void     | stop_card                         | void
+B0 | 4D | int      | card_info_subfunc                 | int port
+B0 | 4E | int      | write_card_sector                 | int port, int sector, const void *src
+B0 | 4F | int      | read_card_sector                  | int port, int sector, void *dst
+B0 | 50 | void     | allow_new_card                    | void
+B0 | 51 | uint32_t | krom2_raw_add                     | uint32_t shiftjis_code
+B0 | 52 | void     | system_error_b_%A                 | void                                   | stub
+B0 | 53 | uint32_t | krom2_offset                      | uint32_t shiftjis_code
+B0 | 54 | int      | get_errno                         | void
+B0 | 55 | int      | get_error                         | int fd
+B0 | 56 | void *   | get_c0_table                      | void
+B0 | 57 | void *   | get_b0_table                      | void
+B0 | 58 | int      | get_bu_callback_port              | void
+B0 | 59 | int      | test_device                       | const char *device_name
+B0 | 5A | void     | system_error_b_%A                 | void                                   | stub
+B0 | 5B | void     | change_clear_pad                  | int val
+B0 | 5C | int      | get_card_status                   | int slot
+B0 | 5D | int      | wait_card_status                  | int slot
+
+C0 | 00 | void     | enqueue_timer_and_vblank_irqs     | int priority
+C0 | 01 | void     | enqueue_syscall_handler           | int priority
+C0 | 02 | void     | enq_int_rp                        | int priority, void *struc
+C0 | 03 | void     | deq_int_rp                        | int priority, void *struc
+C0 | 04 | int      | get_free_evcb_slot                | void
+C0 | 05 | int      | get_free_tcb_slot                 | void
+C0 | 06 | void     | exception_handler                 | void
+C0 | 07 | void     | install_exception_handlers        | void                                   | clobbers $k0 and $k1
+C0 | 08 | void     | init_memory                       | void *addr, size_t size
+C0 | 09 | void     | init_kernel_variables             | void
+C0 | 0A | void     | change_clear_rcnt                 | int t, int flag
+C0 | 0B | void     | system_error_c_%A                 | void                                   | stub
+C0 | 0C | void     | init_def_int                      | int priority
+C0 | 0D | void     | set_irq_auto_ack                  | int irq, int flag
+C0 | 0E | int      | return_zero_c_%A                  | void                                   | stub, returns 0
+C0 | 0F | int      | return_zero_c_%A                  | void                                   | stub, returns 0
+C0 | 10 | int      | return_zero_c_%A                  | void                                   | stub, returns 0
+C0 | 11 | int      | return_zero_c_%A                  | void                                   | stub, returns 0
+C0 | 12 | void     | install_devices                   | int tty_flag
+C0 | 13 | void     | flush_std_in_out_put              | void
+C0 | 14 | int      | return_zero_c_%A                  | void                                   | stub, returns 0
+C0 | 15 | void     | tty_cdevinput                     | void *circ, int c
+C0 | 16 | void     | tty_cdevscan                      | void
+C0 | 17 | int      | tty_circgetc                      | void *circ
+C0 | 18 | void     | tty_circputc                      | int c, void *circ
+C0 | 19 | void     | ioabort                           | const char *txt1, const char *txt2
+C0 | 1A | void     | set_card_find_mode                | int mode                               | 0 = normal, 1 = find deleted files
+C0 | 1B | void     | kernel_redirect                   | int tty_flag
+C0 | 1C | void     | adjust_a0_table                   | void
+C0 | 1D | int      | get_card_find_mode                | void
+
+# syscalls with a special case
+S  | 00 | void     | no_function                       | void					| stub
+S  | 01 | int      | enter_critical_section            | void
+S  | 02 | void     | exit_critical_section             | void
+S  | 03 | void     | change_thread_sub_function        | void *addr

@@ -204,8 +204,8 @@ sio1_init(
 		| SIO_CTRL_RTS;
 }
 
-char
-sio1_getc(
+int
+sio1_getchar(
 	void
 	)
 {
@@ -216,9 +216,9 @@ sio1_getc(
 	return (SIO_DATA(1));
 }
 
-void
-sio1_putc(
-	char c
+int
+sio1_putchar(
+	int c
 	)
 {
 	while (!(SIO_STAT(1) & SIO_STAT_TX_NOT_FULL)) {
@@ -226,4 +226,6 @@ sio1_putc(
 	}
 
 	SIO_DATA(1) = c;
+
+	return (c);
 }

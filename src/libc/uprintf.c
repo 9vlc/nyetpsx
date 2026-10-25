@@ -19,13 +19,13 @@ struct up_ctx {
 };
 
 static void
-up_putc(
+up_putchar(
 	struct up_ctx *ctx,
 	char c
 	)
 {
 	if (ctx->buf == NULL) {
-		putc(c);
+		putchar(c);
 	} else if (ctx->str_len + 1 < ctx->buf_len) {
 		ctx->buf[ctx->str_len] = c;
 	}
@@ -43,7 +43,7 @@ up_putu(
 	int i = 0;
 
 	if (v == 0) {
-		up_putc(ctx, '0');
+		up_putchar(ctx, '0');
 		return;
 	}
 
@@ -53,7 +53,7 @@ up_putu(
 	}
 
 	while (i > 0) {
-		up_putc(ctx, c[--i]);
+		up_putchar(ctx, c[--i]);
 	}
 }
 
@@ -66,7 +66,7 @@ up_puti(
 	uint32_t uv;
 
 	if (v < 0) {
-		up_putc(ctx, '-');
+		up_putchar(ctx, '-');
 		uv = -(uint32_t)v;
 	} else {
 		uv = (uint32_t)v;
@@ -85,7 +85,7 @@ up_putx(
 	uint32_t p;
 
 	if (x == 0) {
-		up_putc(ctx, '0');
+		up_putchar(ctx, '0');
 		return;
 	}
 
@@ -96,7 +96,7 @@ up_putx(
 			continue;
 		}
 
-		up_putc(ctx, "0123456789ABCDEF"[p]);
+		up_putchar(ctx, "0123456789ABCDEF"[p]);
 	}
 }
 
@@ -113,7 +113,7 @@ up_fmt(
 	while ((c = *fmt++) != '\0') {
 		/* Regular text */
 		if (c != '%') {
-			up_putc(ctx, c);
+			up_putchar(ctx, c);
 			continue;
 		}
 
@@ -122,7 +122,7 @@ up_fmt(
 		switch (c) {
 			/* Character */
 		case 'c':
-			up_putc(ctx, (char)va_arg(ap, int));
+			up_putchar(ctx, (char)va_arg(ap, int));
 			break;
 
 			/* String */
@@ -134,7 +134,7 @@ up_fmt(
 			}
 
 			while (*s != '\0') {
-				up_putc(ctx, *s++);
+				up_putchar(ctx, *s++);
 			}
 
 			break;
@@ -161,8 +161,8 @@ up_fmt(
 			return;
 
 		default:
-			up_putc(ctx, '%');
-			up_putc(ctx, c);
+			up_putchar(ctx, '%');
+			up_putchar(ctx, c);
 			break;
 		}
 	}

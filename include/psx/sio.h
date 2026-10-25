@@ -82,8 +82,8 @@ typedef uint32_t sio_ctrl_flag_t;
 #define SIO_BAUD(N)			MMIO16((IO_BASE | 0x04E) + (16u * (N)))
 
 void sio1_init(int baud);
-char sio1_getc(void);
-void sio1_putc(char c);
+int sio1_getchar(void);
+int sio1_putchar(int c);
 
 void sio0_init(void);
 void sio0_sel_port(int port);

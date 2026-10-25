@@ -1,2 +1,2 @@
-SRCS:= clz.s
+SRCS:= clz.s syscall.s
 .include "${MBDIR}/gen.mk"

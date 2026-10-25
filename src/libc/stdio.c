@@ -13,7 +13,7 @@ putxn(
 	uint8_t n
 	)
 {
-        putc("0123456789ABCDEF"[n & 0xF]);
+	putchar("0123456789ABCDEF"[n & 0xF]);
 }
 
 void

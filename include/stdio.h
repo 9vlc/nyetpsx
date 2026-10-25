@@ -16,9 +16,15 @@
 #include <stdint.h>
 
 #include <psx/sio.h>
+#include <sys/syscall.h>
 
-#define putc sio1_putc
-#define getc sio1_getc
+#if STDIO_USE_SIO1 == 1
+#  define putchar	sio1_putchar
+#  define getchar	sio1_getchar
+#else
+#  define putchar	sys_putchar
+#  define getchar	sys_getchar
+#endif
 
 void putx8(uint8_t x);
 void putx16(uint16_t x);
@@ -66,11 +72,11 @@ usnprintf(
 	...
 	);
 
-#define vprintf uvprintf
-#define printf uprintf
-#define vsprintf uvsprintf
-#define sprintf usprintf
-#define vsnprintf uvsnprintf
-#define snprintf usnprintf
+#define vprintf		uvprintf
+#define printf		uprintf
+#define vsprintf	uvsprintf
+#define sprintf		usprintf
+#define vsnprintf	uvsnprintf
+#define snprintf	usnprintf
 
 #endif /* _STDIO_H */

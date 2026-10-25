@@ -155,6 +155,12 @@ main(
 	(void)argc;
 	(void)argv;
 
+#if STDIO_USE_SIO1 == 1
+	sio1_init(115200);
+	uprintf("Hello, world!\n");
+#endif
+	sys_printf("Hello from TTY!\n");
+
 	graph_init_gpu(SCREEN_HRES, SCREEN_VRES, SCREEN_WIDTH, SCREEN_HEIGHT);
 	graph_init_gte(SCREEN_WIDTH, SCREEN_HEIGHT);
 
