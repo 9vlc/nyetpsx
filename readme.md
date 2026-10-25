@@ -23,6 +23,7 @@ Available build variables (can be passed over commandline or environment):
 - `NYETPSX_USE_SDATA(=1)` - Rely on MIPS small data (`.sdata`), very slight performance increase
 - `NYETPSX_BUILD_EXAMPLE(=1)` - Build the example EXE
 - `NYETPSX_SOURCE_TC(=0)` - Find the toolchain and set toolchain-specific CFLAGS
+- `NYETPSX_STDIO_USE_SIO1(=0)` - Use serial link port for stdio / printf
 - `CFLAGS_ADD` - Appends to CFLAGS
 - `LDFLAGS_ADD` - Appends to LDFLAGS
 

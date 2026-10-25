@@ -1,6 +1,7 @@
 NYETPSX_TC?= GCC
 NYETPSX_USE_SDATA?= 1
 NYETPSX_BUILD_EXAMPLE?= 1
+NYETPSX_STDIO_USE_SIO1?= 0
 NYETPSX_SOURCE_TC?= 0 # Set to 1 to just get the toolchain from a different project
 
 .if ${NYETPSX_TC:tu} == "GCC"
@@ -53,5 +54,9 @@ LDFLAGS:= -G0
 
 CFLAGS+= -I${INCDIR} -I${INCDIR}/psx -Wall -pedantic -std=c99 -Os ${CFLAGS_ADD}
 LDFLAGS+= -L${OBJDIR}/out -g -static -nostdlib ${LDFLAGS_ADD}
+
+.if ${NYETPSX_STDIO_USE_SIO1} == 1
+CFLAGS+= -DSTDIO_USE_SIO1=1
+.endif
 
 .endif # NYETPSX_SOURCE_TC
