@@ -633,12 +633,12 @@ gp1_fb_mode(
 	bool interlace
 	)
 {
-	return (GP1_CMD_FB_MODE  |
-		(hres      << 0) |
-		(vres      << 2) |
-		(mode      << 3) |
-		(depth     << 4) |
-		(interlace << 5));
+	return (GP1_CMD_FB_MODE           |
+		((hres      & 0x47) << 0) |
+		((vres      &    1) << 2) |
+		((mode      &    1) << 3) |
+		((depth     &    1) << 4) |
+		((interlace &    1) << 5));
 }
 
 DEF(uint32_t)
@@ -653,6 +653,6 @@ gp1_vram_size(
 
 void gpu_await_dma(void);
 void gpu_await_cmd(void);
-void gpu_await_vsync(void);
+void gpu_await_vsync(bool interlace_odd);
 
 #endif /* _PSX__GPU_H */

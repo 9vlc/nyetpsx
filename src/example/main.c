@@ -164,10 +164,13 @@ main(
 	graph_init_gpu(SCREEN_HRES, SCREEN_VRES, SCREEN_WIDTH, SCREEN_HEIGHT);
 	graph_init_gte(SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	bool interlace_odd = true;
+
 	graph_dma_chain_t chain;
 	while (1) {
 		gpu_await_dma();
 		chain.next = chain.data;
+		interlace_odd ^= 1;
 
 		example_clear_bg(&chain);
 		example_gradient(&chain);
@@ -175,7 +178,8 @@ main(
 
 		graph_m_end(&chain);
 
-		gpu_await_vsync();
+		gpu_await_cmd();
+		gpu_await_vsync(interlace_odd);
 		graph_send_chain(chain.data);
 	}
 
