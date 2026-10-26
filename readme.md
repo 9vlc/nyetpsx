@@ -29,3 +29,22 @@ Available build variables (can be passed over commandline or environment):
 
 # How to use
 TODO
+
+# About emulators
+A lot of PlayStation 1 emulators are very inaccurate, so it's advised to use real hardware for testing programs built with this SDK.
+
+If you can only use an emulator, the following emulators are relatively accurate:
+- Duckstation
+- PCSX-Redux *(Very slow, recently switched to being vibe-coded, recompiler not as accurate)*
+
+The following emulators are deemed not accurate enough by me and others:
+- Xebra
+- ePSXe
+- psxfin / pSX *(Very inaccurate GPU and GTE)*
+- PCSX and its derivatives other than PCSX-Redux
+- Sony's official emulators
+- Various RetroArch emulators such as Beetle PSX
+- no$psx *(Has some GTE quirks, example program does not spin the cube on it)*
+
+The following emulators are mostly accurate, but have a bad UX:
+- Mednafen
