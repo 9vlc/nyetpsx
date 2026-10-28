@@ -11,6 +11,9 @@
 #include <graph/geom.h>
 #include <graph/dmadraw.h>
 
+#include <graph/font.h>
+#include <graph/fonts/cordata.h>
+
 #include <string.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -164,6 +167,8 @@ main(
 	graph_init_gpu(SCREEN_HRES, SCREEN_VRES, SCREEN_WIDTH, SCREEN_HEIGHT);
 	graph_init_gte(SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	graph_load_font(&font_cordata);
+
 	bool interlace_odd = true;
 
 	graph_dma_chain_t chain;
@@ -175,6 +180,13 @@ main(
 		example_clear_bg(&chain);
 		example_gradient(&chain);
 		example_cube_frame(&chain);
+
+		graph_m_print_str(
+			&chain,
+			&font_cordata,
+			&GRAPH_POINT(25, 25),
+			"Hello, world!"
+		);
 
 		graph_m_end(&chain);
 

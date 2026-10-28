@@ -1,5 +1,6 @@
 /*
  * SPDX-License-Identifier: MIT
+ * Copyright (c) 2023-2026 spicyjpeg
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
@@ -13,9 +14,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define GRAPH_DMA_MAX_CHUNK_SIZE 16
-#define GRAPH_DMA_CHAIN_BUF_SIZE 1024
-#define GRAPH_DMA_CHAIN_OT_SIZE 128
+#define GRAPH_DMA_MAX_CHUNK_SIZE	16
+#define GRAPH_DMA_CHAIN_BUF_SIZE	4096
+#define GRAPH_DMA_CHAIN_OT_SIZE		240
 
 struct graph_dma_chain {
 	uint32_t data[GRAPH_DMA_CHAIN_BUF_SIZE];
@@ -70,7 +71,7 @@ graph_write_vram(
 	);
 
 void
-graph_send_texture(
+graph_load_texture(
 	graph_texture_info_t *info,
 	graph_texture_data_t *data
 	);

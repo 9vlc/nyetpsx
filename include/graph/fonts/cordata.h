@@ -2,8 +2,8 @@
  * Automatically generated with mkfont.py, DO NOT EDIT
  */
 
-#ifndef _GRAPH__FONT_CORDATA
-#define _GRAPH__FONT_CORDATA
+#ifndef _GRAPH__FONTS__CORDATA
+#define _GRAPH__FONTS__CORDATA
 
 #include <psx/gpu.h>
 #include <graph/font.h>
@@ -1683,7 +1683,7 @@ static const uint8_t font_cordata_clut[32] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-const graph_font_t font_cordata {
+static graph_font_t font_cordata = {
 	.data = {
 		.img   = font_cordata_sheet,
 		.x     = 0,
@@ -1703,4 +1703,4 @@ const graph_font_t font_cordata {
 	.cols = 16
 };
 
-#endif /* _GRAPH__FONT_CORDATA_H */
+#endif /* _GRAPH__FONTS__CORDATA_H */

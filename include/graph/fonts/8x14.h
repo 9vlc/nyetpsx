@@ -2,8 +2,8 @@
  * Automatically generated with mkfont.py, DO NOT EDIT
  */
 
-#ifndef _GRAPH__FONT_8X14
-#define _GRAPH__FONT_8X14
+#ifndef _GRAPH__FONTS__8X14
+#define _GRAPH__FONTS__8X14
 
 #include <psx/gpu.h>
 #include <graph/font.h>
@@ -467,7 +467,7 @@ static const uint8_t font_8x14_clut[32] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-const graph_font_t font_8x14 {
+static graph_font_t font_8x14 = {
 	.data = {
 		.img   = font_8x14_sheet,
 		.x     = 0,
@@ -487,4 +487,4 @@ const graph_font_t font_8x14 {
 	.cols = 16
 };
 
-#endif /* _GRAPH__FONT_8X14_H */
+#endif /* _GRAPH__FONTS__8X14_H */

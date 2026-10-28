@@ -8,6 +8,7 @@
 
 #include <graph/gpu.h>
 #include <graph/geom.h>
+#include <graph/font.h>
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -194,6 +195,13 @@ graph_d_sprite16x16(
 	graph_texture_info_t *tex,
 	bool raw,
 	bool blend
+	);
+
+void
+graph_d_print_str(
+	graph_font_t *font,
+	graph_point_t *pos,
+	const char *str
 	);
 
 #endif /* _GRAPH__DIRECTDRAW_H */

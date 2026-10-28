@@ -72,7 +72,7 @@ graph_read_vram(
 		chunk_size = GRAPH_DMA_MAX_CHUNK_SIZE;
 		chunk_num = len / GRAPH_DMA_MAX_CHUNK_SIZE;
 
-		assert((len % GRAPH_DMA_MAX_CHUNK_SIZE) != 0);
+		assert((len % GRAPH_DMA_MAX_CHUNK_SIZE) == 0);
 	}
 
 	gpu_await_dma();
@@ -111,7 +111,7 @@ graph_write_vram(
 		chunk_size = GRAPH_DMA_MAX_CHUNK_SIZE;
 		chunk_num = len / GRAPH_DMA_MAX_CHUNK_SIZE;
 
-		assert((len % GRAPH_DMA_MAX_CHUNK_SIZE) != 0);
+		assert((len % GRAPH_DMA_MAX_CHUNK_SIZE) == 0);
 	}
 
 	gpu_await_dma();

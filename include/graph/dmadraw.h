@@ -8,6 +8,7 @@
 
 #include <graph/gpu.h>
 #include <graph/geom.h>
+#include <graph/font.h>
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -215,6 +216,14 @@ graph_m_sprite16x16(
 	graph_texture_info_t *tex,
 	bool raw,
 	bool blend
+	);
+
+void
+graph_m_print_str(
+	graph_dma_chain_t *chain,
+	graph_font_t *font,
+	graph_point_t *pos,
+	const char *str
 	);
 
 uint32_t *

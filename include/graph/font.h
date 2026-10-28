@@ -24,12 +24,8 @@ struct graph_font {
 typedef struct graph_font graph_font_t;
 
 void
-graph_print_str(
-	graph_dma_chain_t *chain,
-	graph_font_t *font,
-	int x,
-	int y,
-	const char *str
+graph_load_font(
+	graph_font_t *font
 	);
 
 #endif /* _GRAPH__FONT_H */

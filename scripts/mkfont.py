@@ -259,8 +259,8 @@ def main():
 	print( " * Automatically generated with mkfont.py, DO NOT EDIT")
 	print( " */")
 	print()
-	print(f"#ifndef _GRAPH__FONT_{nameUpper}")
-	print(f"#define _GRAPH__FONT_{nameUpper}")
+	print(f"#ifndef _GRAPH__FONTS__{nameUpper}")
+	print(f"#define _GRAPH__FONTS__{nameUpper}")
 	print()
 	print( "#include <psx/gpu.h>")
 	print( "#include <graph/font.h>")
@@ -271,7 +271,7 @@ def main():
 	print()
 	dataToArray(clutData.tobytes(), f"font_{nameLower}_clut")
 	print()
-	print(f"const graph_font_t font_{nameLower} {{")
+	print(f"static graph_font_t font_{nameLower} = {{")
 	print( "\t.data = {")
 	print(f"\t\t.img   = font_{nameLower}_sheet,")
 	print( "\t\t.x     = 0,")
@@ -291,7 +291,7 @@ def main():
 	print(f"\t.cols = {args.cols}")
 	print( "};")
 	print()
-	print(f"#endif /* _GRAPH__FONT_{nameUpper}_H */")
+	print(f"#endif /* _GRAPH__FONTS__{nameUpper}_H */")
 
 if __name__ == "__main__":
 	main()
