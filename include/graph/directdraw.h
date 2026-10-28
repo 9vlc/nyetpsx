@@ -174,10 +174,8 @@ graph_d_rect16x16(
 
 void
 graph_d_sprite(
-	graph_rect_t *rect,
-	graph_rgb_t col,
+	graph_point_t *pos,
 	graph_texture_info_t *tex,
-	graph_uv_t *uv,
 	bool raw,
 	bool blend
 	);
@@ -185,9 +183,7 @@ graph_d_sprite(
 void
 graph_d_sprite8x8(
 	graph_point_t *pos,
-	graph_rgb_t col,
 	graph_texture_info_t *tex,
-	graph_uv_t *uv,
 	bool raw,
 	bool blend
 	);
@@ -195,9 +191,7 @@ graph_d_sprite8x8(
 void
 graph_d_sprite16x16(
 	graph_point_t *pos,
-	graph_rgb_t col,
 	graph_texture_info_t *tex,
-	graph_uv_t *uv,
 	bool raw,
 	bool blend
 	);

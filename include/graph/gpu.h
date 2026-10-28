@@ -30,22 +30,24 @@ struct graph_dma_ord_chain {
 };
 typedef struct graph_dma_ord_chain graph_dma_ord_chain_t;
 
+/* Texture in RAM */
+struct graph_texture_data {
+	const void *img;
+	uint32_t x, y, w, h;
+
+	const void *clut;
+	uint32_t cx, cy;
+	gp0_color_depth_t depth;
+};
+typedef struct graph_texture_data graph_texture_data_t;
+
+/* Texture in VRAM */
 struct graph_texture_info {
 	uint8_t u, v;
 	uint16_t w, h;
 	uint16_t page, clut;
 };
 typedef struct graph_texture_info graph_texture_info_t;
-
-struct graph_texture_data {
-	void *img;
-	uint32_t x, y, w, h;
-
-	void *pal;
-	uint32_t px, py;
-	gp0_color_depth_t depth;
-};
-typedef struct graph_texture_data graph_texture_data_t;
 
 void
 graph_init_gpu(

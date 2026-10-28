@@ -133,7 +133,7 @@ graph_write_vram(
 }
 
 void
-graph_send_texture(
+graph_load_texture(
 	graph_texture_info_t *info,
 	graph_texture_data_t *data
 	)
@@ -141,24 +141,25 @@ graph_send_texture(
 	assert((data->w <= 256) && (data->h <= 256));
 
 	int ncol = 0, wdiv = 0;
+	gp0_color_depth_t depth = data->depth;
 
-	if (data->pal != NULL) {
-		assert(data->depth != GP0_COLOR_16BPP);
+	if (data->clut != NULL) {
+		assert(depth != GP0_COLOR_16BPP);
 
-		ncol = (data->depth == GP0_COLOR_8BPP ? 256 : 16);
-		wdiv = (data->depth == GP0_COLOR_8BPP ? 1 : 2);
+		ncol = (depth == GP0_COLOR_8BPP ? 256 : 16);
+		wdiv = (depth == GP0_COLOR_8BPP ? 1 : 2);
 
-		assert(!(data->px % 16) && ((data->px + ncol) <= 1024));
+		assert(!(data->cx % 16) && ((data->cx + ncol) <= 1024));
 
-		graph_write_vram(data->pal, &GRAPH_RECT(
-			data->px,
-			data->py,
+		graph_write_vram(data->clut, &GRAPH_RECT(
+			data->cx,
+			data->cy,
 			ncol,
 			1
 		));
 		gpu_await_dma();
 	} else {
-		data->depth = GP0_COLOR_16BPP;
+		depth = GP0_COLOR_16BPP;
 	}
 
 	graph_write_vram(data->img, &GRAPH_RECT(
@@ -175,13 +176,13 @@ graph_send_texture(
 		data->x / 64,
 		data->y / 256,
 		GP0_BLEND_SEMITRANS,
-		data->depth
+		depth
 	);
-	info->clut = 0;
-	info->u = (uint8_t)((data->x % 64) << wdiv);
-	info->v = (uint8_t)(data->y % 256);
-	info->w = (uint16_t)data->w;
-	info->h = (uint16_t)data->h;
+	info->clut = (data->clut != NULL ? gp0_clut(data->cx / 16, data->cy) : 0);
+	info->u    = (uint8_t)((data->x % 64) << wdiv);
+	info->v    = (uint8_t)(data->y % 256);
+	info->w    = (uint16_t)data->w;
+	info->h    = (uint16_t)data->h;
 }
 
 uint32_t *

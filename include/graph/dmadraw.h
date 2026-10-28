@@ -193,10 +193,8 @@ graph_m_rect16x16(
 uint32_t *
 graph_m_sprite(
 	graph_dma_chain_t *chain,
-	graph_rect_t *rect,
-	graph_rgb_t col,
+	graph_point_t *pos,
 	graph_texture_info_t *tex,
-	graph_uv_t *uv,
 	bool raw,
 	bool blend
 	);
@@ -205,9 +203,7 @@ uint32_t *
 graph_m_sprite8x8(
 	graph_dma_chain_t *chain,
 	graph_point_t *pos,
-	graph_rgb_t col,
 	graph_texture_info_t *tex,
-	graph_uv_t *uv,
 	bool raw,
 	bool blend
 	);
@@ -216,9 +212,7 @@ uint32_t *
 graph_m_sprite16x16(
 	graph_dma_chain_t *chain,
 	graph_point_t *pos,
-	graph_rgb_t col,
 	graph_texture_info_t *tex,
-	graph_uv_t *uv,
 	bool raw,
 	bool blend
 	);

@@ -423,10 +423,8 @@ uint32_t *
 graph_o_sprite(
 	graph_dma_ord_chain_t *chain,
 	uint32_t z,
-	graph_rect_t *rect,
-	graph_rgb_t col,
+	graph_point_t *pos,
 	graph_texture_info_t *tex,
-	graph_uv_t *uv,
 	bool raw,
 	bool blend
 	)
@@ -434,10 +432,10 @@ graph_o_sprite(
 	uint32_t *ptr = graph_alloc_ord_chain_packet(chain, z, 5);
 
 	ptr[0] = GP0_CMD_TPAGE | tex->page;
-	ptr[1] = col.raw | gp0_rect(true, raw, blend);
-	ptr[2] = gp0_xy(rect->x, rect->y);
-	ptr[3] = gp0_uv(uv->u, uv->v, tex->clut);
-	ptr[4] = gp0_xy(rect->w, rect->h);
+	ptr[1] = gp0_rect(true, raw, blend);
+	ptr[2] = gp0_xy(pos->x, pos->y);
+	ptr[3] = gp0_uv(tex->u, tex->v, tex->clut);
+	ptr[4] = gp0_xy(tex->w, tex->h);
 
 	return (ptr);
 }
@@ -447,9 +445,7 @@ graph_o_sprite8x8(
 	graph_dma_ord_chain_t *chain,
 	uint32_t z,
 	graph_point_t *pos,
-	graph_rgb_t col,
 	graph_texture_info_t *tex,
-	graph_uv_t *uv,
 	bool raw,
 	bool blend
 	)
@@ -457,9 +453,9 @@ graph_o_sprite8x8(
 	uint32_t *ptr = graph_alloc_ord_chain_packet(chain, z, 4);
 
 	ptr[0] = GP0_CMD_TPAGE | tex->page;
-	ptr[1] = col.raw | gp0_rect8x8(true, raw, blend);
+	ptr[1] = gp0_rect8x8(true, raw, blend);
 	ptr[2] = gp0_xy(pos->x, pos->y);
-	ptr[3] = gp0_uv(uv->u, uv->v, tex->clut);
+	ptr[3] = gp0_uv(tex->u, tex->v, tex->clut);
 
 	return (ptr);
 }
@@ -469,9 +465,7 @@ graph_o_sprite16x16(
 	graph_dma_ord_chain_t *chain,
 	uint32_t z,
 	graph_point_t *pos,
-	graph_rgb_t col,
 	graph_texture_info_t *tex,
-	graph_uv_t *uv,
 	bool raw,
 	bool blend
 	)
@@ -479,9 +473,9 @@ graph_o_sprite16x16(
 	uint32_t *ptr = graph_alloc_ord_chain_packet(chain, z, 4);
 
 	ptr[0] = GP0_CMD_TPAGE | tex->page;
-	ptr[1] = col.raw | gp0_rect16x16(true, raw, blend);
+	ptr[1] = gp0_rect16x16(true, raw, blend);
 	ptr[2] = gp0_xy(pos->x, pos->y);
-	ptr[3] = gp0_uv(uv->u, uv->v, tex->clut);
+	ptr[3] = gp0_uv(tex->u, tex->v, tex->clut);
 
 	return (ptr);
 }

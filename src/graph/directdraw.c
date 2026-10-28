@@ -348,10 +348,8 @@ graph_d_rect16x16(
 
 void
 graph_d_sprite(
-	graph_rect_t *rect,
-	graph_rgb_t col,
+	graph_point_t *pos,
 	graph_texture_info_t *tex,
-	graph_uv_t *uv,
 	bool raw,
 	bool blend
 	)
@@ -359,18 +357,16 @@ graph_d_sprite(
 	gpu_await_cmd();
 
 	GPU_GP0 = GP0_CMD_TPAGE | tex->page;
-	GPU_GP0 = col.raw | gp0_rect(true, raw, blend);
-	GPU_GP0 = gp0_xy(rect->x, rect->y);
-	GPU_GP0 = gp0_uv(uv->u, uv->v, tex->clut);
-	GPU_GP0 = gp0_xy(rect->w, rect->h);
+	GPU_GP0 = gp0_rect(true, raw, blend);
+	GPU_GP0 = gp0_xy(pos->x, pos->y);
+	GPU_GP0 = gp0_uv(tex->u, tex->v, tex->clut);
+	GPU_GP0 = gp0_xy(tex->w, tex->h);
 }
 
 void
 graph_d_sprite8x8(
 	graph_point_t *pos,
-	graph_rgb_t col,
 	graph_texture_info_t *tex,
-	graph_uv_t *uv,
 	bool raw,
 	bool blend
 	)
@@ -378,17 +374,15 @@ graph_d_sprite8x8(
 	gpu_await_cmd();
 
 	GPU_GP0 = GP0_CMD_TPAGE | tex->page;
-	GPU_GP0 = col.raw | gp0_rect8x8(true, raw, blend);
+	GPU_GP0 = gp0_rect8x8(true, raw, blend);
 	GPU_GP0 = gp0_xy(pos->x, pos->y);
-	GPU_GP0 = gp0_uv(uv->u, uv->v, tex->clut);
+	GPU_GP0 = gp0_uv(tex->u, tex->v, tex->clut);
 }
 
 void
 graph_d_sprite16x16(
 	graph_point_t *pos,
-	graph_rgb_t col,
 	graph_texture_info_t *tex,
-	graph_uv_t *uv,
 	bool raw,
 	bool blend
 	)
@@ -396,7 +390,7 @@ graph_d_sprite16x16(
 	gpu_await_cmd();
 
 	GPU_GP0 = GP0_CMD_TPAGE | tex->page;
-	GPU_GP0 = col.raw | gp0_rect16x16(true, raw, blend);
+	GPU_GP0 = gp0_rect16x16(true, raw, blend);
 	GPU_GP0 = gp0_xy(pos->x, pos->y);
-	GPU_GP0 = gp0_uv(uv->u, uv->v, tex->clut);
+	GPU_GP0 = gp0_uv(tex->u, tex->v, tex->clut);
 }
