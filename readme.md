@@ -1,10 +1,12 @@
 # nyetpsx
-A very opinionated C99 fork of spicyjpeg's ps1-bare-metal.
+A very opinionated ~~C99~~ C11 fork of spicyjpeg's ps1-bare-metal.
 
 This was meant to be just a tiny libc and a base for my serial loader project, but it turned into probably my biggest project yet.
 
 # Status
 Fully usable as a development library, although currently without much documentation.
+
+**Unstable ABI!**
 
 # How to build
 You need:
@@ -46,3 +48,16 @@ The following emulators are deemed not accurate enough by me and others:
 - Sony's official emulators
 - Various RetroArch emulators such as Beetle PSX
 - no$psx *(Has some GTE quirks, example program does not spin the cube on it)*
+
+# Acknowledgements
+This project would not have been possible without these amazing people:
+- spicyjpeg - [GitHub](https://github.com/spicyjpeg/) / [Website](https://spicyjpeg.dev/)
+- JonaB03
+- Ekleipsis1502 - [YouTube](https://www.youtube.com/@ekleipsis1502)
+- The Humanbrew Discord Server - https://discord.gg/KB6uxMBaNq
+
+And these projects:
+- [ps1-bare-metal](https://github.com/spicyjpeg/ps1-bare-metal/)
+- [arith64](https://github.com/glitchub/arith64/)
+- [oldschool-pc-fonts](https://int10h.org/oldschool-pc-fonts/)
+- [mandelbrot-c](https://github.com/jesper-olsen/mandelbrot-c/)

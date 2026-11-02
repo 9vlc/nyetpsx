@@ -12,7 +12,7 @@
 
 #define GRAPH_FONT_FIRST_CHAR	32  /* ' ' */
 #define GRAPH_FONT_LAST_CHAR	127 /* DEL */
-#define GRAPH_FONT_TAB_CHARS	8
+#define GRAPH_FONT_TAB_WIDTH	8
 
 struct graph_font {
 	struct graph_texture_data data;

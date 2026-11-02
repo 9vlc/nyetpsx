@@ -8,15 +8,6 @@
 
 #include <stdint.h>
 
-/* I really hope the compiler doesn't break this */
-union graph_rgb {
-	struct { uint8_t r, g, b; } c;
-	uint32_t raw;
-};
-typedef union graph_rgb graph_rgb_t;
-#define GRAPH_RGB(R, G, B) (graph_rgb_t){.c.r=(R), .c.g=(G), .c.b=(B)}
-#define GRAPH_XRGB(X) (graph_rgb_t){.raw=gp0_xrgb(X)}
-
 struct graph_point {
 	int32_t x, y;
 };

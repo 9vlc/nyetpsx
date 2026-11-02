@@ -15,6 +15,11 @@
 #endif
 
 void
+abort(
+	void
+	);
+
+void
 _assert_abort(
 	const char *file,
 	int line,

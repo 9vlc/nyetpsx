@@ -1,5 +1,5 @@
-SRCS:= main.c
-EXTRAS:= example.exe
+SRCS:= main.c mandel.c cube.c
+EXTRAS:= example.elf example.exe
 
 .include "${MBDIR}/gen.mk"
 .include "${MBDIR}/extras.mk"

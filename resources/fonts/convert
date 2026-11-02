@@ -1,0 +1,3 @@
+#!/bin/sh
+set -e
+for f in resources/fonts/*.png; do f=`basename ${f%.*}`; ./scripts/mkfont.py --name $f ./resources/fonts/$f.png > include/graph/fonts/$f.h && echo $f; done

@@ -9,7 +9,9 @@
 
 #define DEF(type) static inline type __attribute__((always_inline))
 
-#define ISIN_SHIFT 10
+/* Same as GTE */
+#define TRIG_SHIFT	12
+#define TRIG_UNIT	(1u << TRIG_SHIFT)
 
 int isin(int x);
 
@@ -18,7 +20,7 @@ icos(
 	int x
 	)
 {
-	return (isin(x + (1 << ISIN_SHIFT)));
+	return (isin(x + TRIG_UNIT));
 }
 
 #undef DEF

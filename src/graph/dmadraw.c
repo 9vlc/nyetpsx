@@ -18,7 +18,7 @@ uint32_t *
 graph_m_tri(
 	graph_dma_chain_t *chain,
 	graph_tri_t *tri,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -36,9 +36,9 @@ uint32_t *
 graph_m_shad_tri(
 	graph_dma_chain_t *chain,
 	graph_tri_t *tri,
-	graph_rgb_t col0,
-	graph_rgb_t col1,
-	graph_rgb_t col2,
+	graph_rgb24_t col0,
+	graph_rgb24_t col1,
+	graph_rgb24_t col2,
 	bool blend
 	)
 {
@@ -58,7 +58,7 @@ uint32_t *
 graph_m_tex_tri(
 	graph_dma_chain_t *chain,
 	graph_tri_t *tri,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	graph_texture_info_t *tex,
 	graph_uv_t *uv0,
 	graph_uv_t *uv1,
@@ -84,9 +84,9 @@ graph_m_shad_tex_tri(
 	graph_dma_chain_t *chain,
 	graph_tri_t *tri,
 	graph_texture_info_t *tex,
-	graph_rgb_t col0,
-	graph_rgb_t col1,
-	graph_rgb_t col2,
+	graph_rgb24_t col0,
+	graph_rgb24_t col1,
+	graph_rgb24_t col2,
 	graph_uv_t *uv0,
 	graph_uv_t *uv1,
 	graph_uv_t *uv2,
@@ -112,7 +112,7 @@ uint32_t *
 graph_m_quad(
 	graph_dma_chain_t *chain,
 	graph_quad_t *quad,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -131,10 +131,10 @@ uint32_t *
 graph_m_shad_quad(
 	graph_dma_chain_t *chain,
 	graph_quad_t *quad,
-	graph_rgb_t col0,
-	graph_rgb_t col1,
-	graph_rgb_t col2,
-	graph_rgb_t col3,
+	graph_rgb24_t col0,
+	graph_rgb24_t col1,
+	graph_rgb24_t col2,
+	graph_rgb24_t col3,
 	bool blend
 	)
 {
@@ -156,7 +156,7 @@ uint32_t *
 graph_m_tex_quad(
 	graph_dma_chain_t *chain,
 	graph_quad_t *quad,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	graph_texture_info_t *tex,
 	graph_uv_t *uv0,
 	graph_uv_t *uv1,
@@ -185,10 +185,10 @@ graph_m_shad_tex_quad(
 	graph_dma_chain_t *chain,
 	graph_quad_t *quad,
 	graph_texture_info_t *tex,
-	graph_rgb_t col0,
-	graph_rgb_t col1,
-	graph_rgb_t col2,
-	graph_rgb_t col3,
+	graph_rgb24_t col0,
+	graph_rgb24_t col1,
+	graph_rgb24_t col2,
+	graph_rgb24_t col3,
 	graph_uv_t *uv0,
 	graph_uv_t *uv1,
 	graph_uv_t *uv2,
@@ -218,7 +218,7 @@ uint32_t *
 graph_m_line(
 	graph_dma_chain_t *chain,
 	graph_line_t *line,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -235,8 +235,8 @@ uint32_t *
 graph_m_shad_line(
 	graph_dma_chain_t *chain,
 	graph_line_t *line,
-	graph_rgb_t col0,
-	graph_rgb_t col1,
+	graph_rgb24_t col0,
+	graph_rgb24_t col1,
 	bool blend
 	)
 {
@@ -254,7 +254,7 @@ uint32_t *
 graph_m_line3(
 	graph_dma_chain_t *chain,
 	graph_tri_t *tri,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -273,9 +273,9 @@ uint32_t *
 graph_m_shad_line3(
 	graph_dma_chain_t *chain,
 	graph_tri_t *tri,
-	graph_rgb_t col0,
-	graph_rgb_t col1,
-	graph_rgb_t col2,
+	graph_rgb24_t col0,
+	graph_rgb24_t col1,
+	graph_rgb24_t col2,
 	bool blend
 	)
 {
@@ -296,7 +296,7 @@ uint32_t *
 graph_m_line4(
 	graph_dma_chain_t *chain,
 	graph_quad_t *quad,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -316,10 +316,10 @@ uint32_t *
 graph_m_shad_line4(
 	graph_dma_chain_t *chain,
 	graph_quad_t *quad,
-	graph_rgb_t col0,
-	graph_rgb_t col1,
-	graph_rgb_t col2,
-	graph_rgb_t col3,
+	graph_rgb24_t col0,
+	graph_rgb24_t col1,
+	graph_rgb24_t col2,
+	graph_rgb24_t col3,
 	bool blend
 	)
 {
@@ -342,7 +342,7 @@ uint32_t *
 graph_m_rect(
 	graph_dma_chain_t *chain,
 	graph_rect_t *rect,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -359,7 +359,7 @@ uint32_t *
 graph_m_rect1x1(
 	graph_dma_chain_t *chain,
 	graph_point_t *pos,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -375,7 +375,7 @@ uint32_t *
 graph_m_rect8x8(
 	graph_dma_chain_t *chain,
 	graph_point_t *pos,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -391,7 +391,7 @@ uint32_t *
 graph_m_rect16x16(
 	graph_dma_chain_t *chain,
 	graph_point_t *pos,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -472,7 +472,7 @@ graph_m_print_str(
 	uint32_t
 		offset_x    = 0,
 		offset_y    = 0,
-		tab_width   = font->cw * GRAPH_FONT_TAB_CHARS,
+		tab_width   = font->cw * GRAPH_FONT_TAB_WIDTH,
 		space_width = font->cw,
 		line_height = font->ch;
 
@@ -535,3 +535,62 @@ graph_m_end(
 
 	return (chain->next);
 }
+
+uint32_t *
+graph_m_vram_fill(
+	graph_dma_chain_t *chain,
+	graph_rect_t *rect,
+	graph_rgb24_t col
+	)
+{
+	uint32_t *ptr = graph_alloc_chain_packet(chain, 3);
+
+	ptr[0] = col.raw | gp0_vram_fill();
+	ptr[1] = gp0_xy(rect->x, rect->y);
+	ptr[2] = gp0_xy(rect->w, rect->h);
+
+	return (ptr);
+}
+
+uint32_t *
+graph_m_set_page(
+	graph_dma_chain_t *chain,
+	uint16_t page,
+	bool dither,
+	bool unlock_fb
+	)
+{
+	uint32_t *ptr = graph_alloc_chain_packet(chain, 1);
+
+	ptr[0] = gp0_set_page(page, dither, unlock_fb);
+
+	return (ptr);
+}
+
+uint32_t *
+graph_m_set_render_window(
+	graph_dma_chain_t *chain,
+	graph_rect_t *rect
+	)
+{
+	uint32_t *ptr = graph_alloc_chain_packet(chain, 2);
+
+	ptr[0] = gp0_draw_area_tl(rect->x, rect->y);
+	ptr[1] = gp0_draw_area_br(rect->x + rect->w, rect->y + rect->h);
+
+	return (ptr);
+}
+
+uint32_t *
+graph_m_set_fb_origin(
+	graph_dma_chain_t *chain,
+	graph_point_t *pos
+	)
+{
+	uint32_t *ptr = graph_alloc_chain_packet(chain, 1);
+
+	ptr[0] = gp0_draw_origin(pos->x, pos->y);
+
+	return (ptr);
+}
+

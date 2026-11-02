@@ -110,7 +110,7 @@ gp0_xy(
 	int32_t y
 	)
 {
-	return (((x & 0xFFFF) << 0) |
+	return (((x & 0xFFFF) <<  0) |
 		((y & 0xFFFF) << 16));
 }
 
@@ -127,26 +127,53 @@ gp0_uv(
 }
 
 DEF(uint32_t)
-gp0_rgb(
+gp0_rgb24(
 	uint8_t r,
 	uint8_t g,
 	uint8_t b
 	)
 {
-	return ((r <<  0) |
-		(g <<  8) |
-		(b << 16));
+	return (((r & 0xFF) <<  0) |
+		((g & 0xFF) <<  8) |
+		((b & 0xFF) << 16));
 }
 
-/* RRGGBB -> BBGGRR */
+/* 0xRRGGBB -> 0xBBGGRR */
 DEF(uint32_t)
-gp0_xrgb(
+gp0_xrgb24(
 	uint32_t c
 	)
 {
 	return (((c & 0xFF0000) >> 16) |
 		((c & 0x00FF00) <<  0) |
 		((c & 0x0000FF) << 16));
+}
+
+DEF(uint16_t)
+gp0_rgb16(
+	uint8_t r,
+	uint8_t g,
+	uint8_t b,
+	bool stp
+	)
+{
+	return (((r   & 0x1F) <<  0) |
+		((g   & 0x1F) <<  5) |
+		((b   & 0x1F) << 10) |
+		((stp & 0x01) << 15));
+}
+
+/* 0xRRGGBB -> 0b0BBBBBGGGGGRRRRR */
+DEF(uint16_t)
+gp0_xrgb16(
+	uint32_t c,
+	bool stp
+	)
+{
+	return ((((c >> 0x13) & 0x1F) <<  0) |
+	        (((c >> 0x0B) & 0x1F) <<  5) |
+	        (((c >> 0x03) & 0x1F) << 10) |
+	        (((stp      ) & 0x01) << 15));
 }
 
 /*
@@ -159,7 +186,7 @@ gp0_tag(
 	void *next
 	)
 {
-	return ((((uint32_t)next & 0xFFFFFF) << 0) |
+	return ((((uint32_t)next   & 0xFFFFFF) <<  0) |
 		(((uint32_t)length & 0x0000FF) << 24));
 }
 
@@ -446,7 +473,7 @@ gp0_draw_origin(
 }
 
 DEF(uint32_t)
-gp0_fb_mask(
+gp0_draw_mask(
 	bool set,
 	bool use
 	)

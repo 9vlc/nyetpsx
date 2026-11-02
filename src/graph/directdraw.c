@@ -13,10 +13,17 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+/*
+ * Direct GP0 rendering backend
+ * Usage: Just run the functions!
+ * Not recommended for high performance applications!
+ * Do not use for 3D!
+ */
+
 void
 graph_d_tri(
 	graph_tri_t *tri,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -31,9 +38,9 @@ graph_d_tri(
 void
 graph_d_shad_tri(
 	graph_tri_t *tri,
-	graph_rgb_t col0,
-	graph_rgb_t col1,
-	graph_rgb_t col2,
+	graph_rgb24_t col0,
+	graph_rgb24_t col1,
+	graph_rgb24_t col2,
 	bool blend
 	)
 {
@@ -50,7 +57,7 @@ graph_d_shad_tri(
 void
 graph_d_tex_tri(
 	graph_tri_t *tri,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	graph_texture_info_t *tex,
 	graph_uv_t *uv0,
 	graph_uv_t *uv1,
@@ -73,9 +80,9 @@ void
 graph_d_shad_tex_tri(
 	graph_tri_t *tri,
 	graph_texture_info_t *tex,
-	graph_rgb_t col0,
-	graph_rgb_t col1,
-	graph_rgb_t col2,
+	graph_rgb24_t col0,
+	graph_rgb24_t col1,
+	graph_rgb24_t col2,
 	graph_uv_t *uv0,
 	graph_uv_t *uv1,
 	graph_uv_t *uv2,
@@ -98,7 +105,7 @@ graph_d_shad_tex_tri(
 void
 graph_d_quad(
 	graph_quad_t *quad,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -114,10 +121,10 @@ graph_d_quad(
 void
 graph_d_shad_quad(
 	graph_quad_t *quad,
-	graph_rgb_t col0,
-	graph_rgb_t col1,
-	graph_rgb_t col2,
-	graph_rgb_t col3,
+	graph_rgb24_t col0,
+	graph_rgb24_t col1,
+	graph_rgb24_t col2,
+	graph_rgb24_t col3,
 	bool blend
 	)
 {
@@ -136,7 +143,7 @@ graph_d_shad_quad(
 void
 graph_d_tex_quad(
 	graph_quad_t *quad,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	graph_texture_info_t *tex,
 	graph_uv_t *uv0,
 	graph_uv_t *uv1,
@@ -162,10 +169,10 @@ void
 graph_d_shad_tex_quad(
 	graph_quad_t *quad,
 	graph_texture_info_t *tex,
-	graph_rgb_t col0,
-	graph_rgb_t col1,
-	graph_rgb_t col2,
-	graph_rgb_t col3,
+	graph_rgb24_t col0,
+	graph_rgb24_t col1,
+	graph_rgb24_t col2,
+	graph_rgb24_t col3,
 	graph_uv_t *uv0,
 	graph_uv_t *uv1,
 	graph_uv_t *uv2,
@@ -192,7 +199,7 @@ graph_d_shad_tex_quad(
 void
 graph_d_line(
 	graph_line_t *line,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -206,8 +213,8 @@ graph_d_line(
 void
 graph_d_shad_line(
 	graph_line_t *line,
-	graph_rgb_t col0,
-	graph_rgb_t col1,
+	graph_rgb24_t col0,
+	graph_rgb24_t col1,
 	bool blend
 	)
 {
@@ -222,7 +229,7 @@ graph_d_shad_line(
 void
 graph_d_line3(
 	graph_tri_t *tri,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -238,9 +245,9 @@ graph_d_line3(
 void
 graph_d_shad_line3(
 	graph_tri_t *tri,
-	graph_rgb_t col0,
-	graph_rgb_t col1,
-	graph_rgb_t col2,
+	graph_rgb24_t col0,
+	graph_rgb24_t col1,
+	graph_rgb24_t col2,
 	bool blend
 	)
 {
@@ -258,7 +265,7 @@ graph_d_shad_line3(
 void
 graph_d_line4(
 	graph_quad_t *quad,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -275,10 +282,10 @@ graph_d_line4(
 void
 graph_d_shad_line4(
 	graph_quad_t *quad,
-	graph_rgb_t col0,
-	graph_rgb_t col1,
-	graph_rgb_t col2,
-	graph_rgb_t col3,
+	graph_rgb24_t col0,
+	graph_rgb24_t col1,
+	graph_rgb24_t col2,
+	graph_rgb24_t col3,
 	bool blend
 	)
 {
@@ -298,7 +305,7 @@ graph_d_shad_line4(
 void
 graph_d_rect(
 	graph_rect_t *rect,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -312,7 +319,7 @@ graph_d_rect(
 void
 graph_d_rect1x1(
 	graph_point_t *pos,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -325,7 +332,7 @@ graph_d_rect1x1(
 void
 graph_d_rect8x8(
 	graph_point_t *pos,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -338,7 +345,7 @@ graph_d_rect8x8(
 void
 graph_d_rect16x16(
 	graph_point_t *pos,
-	graph_rgb_t col,
+	graph_rgb24_t col,
 	bool blend
 	)
 {
@@ -407,7 +414,7 @@ graph_d_print_str(
 	uint32_t
 		offset_x    = 0,
 		offset_y    = 0,
-		tab_width   = font->cw * GRAPH_FONT_TAB_CHARS,
+		tab_width   = font->cw * GRAPH_FONT_TAB_WIDTH,
 		space_width = font->cw,
 		line_height = font->ch;
 
@@ -458,4 +465,50 @@ graph_d_print_str(
 
 		offset_x += font->cw;
 	}
+}
+
+void
+graph_d_vram_fill(
+	graph_rect_t *rect,
+	graph_rgb24_t col
+	)
+{
+	gpu_await_cmd();
+
+	GPU_GP0 = col.raw | gp0_vram_fill();
+	GPU_GP0 = gp0_xy(rect->x, rect->y);
+	GPU_GP0 = gp0_xy(rect->w, rect->h);
+}
+
+void
+graph_d_set_page(
+	uint16_t page,
+	bool dither,
+	bool unlock_fb
+	)
+{
+	gpu_await_cmd();
+
+	GPU_GP0 = gp0_set_page(page, dither, unlock_fb);
+}
+
+void
+graph_d_set_render_window(
+	graph_rect_t *rect
+	)
+{
+	gpu_await_cmd();
+
+	GPU_GP0 = gp0_draw_area_tl(rect->x, rect->y);
+	GPU_GP0 = gp0_draw_area_br(rect->x + rect->w, rect->y + rect->h);
+}
+
+void
+graph_d_set_fb_origin(
+	graph_point_t *pos
+	)
+{
+	gpu_await_cmd();
+
+	GPU_GP0 = gp0_draw_origin(pos->x, pos->y);
 }

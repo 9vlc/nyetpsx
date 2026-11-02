@@ -12,38 +12,39 @@
 #include <stdint.h>
 
 #define DEF(T) static inline T __attribute__((always_inline))
-#define ALIGNED(A) __attribute__((aligned(A)))
+
+#define GTE_SHIFT	12
+#define GTE_UNIT	(1 << GTE_SHIFT)
 
 /*
  * GTE data types
  */
 
-/*
- * The GTE stores 16-bit vectors and matrices in 32-bit registers, packing two
- * values into each register. Since lwc2/swc2 can only perform aligned memory
- * accesses (see gte_load_data_reg() and gte_store_data_reg()), the structures below
- * must always be aligned to 32 bits.
- */
-struct gte_vec16 {
-	int16_t x;
-	int16_t y;
-	int16_t z;
-	int16_t _padding;
-} ALIGNED(4);
-typedef struct gte_vec16 gte_vec16_t;
+union gte_mtx {
+	struct {
+		int16_t v[3][3];
+		int16_t _pad;
+	};
+	uint32_t packed[5];
+};
+typedef union gte_mtx gte_mtx_t;
 
-struct gte_vec32 {
-	int32_t x;
-	int32_t y;
-	int32_t z;
-} ALIGNED(4);
-typedef struct gte_vec32 gte_vec32_t;
+union gte_vec16 {
+	struct {
+		int16_t x, y, z;
+		int16_t _pad;
+	};
+	uint32_t packed[2];
+};
+typedef union gte_vec16 gte_vec16_t;
 
-struct gte_mtx {
-	int16_t v[3][3];
-	int16_t _padding;
-} ALIGNED(4);
-typedef struct gte_mtx gte_mtx_t;
+union gte_vec32 {
+	struct {
+		int32_t x, y, z;
+	};
+	uint32_t packed[3];
+};
+typedef union gte_vec32 gte_vec32_t;
 
 /*
  * Command definitions
@@ -99,7 +100,7 @@ gte_load_delay(
 	void
 	)
 {
-	__asm__ volatile(
+	__asm__ __volatile__(
 		"nop\n"
 		"nop\n"
 	);
@@ -107,11 +108,15 @@ gte_load_delay(
 
 DEF(void)
 gte_cmd(
-	const uint32_t cmd
+	const uint32_t opcode
 	)
 {
 	gte_load_delay();
-	__asm__ volatile("cop2 %0\n" :: "i"(cmd));
+	__asm__ __volatile__(
+		"nop\n"
+		"cop2 %0\n"
+		:: "n"(opcode)
+	);
 }
 
 /*
@@ -187,7 +192,12 @@ gte_set_ctrl_reg(
 	uint32_t value
 	)
 {
-	__asm__ volatile("ctc2 %0, $%1\n" :: "r"(value), "i"(reg));
+	/* GCC-ism let's gooo */
+	if (__builtin_constant_p(value) && value == 0) {
+		__asm__ __volatile__("ctc2 $0, $%0\n" :: "n"(reg));
+	} else {
+		__asm__ __volatile__("ctc2 %0, $%1\n" :: "r"(value), "n"(reg));
+	}
 }
 
 DEF(uint32_t)
@@ -197,54 +207,48 @@ gte_get_ctrl_reg(
 {
 	uint32_t value;
 
-	__asm__ volatile("cfc2 %0, $%1\n" : "=r"(value) : "i"(reg));
+	__asm__ __volatile__("cfc2 %0, $%1\n" : "=r"(value) : "n"(reg));
 	return (value);
 }
 
 #define MATRIX_FUNCTIONS(REG0, REG1, REG2, REG3, REG4, NAME) \
-	DEF(void) \
-	gte_set_##NAME( \
-		int16_t v11, int16_t v12, int16_t v13, \
-		int16_t v21, int16_t v22, int16_t v23, \
-		int16_t v31, int16_t v32, int16_t v33 \
-		) \
-	{ \
-		gte_set_ctrl_reg(REG0, ((uint16_t)v11) | ((uint16_t)v12 << 16)); \
-		gte_set_ctrl_reg(REG1, ((uint16_t)v13) | ((uint16_t)v21 << 16)); \
-		gte_set_ctrl_reg(REG2, ((uint16_t)v22) | ((uint16_t)v23 << 16)); \
-		gte_set_ctrl_reg(REG3, ((uint16_t)v31) | ((uint16_t)v32 << 16)); \
-		gte_set_ctrl_reg(REG4, v33); \
-	} \
-	\
-	DEF(void) \
-	gte_load_##NAME(const gte_mtx_t *in) \
-	{ \
-		gte_set_ctrl_reg(REG0, ((uint16_t)in->v[0][0]) | ((uint16_t)in->v[0][1] << 16)); \
-		gte_set_ctrl_reg(REG1, ((uint16_t)in->v[0][2]) | ((uint16_t)in->v[1][0] << 16)); \
-		gte_set_ctrl_reg(REG2, ((uint16_t)in->v[1][1]) | ((uint16_t)in->v[1][2] << 16)); \
-		gte_set_ctrl_reg(REG3, ((uint16_t)in->v[2][0]) | ((uint16_t)in->v[2][1] << 16)); \
-		gte_set_ctrl_reg(REG4, ((uint16_t)in->v[2][2])); \
-	} \
-	\
-	DEF(void) \
-	gte_store_##NAME(gte_mtx_t *out) \
-	{ \
-		uint32_t v0 = gte_get_ctrl_reg(REG0); \
-		uint32_t v1 = gte_get_ctrl_reg(REG1); \
-		uint32_t v2 = gte_get_ctrl_reg(REG2); \
-		uint32_t v3 = gte_get_ctrl_reg(REG3); \
-		uint32_t v4 = gte_get_ctrl_reg(REG4); \
-		\
-		out->v[0][0] = (int16_t)(v0 >>  0); \
-		out->v[0][1] = (int16_t)(v0 >> 16); \
-		out->v[0][2] = (int16_t)(v1 >>  0); \
-		out->v[1][0] = (int16_t)(v1 >> 16); \
-		out->v[1][1] = (int16_t)(v2 >>  0); \
-		out->v[1][2] = (int16_t)(v2 >> 16); \
-		out->v[2][0] = (int16_t)(v3 >>  0); \
-		out->v[2][1] = (int16_t)(v3 >> 16); \
-		out->v[2][2] = (int16_t)(v4 >>  0); \
-	}
+DEF(void) \
+gte_set_##NAME( \
+	int16_t v11, int16_t v12, int16_t v13, \
+	int16_t v21, int16_t v22, int16_t v23, \
+	int16_t v31, int16_t v32, int16_t v33 \
+	) \
+{ \
+	gte_set_ctrl_reg(REG0, ((uint16_t)v11) | ((uint16_t)v12 << 16)); \
+	gte_set_ctrl_reg(REG1, ((uint16_t)v13) | ((uint16_t)v21 << 16)); \
+	gte_set_ctrl_reg(REG2, ((uint16_t)v22) | ((uint16_t)v23 << 16)); \
+	gte_set_ctrl_reg(REG3, ((uint16_t)v31) | ((uint16_t)v32 << 16)); \
+	gte_set_ctrl_reg(REG4, v33); \
+} \
+\
+DEF(void) \
+gte_load_##NAME(\
+	const gte_mtx_t *input \
+	) \
+{ \
+	gte_set_ctrl_reg(REG0, input->packed[0]); \
+	gte_set_ctrl_reg(REG1, input->packed[1]); \
+	gte_set_ctrl_reg(REG2, input->packed[2]); \
+	gte_set_ctrl_reg(REG3, input->packed[3]); \
+	gte_set_ctrl_reg(REG4, input->packed[4]); \
+} \
+\
+DEF(void) \
+gte_store_##NAME( \
+	gte_mtx_t *output \
+	) \
+{ \
+	output->packed[0] = gte_get_ctrl_reg(REG0); \
+	output->packed[1] = gte_get_ctrl_reg(REG1); \
+	output->packed[2] = gte_get_ctrl_reg(REG2); \
+	output->packed[3] = gte_get_ctrl_reg(REG3); \
+	output->packed[4] = gte_get_ctrl_reg(REG4); \
+}
 
 MATRIX_FUNCTIONS(GTE_RT11RT12, GTE_RT13RT21, GTE_RT22RT23, GTE_RT31RT32, GTE_RT33, rot_mtx)
 MATRIX_FUNCTIONS(GTE_L11L12, GTE_L13L21, GTE_L22L23, GTE_L31L32, GTE_L33, light_mtx)
@@ -294,7 +298,11 @@ gte_set_data_reg(
 	uint32_t value
 	)
 {
-	__asm__ volatile("mtc2 %0, $%1\n" :: "r"(value), "i"(reg));
+	if (__builtin_constant_p(value) && value == 0) {
+		__asm__ __volatile__("mtc2 $0, $%0\n" :: "n"(reg));
+	} else {
+		__asm__ __volatile__("mtc2 %0, $%1\n" :: "r"(value), "n"(reg));
+	}
 }
 
 DEF(uint32_t)
@@ -304,7 +312,7 @@ gte_get_data_reg(
 {
 	uint32_t value;
 
-	__asm__ volatile("mfc2 %0, $%1\n" : "=r"(value) : "i"(reg));
+	__asm__ __volatile__("mfc2 %0, $%1\n" : "=r"(value) : "i"(reg));
 	return (value);
 }
 
@@ -315,25 +323,23 @@ gte_get_data_reg(
  */
 DEF(void)
 gte_load_data_reg(
-	gte_data_reg_t reg,
-	int16_t offset,
-	const void *ptr
+	const gte_data_reg_t reg,
+	const uint32_t *ptr
 	)
 {
-	__asm__ volatile("lwc2 $%0, %1(%2)\n" :: "i"(reg), "i"(offset), "r"(ptr));
+	__asm__ __volatile__("lwc2 $%1, %0\n" :: "R"(*ptr), "n"(reg));
 }
 
 DEF(void)
 gte_store_data_reg(
-	gte_data_reg_t reg,
-	int16_t offset,
-	void *ptr
+	const gte_data_reg_t reg,
+	uint32_t *ptr
 	)
 {
-	__asm__ volatile("swc2 $%0, %1(%2)\n" :: "i"(reg), "i"(offset), "r"(ptr) : "memory");
+	__asm__ __volatile__("swc2 $%1, %0\n" : "=R"(*ptr) : "n"(reg));
 }
 
-#define VECTOR_FUNCTIONS(REG0, REG1, NAME) \
+#define VECTOR16_FUNCTIONS(REG0, REG1, NAME) \
 DEF(void) \
 gte_set_##NAME( \
 	int16_t x, \
@@ -341,29 +347,59 @@ gte_set_##NAME( \
 	int16_t z \
 	) \
 { \
-	gte_set_data_reg(REG0, ((uint16_t)x) | ((uint16_t)y << 16)); \
+	gte_set_data_reg(REG0, ((uint16_t) x) | ((uint16_t) y << 16)); \
 	gte_set_data_reg(REG1, z); \
 } \
 \
 DEF(void) \
-gte_load_##NAME(const gte_vec16_t *input) \
+gte_load_##NAME( \
+	const gte_vec16_t *input \
+	) \
 { \
-	gte_load_data_reg(REG0, 0, input); \
-	gte_load_data_reg(REG1, 4, input); \
+	gte_load_data_reg(REG0, &input->packed[0]); \
+	gte_load_data_reg(REG1, &input->packed[1]); \
 } \
 \
 DEF(void) \
-gte_store_##NAME(gte_vec16_t *out) \
+gte_store_##NAME( \
+	gte_vec16_t *output \
+	) \
 { \
-	gte_store_data_reg(REG0, 0, out); \
-	gte_store_data_reg(REG1, 4, out); \
+	gte_store_data_reg(REG0, &output->packed[0]); \
+	gte_store_data_reg(REG1, &output->packed[1]); \
 }
 
-VECTOR_FUNCTIONS(GTE_VXY0, GTE_VZ0, V0)
-VECTOR_FUNCTIONS(GTE_VXY1, GTE_VZ1, V1)
-VECTOR_FUNCTIONS(GTE_VXY2, GTE_VZ2, V2)
+VECTOR16_FUNCTIONS(GTE_VXY0, GTE_VZ0, v0)
+VECTOR16_FUNCTIONS(GTE_VXY1, GTE_VZ1, v1)
+VECTOR16_FUNCTIONS(GTE_VXY2, GTE_VZ2, v2)
 
-#undef VECTOR_FUNCTIONS
+#undef VECTOR16_FUNCTIONS
+
+#define VECTOR32_FUNCTIONS(REG0, REG1, REG2, NAME) \
+DEF(void) \
+gte_load_##NAME( \
+	const gte_vec32_t *input \
+	) \
+{ \
+	gte_load_data_reg(REG0, &input->packed[0]); \
+	gte_load_data_reg(REG1, &input->packed[1]); \
+	gte_load_data_reg(REG2, &input->packed[2]); \
+} \
+\
+DEF(void) \
+gte_store_##NAME( \
+	gte_vec32_t *output \
+	) \
+{ \
+	gte_store_data_reg(REG0, &output->packed[0]); \
+	gte_store_data_reg(REG1, &output->packed[1]); \
+	gte_store_data_reg(REG2, &output->packed[2]); \
+}
+
+VECTOR32_FUNCTIONS(GTE_IR1,  GTE_IR2,  GTE_IR3,  ir)
+VECTOR32_FUNCTIONS(GTE_MAC1, GTE_MAC2, GTE_MAC3, mac)
+
+#undef VECTOR32_FUNCTIONS
 
 DEF(void)
 gte_set_row_vecs(

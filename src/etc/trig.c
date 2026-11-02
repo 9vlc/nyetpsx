@@ -21,13 +21,13 @@ isin(
 	int x
 	)
 {
-	int c = x << (30 - ISIN_SHIFT);
-	x -= 1 << ISIN_SHIFT;
+	int c = x << (30 - TRIG_SHIFT);
+	x -= 1 << TRIG_SHIFT;
 
-	x <<= 31 - ISIN_SHIFT;
-	x >>= 31 - ISIN_SHIFT;
+	x <<= 31 - TRIG_SHIFT;
+	x >>= 31 - TRIG_SHIFT;
 	x *= x;
-	x >>= 2 * ISIN_SHIFT - 14;
+	x >>= 2 * TRIG_SHIFT - 14;
 
 	int y = B - (x * C >> 14);
 	y = A - (x * y >> 16);

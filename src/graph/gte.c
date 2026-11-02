@@ -16,8 +16,12 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/*
+ * Prefix stuff with just gte_ instead of graph_gte_ to match psx/gte.h
+ */
+
 uint32_t
-floor_log2(
+gte_floor_log2(
 	int32_t x
 	)
 {
@@ -30,7 +34,7 @@ floor_log2(
 }
 
 uint32_t
-ceil_log2(
+gte_ceil_log2(
 	int32_t x
 	)
 {
@@ -62,7 +66,7 @@ graph_init_gte(
 
 #define MULTIPLY_MATRIX(FLAG, NAME) \
 void \
-graph_mul_##NAME(gte_mtx_t *out) \
+gte_mul_##NAME(gte_mtx_t *out) \
 { \
 	gte_cmd(GTE_CMD_MVMVA | GTE_SF | (FLAG) | GTE_V_V0 | \
 		GTE_CV_NONE); \
@@ -91,7 +95,7 @@ MULTIPLY_MATRIX(GTE_MX_LCM, light_col_mtx)
 
 #define ROTATE_MATRIX(V11, V12, V13, V21, V22, V23, V31, V32, V33, NAME) \
 void \
-graph_rot_mtx_##NAME(int a) \
+gte_rot_mtx_##NAME(int a) \
 { \
 	int s = isin(a); \
 	int c = icos(a); \
@@ -104,20 +108,20 @@ graph_rot_mtx_##NAME(int a) \
 	\
 	gte_mtx_t result; \
 	\
-	graph_mul_rot_mtx(&result); \
+	gte_mul_rot_mtx(&result); \
 	gte_load_rot_mtx(&result); \
 }
 
 ROTATE_MATRIX(
-	GRAPH_GTE_UNIT, 0, 0,
-			0, c, -s,
-			0, s,  c,
+	GTE_UNIT, 0, 0,
+	0, c, -s,
+	0, s,  c,
 	x
 )
 
 ROTATE_MATRIX(
 	c, 0, s,
-	0, GRAPH_GTE_UNIT, 0,
+	0, GTE_UNIT, 0,
 	-s, 0, c,
 	y
 )
@@ -125,14 +129,14 @@ ROTATE_MATRIX(
 ROTATE_MATRIX(
 	c, -s, 0,
 	s,  c, 0,
-	0,  0, GRAPH_GTE_UNIT,
+	0,  0, GTE_UNIT,
 	z
 )
 
 #undef ROTATE_MATRIX
 
 void
-graph_tf_light_mtx(
+gte_tf_light_mtx(
 	void
 	)
 {
@@ -145,6 +149,6 @@ graph_tf_light_mtx(
 		result.v[2][0], result.v[2][1], result.v[2][2]
 	);
 
-	graph_mul_light_mtx(&result);
+	gte_mul_light_mtx(&result);
 	gte_load_light_mtx(&result);
 }

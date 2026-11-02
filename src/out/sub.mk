@@ -1,6 +1,6 @@
-EXTRAS:= nyetpsx.a
+EXTRAS:= libnyetpsx.a
 .include "${MBDIR}/extras.mk"
 
-${SUBOBJDIR}/nyetpsx.a: ${OBJS_ALL}
+${SUBOBJDIR}/libnyetpsx.a: ${OBJS_ALL}
 	${AR} rcs $@ $>
 	${RANLIB} $@

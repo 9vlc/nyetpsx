@@ -11,10 +11,13 @@
 
 #include <stdint.h>
 
-#define GRAPH_GTE_UNIT (1 << 12)
+#define GTE_SQRT2  (GTE_UNIT * 141421 / 100000)
+#define GTE_RSQRT2 (GTE_UNIT *  70711 / 100000)
+#define GTE_SQRT3  (GTE_UNIT * 173205 / 100000)
+#define GTE_RSQRT3 (GTE_UNIT *  57735 / 100000)
 
-uint32_t floor_log2(int32_t x);
-uint32_t ceil_log2(int32_t x);
+uint32_t gte_floor_log2(int32_t x);
+uint32_t gte_ceil_log2(int32_t x);
 
 void
 graph_init_gte(
@@ -22,14 +25,14 @@ graph_init_gte(
 	uint32_t height
 	);
 
-void graph_mul_rot_mtx(gte_mtx_t *out);
-void graph_mul_light_mtx(gte_mtx_t *out);
-void graph_mul_light_col_mtx(gte_mtx_t *out);
+void gte_mul_rot_mtx(gte_mtx_t *out);
+void gte_mul_light_mtx(gte_mtx_t *out);
+void gte_mul_light_col_mtx(gte_mtx_t *out);
 
-void graph_rot_mtx_x(int a);
-void graph_rot_mtx_y(int a);
-void graph_rot_mtx_z(int a);
+void gte_rot_mtx_x(int a);
+void gte_rot_mtx_y(int a);
+void gte_rot_mtx_z(int a);
 
-void graph_tf_light_mtx(void);
+void gte_tf_light_mtx(void);
 
 #endif /* _GRAPH__GTE_H */

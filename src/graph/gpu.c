@@ -23,6 +23,7 @@ graph_init_gpu(
 	)
 {
 	bool is_pal = ((GPU_GP1 & GP1_STAT_FB_MODE_BITMASK) == GP1_STAT_FB_MODE_PAL);
+	bool is_interlaced = (vres == GP1_VRES_512 ? true : false);
 
 	int x = 0x760;
 	int y = (is_pal ? 0xA3 : 0x88);
@@ -31,14 +32,18 @@ graph_init_gpu(
 	int off_y = (height / gp1_clock_div_v(vres)) / 2;
 
 	GPU_GP1 = gp1_reset_gpu();
-	GPU_GP1 = gp1_fb_range_h(x - off_x, x + off_x);
-	GPU_GP1 = gp1_fb_range_v(y - off_y, y + off_y);
+
+	/* Interlaced mode is a bit weird... This matches how shell does it */
+	GPU_GP1 = gp1_fb_range_h(x - off_x, x + off_x - (is_interlaced ? 1 : 0));
+	GPU_GP1 = gp1_fb_range_v(y - off_y, y + off_y - (is_interlaced ? 1 : 0));
+	GPU_GP1 = gp1_fb_offset(0, (is_interlaced ? 2 : 0));
+
 	GPU_GP1 = gp1_fb_mode(
 		hres,
 		vres,
 		(is_pal ? GP1_MODE_PAL : GP1_MODE_NTSC),
 		GP1_COLOR_16BPP,
-		(vres == GP1_VRES_512) /* Interlace on hires */
+		is_interlaced
 	);
 	GPU_GP1 = gp1_disp_blank(false);
 
@@ -134,8 +139,8 @@ graph_write_vram(
 
 void
 graph_load_texture(
-	graph_texture_info_t *info,
-	graph_texture_data_t *data
+	graph_texture_data_t *data,
+	graph_texture_info_t *info
 	)
 {
 	assert((data->w <= 256) && (data->h <= 256));
