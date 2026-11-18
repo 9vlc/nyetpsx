@@ -19,7 +19,7 @@ CFLAGS:= -march=r3000 -mabi=32 -mno-llsc -mfp32
 .elif ${NYETPSX_TC:tu} == "LLVM"
 CC!= ${.PARSEDIR}/scripts/find_tc.sh llvm clang
 AS!= ${.PARSEDIR}/scripts/find_tc.sh llvm clang
-LD!= ${.PARSEDIR}/scripts/find_tc.sh llvm ld.lld
+LD!= ${.PARSEDIR}/scripts/find_tc.sh llvm clang
 AR!= ${.PARSEDIR}/scripts/find_tc.sh llvm llvm-ar
 RANLIB!= ${.PARSEDIR}/scripts/find_tc.sh llvm llvm-ranlib
 OBJCOPY!= ${.PARSEDIR}/scripts/find_tc.sh llvm llvm-objcopy
@@ -42,20 +42,20 @@ ASFLAGS:= ${CFLAGS} -mno-abicalls
 
 .if ${NYETPSX_SOURCE_TC} != 1
 
-CFLAGS+= -ffreestanding -fno-builtin -nostdlib -fno-pic
+CFLAGS+= -ffreestanding -fno-builtin -nostdlib -fno-pic -flto
 CFLAGS+= -fdata-sections -ffunction-sections -fsigned-char -mno-extern-sdata
 CFLAGS+= -mno-mt -mno-abicalls -mno-check-zero-division
 
 .if ${NYETPSX_USE_SDATA} == 1
-CFLAGS+= #-mgpopt -G8
-LDFLAGS:=# -G8
+CFLAGS+= -mgpopt -G8
+LDFLAGS:= -G8
 .else
 CFLAGS+= -mno-gpopt -G0
 LDFLAGS:= -G0
 .endif
 
 CFLAGS+= -I${INCDIR} -I${INCDIR}/psx -Wall -pedantic -std=c11 -Os ${CFLAGS_ADD}
-LDFLAGS+= -L${OBJDIR}/out -g -static -nostdlib ${LDFLAGS_ADD}
+LDFLAGS+= -L${OBJDIR}/out -s -static -nostdlib ${CFLAGS} ${LDFLAGS_ADD}
 
 .if ${NYETPSX_STDIO_USE_SIO1} == 1
 CFLAGS+= -DSTDIO_USE_SIO1=1
