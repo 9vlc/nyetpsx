@@ -176,8 +176,7 @@ cdrom_play_cdda(
 	uint8_t bcd_track = cdrom_encode_bcd(track);
 
 	if (track > 0) {
-		cdrom_cmd(CDROM_CMD_PLAY, &bcd_track,
-		    sizeof(bcd_track));
+		cdrom_cmd(CDROM_CMD_PLAY, &bcd_track, sizeof(bcd_track));
 	} else {
 		cdrom_cmd(CDROM_CMD_PLAY, 0, 0);
 	}

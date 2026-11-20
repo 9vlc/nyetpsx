@@ -185,8 +185,8 @@ strcmp(
 	)
 {
 	while (1) {
-		char a = *(lhs++),
-		     b = *(rhs++);
+		char	a = *(lhs++),
+			b = *(rhs++);
 
 		if (a != b) {
 			return (((int)a) - ((int)b));
@@ -204,8 +204,8 @@ strncmp(
 	)
 {
 	for (; count && *lhs && *rhs; count--) {
-		char a = *(lhs++),
-		     b = *(rhs++);
+		char	a = *(lhs++),
+			b = *(rhs++);
 
 		if (a != b) {
 			return (((int)a) - ((int)b));
