@@ -30,7 +30,7 @@ cdrom_init(
 		| BIU_CTRL_WIDTH_8
 		| BIU_CTRL_SIZE(2);
 
-	BIU_COM_DELAY = 0
+	BIU_COM_CTRL = 0
 		| BIU_COM_RECOVERY(5)
 		| BIU_COM_HOLD(2)
 		| BIU_COM_FLOAT(3)

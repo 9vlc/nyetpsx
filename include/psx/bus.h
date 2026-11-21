@@ -34,14 +34,14 @@ typedef uint32_t biu_control_flag_t;
 #define BIU_CTRL_DMA_DELAY(value)	(((value) & 15u) << 24)
 
 /*
- * Common bus delay flags (BIU_COM_DELAY)
+ * Common bus delay flags (BIU_COM_CTRL)
  */
 
 #define BIU_COM_RECOVERY_BITMASK	(15u <<  0)
 #define BIU_COM_HOLD_BITMASK		(15u <<  4)
 #define BIU_COM_FLOAT_BITMASK		(15u <<  8)
 #define BIU_COM_PRESTROBE_BITMASK	(15u << 12)
-typedef uint32_t biu_common_delay_flag_t;
+typedef uint32_t biu_com_ctrl_flag_t;
 
 #define BIU_COM_RECOVERY(value)		(((value) & 15u) <<  0)
 #define BIU_COM_HOLD(value)		(((value) & 15u) <<  4)
@@ -56,6 +56,6 @@ typedef uint32_t biu_common_delay_flag_t;
 #define BIU_DEV4_CTRL		MMIO32(IO_BASE | 0x014) /* SPU */
 #define BIU_DEV5_CTRL		MMIO32(IO_BASE | 0x018) /* CD-ROM */
 #define BIU_DEV8_CTRL		MMIO32(IO_BASE | 0x01C) /* PIO/debug */
-#define BIU_COM_DELAY		MMIO32(IO_BASE | 0x020)
+#define BIU_COM_CTRL		MMIO32(IO_BASE | 0x020)
 
 #endif /* _PSX__BUS_H */
