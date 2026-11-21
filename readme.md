@@ -15,6 +15,7 @@ Currently, the only documentation is the [example program](src/example/).
 
 # Example
 The example program is a spinning cube with a mandelbrot texture generated on the fly.
+
 ![Spinning cube demo GIF](resources/nyetpsx_demo.gif)
 
 # How to build
