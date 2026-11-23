@@ -49,12 +49,12 @@ CFLAGS+= -mno-gpopt -G0
 LDFLAGS:= -G0
 .endif
 
-CFLAGS+= -I${INCDIR} -Os # Default (-O0) fails to compile GTE code
-LDFLAGS+= -L${OBJDIR}/out -nostdlib
+CFLAGS+= -Os # Default (-O0) fails to compile GTE code
+LDFLAGS+= -nostdlib
 
 .if ${NYETPSX_SOURCE_TC} != 1
-CFLAGS+= -Wall -pedantic -std=c11 -flto ${CFLAGS_ADD}
-LDFLAGS+= -s -static ${CFLAGS} ${LDFLAGS_ADD}
+CFLAGS+= -I${INCDIR} -Wall -pedantic -std=c11 ${CFLAGS_ADD}
+LDFLAGS+= -L${OBJDIR}/out -s -static ${CFLAGS} ${LDFLAGS_ADD}
 .endif
 
 .if ${NYETPSX_STDIO_USE_SIO1} == 1

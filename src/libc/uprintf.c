@@ -63,7 +63,7 @@ up_putnum(
 	up_flags_t flags,
 	int width,
 	int base,
-	uint64_t v
+	uint32_t v
 	)
 {
 	char buf[64 + 1 + 2]; /* 64 digits + sign + prefix */
@@ -278,7 +278,7 @@ up_fmt(
 			/* Pointer */
 		case 'p': {
 			up_putnum(ctx, flags | UP_FLAG_PREFIX, width, 16,
-				(uint64_t)(uintptr_t)va_arg(ap, void *));
+				(uintptr_t)va_arg(ap, void *));
 			break;
 		}
 
