@@ -34,7 +34,13 @@ crc32_step(
 
 uint32_t
 crc32(
-	const char *data,
+	const void *data,
+	const size_t len
+	);
+
+uint32_t
+vcrc32(
+	const volatile void *data,
 	const size_t len
 	);
 

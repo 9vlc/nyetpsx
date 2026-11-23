@@ -9,14 +9,29 @@
 
 uint32_t
 crc32(
-	const char *data,
+	const void *data,
 	const size_t data_len
 	)
 {
 	uint32_t crc = UINT32_MAX;
 
 	for (size_t i = 0; i < data_len; i++) {
-		crc = crc32_step(crc, data[i]);
+		crc = crc32_step(crc, ((uint8_t *)data)[i]);
+	}
+
+	return (crc ^ UINT32_MAX);
+}
+
+uint32_t
+vcrc32(
+	const volatile void *data,
+	const size_t data_len
+	)
+{
+	uint32_t crc = UINT32_MAX;
+
+	for (size_t i = 0; i < data_len; i++) {
+		crc = crc32_step(crc, ((volatile uint8_t *)data)[i]);
 	}
 
 	return (crc ^ UINT32_MAX);
