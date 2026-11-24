@@ -249,7 +249,7 @@ graph_o_print_str(
 	);
 
 uint32_t *
-graph_m_vram_fill(
+graph_o_vram_fill(
 	graph_dma_ord_chain_t *chain,
 	uint32_t z,
 	graph_rect_t *rect,
@@ -257,7 +257,7 @@ graph_m_vram_fill(
 	);
 
 uint32_t *
-graph_m_set_page(
+graph_o_set_page(
 	graph_dma_ord_chain_t *chain,
 	uint32_t z,
 	uint16_t page,
@@ -266,14 +266,14 @@ graph_m_set_page(
 	);
 
 uint32_t *
-graph_m_set_render_window(
+graph_o_set_render_window(
 	graph_dma_ord_chain_t *chain,
 	uint32_t z,
 	graph_rect_t *rect
 	);
 
 uint32_t *
-graph_m_set_fb_origin(
+graph_o_set_fb_origin(
 	graph_dma_ord_chain_t *chain,
 	uint32_t z,
 	graph_point_t *pos
