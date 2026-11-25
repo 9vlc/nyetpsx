@@ -8,6 +8,7 @@
 
 #include <graph/gpu.h>
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #define GRAPH_FONT_FIRST_CHAR	32  /* ' ' */
@@ -26,6 +27,12 @@ typedef struct graph_font graph_font_t;
 void
 graph_load_font(
 	graph_font_t *font
+	);
+
+void
+graph_load_font_inverted(
+	graph_font_t *font,
+	bool strip_stp
 	);
 
 #ifdef _GRAPH__DIRECTDRAW_H

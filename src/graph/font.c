@@ -3,6 +3,10 @@
  * Copyright (c) 2026 Alexey Laurentsyeu <alex@paidbsd.org>
  */
 
+#include <stdbool.h>
+#include <stdint.h>
+#include <string.h>
+
 #include <graph/gpu.h>
 #include <graph/geom.h>
 
@@ -29,6 +33,42 @@ graph_load_font(
 	)
 {
 	graph_load_texture(&font->data, &font->info);
+}
+
+/* CLUT fun */
+void
+graph_load_font_inverted(
+	graph_font_t *font,
+	bool strip_stp
+	)
+{
+	graph_rgb16_t iclut[16];
+	memcpy(iclut, font->data.clut, sizeof(iclut));
+	graph_texture_data_t idata = font->data;
+	idata.clut = iclut;
+
+	for (int i = 0; i < 16; i++) {
+		if (iclut[i].raw == 0x0000) {
+			continue;
+		}
+
+		/* May want to replace this with just a plain b/w invert? */
+		iclut[i].c.r = 31 - iclut[i].c.r;
+		iclut[i].c.g = 31 - iclut[i].c.g;
+		iclut[i].c.b = 31 - iclut[i].c.b;
+
+		if (strip_stp) {
+			iclut[i].c.stp = 0;
+		}
+
+		if ((iclut[i].raw & 0x7FFF) == 0) {
+			iclut[i].c.r = 1;
+			iclut[i].c.g = 1;
+			iclut[i].c.b = 1;
+		}
+	}
+
+	graph_load_texture(&idata, &font->info);
 }
 
 typedef void
