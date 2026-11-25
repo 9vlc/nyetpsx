@@ -23,10 +23,10 @@
 typedef uint32_t up_flags_t;
 
 struct up_ctx {
+	int (*putchar)(int c);
 	char *buf;
 	size_t buf_len;
 	size_t str_len;
-	bool to_buf;
 };
 typedef struct up_ctx up_ctx_t;
 
@@ -36,8 +36,8 @@ up_putchar(
 	int c
 	)
 {
-	if (!ctx->to_buf) {
-		putchar(c);
+	if (ctx->putchar) {
+		ctx->putchar(c);
 	} else if (ctx->buf != NULL && ctx->str_len + 1 < ctx->buf_len) {
 		ctx->buf[ctx->str_len] = c;
 	}
@@ -311,10 +311,9 @@ uvprintf(
 {
 	up_ctx_t ctx;
 
-	ctx.buf = NULL;
+	ctx.putchar = putchar;
 	ctx.buf_len = 0;
 	ctx.str_len = 0;
-	ctx.to_buf = false;
 	up_fmt(&ctx, fmt, ap);
 
 	return ((int)ctx.str_len);
@@ -337,6 +336,40 @@ uprintf(
 }
 
 int
+uvcprintf(
+	int (*putchar)(int c),
+	const char *fmt,
+	va_list ap
+	)
+{
+	up_ctx_t ctx;
+
+	ctx.putchar = putchar;
+	ctx.buf_len = 0;
+	ctx.str_len = 0;
+	up_fmt(&ctx, fmt, ap);
+
+	return ((int)ctx.str_len);
+}
+
+int
+ucprintf(
+	int (*putchar)(int c),
+	const char *fmt,
+	...
+	)
+{
+	va_list ap;
+	int n;
+
+	va_start(ap, fmt);
+	n = uvcprintf(putchar, fmt, ap);
+	va_end(ap);
+
+	return (n);
+}
+
+int
 uvsprintf(
 	char *str,
 	const char *fmt,
@@ -345,10 +378,10 @@ uvsprintf(
 {
 	up_ctx_t ctx;
 
-	ctx.buf = str;
+	ctx.putchar = NULL;
+	ctx.buf     = str;
 	ctx.buf_len = SIZE_MAX;
 	ctx.str_len = 0;
-	ctx.to_buf = true;
 	up_fmt(&ctx, fmt, ap);
 
 	str[ctx.str_len] = '\0';
@@ -383,10 +416,10 @@ uvsnprintf(
 {
 	up_ctx_t ctx;
 
-	ctx.buf = str;
+	ctx.putchar = NULL;
+	ctx.buf     = str;
 	ctx.buf_len = size;
 	ctx.str_len = 0;
-	ctx.to_buf = true;
 	up_fmt(&ctx, fmt, ap);
 
 	if (str != NULL && size != 0) {

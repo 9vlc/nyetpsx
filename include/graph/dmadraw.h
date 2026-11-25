@@ -218,14 +218,6 @@ graph_m_sprite16x16(
 	bool blend
 	);
 
-void
-graph_m_print_str(
-	graph_dma_chain_t *chain,
-	graph_font_t *font,
-	graph_point_t *pos,
-	const char *str
-	);
-
 uint32_t *
 graph_m_end(
 	graph_dma_chain_t *chain

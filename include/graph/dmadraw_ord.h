@@ -239,15 +239,6 @@ graph_o_sprite16x16(
 	bool blend
 	);
 
-void
-graph_o_print_str(
-	graph_dma_ord_chain_t *chain,
-	uint32_t z,
-	graph_font_t *font,
-	graph_point_t *pos,
-	const char *str
-	);
-
 uint32_t *
 graph_o_vram_fill(
 	graph_dma_ord_chain_t *chain,

@@ -198,13 +198,6 @@ graph_d_sprite16x16(
 	);
 
 void
-graph_d_print_str(
-	graph_font_t *font,
-	graph_point_t *pos,
-	const char *str
-	);
-
-void
 graph_d_vram_fill(
 	graph_rect_t *rect,
 	graph_rgb24_t col
