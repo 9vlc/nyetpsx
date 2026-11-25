@@ -50,16 +50,15 @@ graph_load_font_inverted(
 	for (int i = 0; i < 16; i++) {
 		if (iclut[i].raw == 0x0000) {
 			continue;
+		} else if (strip_stp && iclut[i].raw & 0x8000) {
+			iclut[i].raw = 0x0000;
+			continue;
 		}
 
 		/* May want to replace this with just a plain b/w invert? */
 		iclut[i].c.r = 31 - iclut[i].c.r;
 		iclut[i].c.g = 31 - iclut[i].c.g;
 		iclut[i].c.b = 31 - iclut[i].c.b;
-
-		if (strip_stp) {
-			iclut[i].c.stp = 0;
-		}
 
 		if ((iclut[i].raw & 0x7FFF) == 0) {
 			iclut[i].c.r = 1;
