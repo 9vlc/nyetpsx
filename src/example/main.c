@@ -232,13 +232,13 @@ main(
 
 		cube_render(chain);
 
-		/* Wait for all GPU commands to be finished */
-		gpu_await_cmd();
+		/* Wait for DMA from the previous cycle to finish */
+		gpu_await_dma();
 
-		/* Wait for VSync, then flip the line variable */
+		/* Wait for VSync */
 		gpu_await_vsync(using_second_frame);
 
-		/* Finally, send the chain to the DMA engine */
+		/* Send the chain to the DMA engine */
 		graph_send_chain(&chain->ot[Z_MAX]);
 
 		/* Oh, and flip this variable */
