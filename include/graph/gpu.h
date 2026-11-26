@@ -17,9 +17,22 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define GRAPH_DMA_MAX_CHUNK_SIZE	16
-#define GRAPH_DMA_CHAIN_BUF_SIZE	4096
-#define GRAPH_DMA_CHAIN_OT_SIZE		240
+/*
+ * Use "graph_get_*" functions to get those at runtime instead
+ *   if using precompiled nyetpsx!!
+ */
+
+#ifndef GRAPH_DMA_MAX_CHUNK_SIZE
+#  define GRAPH_DMA_MAX_CHUNK_SIZE	16
+#endif
+
+#ifndef GRAPH_DMA_CHAIN_BUF_SIZE
+#  define GRAPH_DMA_CHAIN_BUF_SIZE	8192
+#endif
+
+#ifndef GRAPH_DMA_CHAIN_OT_SIZE
+#  define GRAPH_DMA_CHAIN_OT_SIZE	240
+#endif
 
 #define GRAPH_VRAM_X_ALIGN_UP(X)	((X) + 16 - ((X) % 16))
 #define GRAPH_VRAM_X_ALIGN_DOWN(X)	((X) -      ((X) % 16))
@@ -136,6 +149,21 @@ void
 graph_clear_ot(
 	uint32_t *ot,
 	size_t size
+	);
+
+uint32_t
+graph_get_dma_max_chunk_size(
+	void
+	);
+
+uint32_t
+graph_get_dma_chain_buf_size(
+	void
+	);
+
+uint32_t
+graph_get_dma_chain_ot_size(
+	void
 	);
 
 #undef PACKED

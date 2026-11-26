@@ -265,3 +265,28 @@ graph_clear_ot(
 		__asm__ __volatile__("");
 	}
 }
+
+uint32_t
+graph_get_dma_max_chunk_size(
+	void
+	)
+{
+	return (GRAPH_DMA_MAX_CHUNK_SIZE);
+}
+
+uint32_t
+graph_get_dma_chain_buf_size(
+	void
+	)
+{
+	return (GRAPH_DMA_CHAIN_BUF_SIZE);
+}
+
+uint32_t
+graph_get_dma_chain_ot_size(
+	void
+	)
+{
+	return (GRAPH_DMA_CHAIN_OT_SIZE);
+}
+
