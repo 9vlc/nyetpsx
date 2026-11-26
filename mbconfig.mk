@@ -37,7 +37,7 @@ CFLAGS:= -target mipsel-none-elf -march=mips1 -mabi=32 -mfp32 -Wextra
 
 ASFLAGS:= ${CFLAGS} -mno-abicalls
 
-CFLAGS+= -ffreestanding -fno-builtin -nostdlib -fno-pic
+CFLAGS+= -ffreestanding -fno-builtin -nostdlib -fno-pic -fno-pie
 CFLAGS+= -fdata-sections -ffunction-sections -fsigned-char -mno-extern-sdata
 CFLAGS+= -mno-mt -mno-abicalls -mno-check-zero-division
 
@@ -50,11 +50,11 @@ LDFLAGS:= -G0
 .endif
 
 CFLAGS+= -Os # Default (-O0) fails to compile GTE code
-LDFLAGS+= -nostdlib
+LDFLAGS+= -nostdlib -fno-pie -static
 
 .if ${NYETPSX_SOURCE_TC} != 1
 CFLAGS+= -I${INCDIR} -Wall -pedantic -std=c11 ${CFLAGS_ADD}
-LDFLAGS+= -L${OBJDIR}/out -s -static ${CFLAGS} ${LDFLAGS_ADD}
+LDFLAGS+= -L${OBJDIR}/out -s ${CFLAGS} ${LDFLAGS_ADD}
 .endif
 
 .if ${NYETPSX_STDIO_USE_SIO1} == 1
