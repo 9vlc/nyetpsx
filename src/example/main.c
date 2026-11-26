@@ -190,12 +190,6 @@ main(
 		chain->next = chain->data;
 
 		/*
-		 * Append various drawing commands to the chain
-		 */
-
-		set_tex_bg(chain, &background_info);
-
-		/*
 		 * Check if the texture is not generated yet, render the next
 		 *   line if so, together with a progress status.
 		 * The graph_load_texture() function awaits for GPU DMA,
@@ -230,15 +224,17 @@ main(
 			graph_load_texture(&mandel_data, &mandel_info);
 		}
 
+		set_tex_bg(chain, &background_info);
 		cube_render(chain);
-
-		/* Wait for DMA from the previous cycle to finish */
-		gpu_await_dma();
 
 		/* Wait for VSync */
 		gpu_await_vsync(using_second_frame);
 
-		/* Send the chain to the DMA engine */
+		/*
+		 * Send the chain to the DMA engine
+		 * This function waits for all ongoing DMA (the previous chain)
+		 *   to finish before beginning a new send
+		 */
 		graph_send_chain(&chain->ot[Z_MAX]);
 
 		/* Oh, and flip this variable */
