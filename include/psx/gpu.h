@@ -681,7 +681,8 @@ gp1_vram_size(
 void gpu_ack_vsync(void);
 bool gpu_is_dma_ready(void);
 bool gpu_is_cmd_ready(void);
-bool gpu_is_vsync_ready(bool interlace_odd);
+bool gpu_is_vsync_ready(void);
+bool gpu_is_field_ready(bool interlace_odd);
 void gpu_await_dma(void);
 void gpu_await_cmd(void);
 void gpu_await_vsync(bool interlace_odd);
